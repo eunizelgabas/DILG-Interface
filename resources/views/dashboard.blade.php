@@ -151,7 +151,7 @@
     <!-- Component End  -->
 
 </div>
-<div class="pt-8 px-2" >
+<div class="pt-2 px-2" >
     <div class="w-full ">
        <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 xl:col-span-2 2xl:col-span-2">
             <div class="flex justify-between ">
