@@ -19,6 +19,7 @@
     @include('layouts.navigation')
 
     <div class="flex-1 flex flex-col">
+
         @include('layouts.nav')
         <!-- Header -->
         @if (isset($header))

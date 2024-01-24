@@ -4,9 +4,117 @@
         <div class="p-4 mx-2">
             <div class="flex ">
                 <h1 class="text-3xl font-medium text-gray-700 "></h1>
-                <a href="" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2 mr-4" >
-                       Add Joint Circular
-                </a>
+                <section class=" flex  items-start">
+                    <button onclick="document.getElementById('myModal').showModal()" id="btn" class="py-3 px-10 bg-blue-600 text-white rounded text shadow-xl"><i class="fa-solid fa-plus" style="color: #ffffff; mr-4"></i> Add</button>
+                </section>
+
+                <dialog id="myModal" class="h-auto w-full md:w-1/2 p-5  bg-white rounded-md">
+                    <div class="flex flex-col w-full h-auto">
+                        <!-- Header -->
+                            <div class="flex w-full h-auto justify-center items-center">
+                                <div class="flex w-10/12 h-auto py-3 justify-center items-center text-2xl font-bold ">
+                                    Create Latest Issuances
+                                </div>
+                                <div onclick="document.getElementById('myModal').close();" class="flex w-1/12 h-auto justify-center cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </div>
+                            </div>
+                        <!--Header End-->
+                        <!-- Modal Content-->
+                            <div class="flex items-center justify-center p-2">
+                                <div class="w-full bg-white">
+                                    <form method="POST" action="{{route('latest.store')}}">
+                                        @csrf
+                                        <div class="mb-5">
+                                            <label for="outcome" class="mb-3 block text-base font-bold text-[#07074D]">
+                                                Outcome Area/Project
+                                            </label>
+                                            <select id="outcome"  name="outcome" autocomplete="outcome" class="w-full rounded-lg border py-2 px-3">
+                                                <option selected disabled>Select...</option>
+                                                <option value="ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE">
+                                                    ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE
+                                                </option>
+                                                <option value="PEACEFUL, ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES">
+                                                    PEACEFUL,
+                                                    ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES
+                                                </option>
+                                                <option value="SOCIALLY PROTECTIVE LGUS">
+                                                    SOCIALLY PROTECTIVE LGUS
+                                                </option>
+                                                <option
+                                                    value="ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT LGUS">
+                                                    ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT  LGUS
+
+                                                </option>
+                                                <option value="BUSINESS-FRIENDLY AND COMPETITIVE LGUS">
+                                                    BUSINESS-FRIENDLY AND COMPETITIVE LGUS
+                                                </option>
+                                                <option value="STRENGTHENING OF INTERNAL GOVERNANCE">
+                                                    STRENGTHENING OF INTERNAL GOVERNANCE
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="-mx-3 flex flex-wrap">
+                                            <div class="w-full px-3 sm:w-1/2">
+                                                <div class="mb-5">
+                                                    <label for="date" class="mb-3 block text-base font-medium text-[#07074D]">
+                                                        Date
+                                                    </label>
+                                                    <input type="date" name="date" id="date"
+                                                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full px-3 sm:w-1/2">
+                                                <div class="mb-5">
+                                                    <label for="category" class="mb-3 block text-base font-medium text-[#07074D]">
+                                                        Category
+                                                    </label>
+                                                    <input type="text" name="category" id="category"
+                                                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-5">
+                                            <label for="title" class="mb-3 block text-base font-medium text-[#07074D]">
+                                            Title
+                                            </label>
+                                            <textarea type="text" name="title" id="title" placeholder="Enter your phone number"
+                                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" /></textarea>
+                                        </div>
+                                        <div class="mb-5">
+                                            <label for="reference_no" class="mb-3 block text-base font-medium text-[#07074D]">
+                                            Reference No
+                                            </label>
+                                            <input type="text" name="reference_no" id="reference_no" placeholder=""
+                                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                        </div>
+                                        <div class="mb-5">
+                                            <label for="url_link" class="mb-3 block text-base font-medium text-[#07074D]">
+                                            Url Link
+                                            </label>
+                                            <input type="text" name="url_link" id="url_link" placeholder=""
+                                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                        </div>
+                                        <div class="mb-5">
+                                            <label for="keyword" class="mb-3 block text-base font-medium text-[#07074D]">
+                                            Keywords
+                                            </label>
+                                            <input type="text" name="keyword" id="keyword" placeholder=""
+                                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                        </div>
+
+                                        <div>
+                                            <button
+                                                type="submit" class=" hover:shadow-form w-full rounded-md bg-blue-400 hover:bg-blue-600 py-3 px-8 text-center text-base font-semibold text-white outline-none">
+                                                Save
+                                            </button>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- End of Modal Content-->
+                    </div>
+                </dialog>
             </div>
             <div class=" w-full mx-auto z-10">
                 <div class="flex flex-col">

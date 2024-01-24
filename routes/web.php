@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/latest_issuances', [IssuanceController::class, 'index']);
+    Route::post('/latest_issuances', [IssuanceController::class, 'store'])->name('latest.store');
 
     Route::get('/joint_circulars', [JointController::class, 'index']);
 

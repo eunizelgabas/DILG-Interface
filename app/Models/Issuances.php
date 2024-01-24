@@ -9,5 +9,10 @@ class Issuances extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'reference_no', 'type', 'category', 'outcome', 'url_link', 'date']
+    protected $fillable = ['title', 'reference_no', 'type', 'url_link', 'date', 'keyword'];
+
+    public function latest()
+    {
+        return $this->hasOne(Latest::class);
+    }
 }
