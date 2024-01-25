@@ -16,7 +16,9 @@
 <body class="font-sans antialiased flex h-screen bg-gray-100">
 
     <!-- Sidebar -->
-    @include('layouts.navigation')
+    {{-- @include('layouts.navigation') --}}
+
+    <x-sidebar />
 
     <div class="flex-1 flex flex-col">
 
@@ -30,17 +32,12 @@
         </header>
         @endif
 
-        <!-- Main content -->
-        <main class="flex-1">
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
+            <!-- Main content goes here -->
             {{ $slot }}
         </main>
 
-        <!-- Footer -->
-        {{-- <footer class="bg-white footer footer-center text-center p-4 bg-base-300 text-base-content">
-            <aside>
-                <p class="text-center"> © 2024 - All rights reserved | MDC Developers</p>
-            </aside>
-        </footer> --}}
+
     </div>
 
 

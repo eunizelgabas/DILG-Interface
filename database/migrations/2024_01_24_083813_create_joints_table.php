@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('issuances', function (Blueprint $table) {
+        Schema::create('joints', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('type');
-            $table->string('reference_no');
-            $table->string('url_link');
-            $table->date('date');
-            $table->string('keyword');
+            $table->string('responsible_office')->nullable();
+            $table->bigInteger('issuance_id')->unsigned();
+            $table->foreign('issuance_id')->references('id')->on('issuances')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('issuances');
+        Schema::dropIfExists('joints');
     }
 };

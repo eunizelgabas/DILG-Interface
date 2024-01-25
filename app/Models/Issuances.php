@@ -15,4 +15,8 @@ class Issuances extends Model
     {
         return $this->hasOne(Latest::class);
     }
+
+    public function joint(){
+        return $this->hasOne(Joint::class);
+    }
 }

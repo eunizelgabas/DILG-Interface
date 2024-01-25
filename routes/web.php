@@ -38,6 +38,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/latest_issuances', [IssuanceController::class, 'store'])->name('latest.store');
 
     Route::get('/joint_circulars', [JointController::class, 'index']);
+    Route::post('/joint_circulars', [JointController::class, 'store'])->name('joint.store');
+    Route::get('/joint_circulars/edit/{joint}', [JointController::class, 'edit'])->name('joint.edit');
+    Route::put('/joint_circulars/{joint}', [JointController::class, 'update'])->name('joint.update');
+    Route::delete('/joint_circulars/{joint}', [JointController::class, 'destroy'])->name('joint.delete');
 
     Route::get('/memo_circulars', [MemoController::class, 'index']);
 
