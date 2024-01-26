@@ -5,9 +5,9 @@
             <h3 class="text-xl font-semibold">
                 Edit Joint Circular Details
             </h3>
-            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="product-modal">
+            <a href="/joint_circulars" type="button" class="text-gray-400 bg-transparent hover:bg-red-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="product-modal">
                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-            </button>
+            </a>
         </div>
 
         <div class="p-6 space-y-6">
@@ -20,8 +20,8 @@
                         <label for="date" class="text-sm font-medium text-gray-900 block mb-2">Date</label>
                         <input type="text" name="date" id="date" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="" value="{{ old('joint', $joint->issuance->date) }}">
                     </div>
-                    
-                    
+
+
                     <div class="col-span-full">
                         <label for="title" class="text-sm font-medium text-gray-900 block mb-2">Title</label>
                         <textarea id="title" name="title" rows="2" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" >{{ old('joint', $joint->issuance->title) }}</textarea>
@@ -37,7 +37,7 @@
                     <div class="col-span-full">
                         <label for="url_link" class="text-sm font-medium text-gray-900 block mb-2">Url Link</label>
                         <input type="text" name="url_link" id="url_link" value="{{ old('joint', $joint->issuance->url_link) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
-                       
+
                     </div>
                     {{-- <div id="keyword-container" class="col-span-full">
                         <label for="url_link" class="text-sm font-medium text-gray-900 block mb-2">Keyword/s</label>
@@ -48,7 +48,7 @@
                         <button type="button" onclick="removeItem(this)"
                         class="ml-2 text-sm text-red-600 cursor-pointer keyword-remove" style="display: none;">Remove</button>
                         <input type="hidden" name="concatenated_keywords" id="concatenated_keywords">
-                        
+
                     </div>
                     <div class="col-span-full mt-0">
                         <button type="button" onclick="addItem()" class="mt-2 text-sm text-blue-600 cursor-pointer">Add keyword</button>
@@ -59,15 +59,15 @@
                         </label>
                         <div class="flex mb-2" id="initial-input">
                             <input type="text" name="keyword[]" placeholder="" value="{{ old('joint', $joint->issuance->keyword) }}"
-                   class="keyword-input shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"/>
+                                class="keyword-input shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"/>
                         </div>
                         @error('keyword')
                         <p class="text-red-500 text-xs mt-2">{{$message}}</p>
                         @enderror
                     </div>
-                    <button type="button" onclick="addItem()" class="mt-2 text-sm text-blue-600 cursor-pointer">Add Item</button>
+                    <button type="button" onclick="addItem()" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add keyword</button>
                     <input type="hidden" name="concatenated_keywords" id="concatenated_keywords">
-                   
+
                 </div>
                 <div class="p-6 border-t mt-5 border-gray-200 rounded-b flex justify-end">
                     <a href="/joint_circulars" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 mr-3 focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center" >Cancel</a>
@@ -76,7 +76,7 @@
             </form>
         </div>
 
-      
+
 
     </div>
 </x-app-layout>

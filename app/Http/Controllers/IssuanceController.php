@@ -8,10 +8,20 @@ use Illuminate\Http\Request;
 
 class IssuanceController extends Controller
 {
-    public function index(){
-        $latests = Latest::with('issuance')->orderBy('created_at', 'desc')->get();
-        return view('latest.index',compact('latests')
-    );
+    public function index(Request $request){
+
+        $search = $request->input('search');
+
+        $latests = Latest::when($search, function ($query) use ($search) {
+            $query->where('responsible_office', 'like', '%' . $search . '%')
+                ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
+                    $issuanceQuery->where('title', 'like', '%' . $search . '%')
+                        ->orWhere('reference_no', 'like', '%' . $search . '%')
+                        ->orWhere('keyword', 'like', '%' . $search . '%');
+                });
+         })->with('issuance')->orderBy('created_at', 'desc')->get();
+
+    return view('latest.index',compact('latests' ,'search'));
     }
 
     public function store(Request $request){

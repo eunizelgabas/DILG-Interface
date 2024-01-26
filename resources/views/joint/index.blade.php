@@ -1,10 +1,9 @@
 <x-app-layout>
-    <div
-    class="w-full max-w-[1190px] px-6 sm:px-8 md:px-16 py-2 md:py-10 rounded-xl min-h-[300px] m-2">
+    <div class="w-full max-w-[1190px] px-6 sm:px-8 md:px-16 py-2 md:py-10 rounded-xl min-h-[300px] m-2">
     <div class="flex flex-col md:flex-row items-start md:items-center">
         <div class="md:mr-4"> <!-- Adjust margin based on your design -->
             <h1 class="font-semibold text-2xl mb-2 tracking-wider drop-shadow-[3px_3px_5px_rgba(91,91,91,0.58)]">Joint Circulars Archive</h1>
-            <small class="font-[500]">In the event that we do not have a full 30-days, we extrapolate based on data we have.</small>
+            {{-- <small class="font-[500]">In the event that we do not have a full 30-days, we extrapolate based on data we have.</small> --}}
         </div>
 
         <button onclick="document.getElementById('myModal').showModal()" id="btn" class="py-2 px-4 bg-blue-600 text-white rounded text shadow-xl mt-4 md:mt-0 ml-auto">
@@ -12,7 +11,36 @@
         </button>
 
     </div>
+    <div class="flex-1 pr-4">
+        <div class="relative md:w-1/3">
+            <form action="{{ route('joint.index') }}" method="GET" class="mb-4" id="searchForm">
+                <input type="text" name="search" value="{{ $search }}"
+                       class="w-full pl-10 pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                       placeholder="Search..." oninput="searchOnChange()">
+                <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24"
+                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
+                        <circle cx="10" cy="10" r="7"/>
+                        <line x1="21" y1="21" x2="15" y2="15"/>
+                    </svg>
+                </div>
+                <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                    <div id="loadingIndicator" class="hidden loader"></div>
+                </div>
+            </form>
 
+
+        </div>
+    </div>
+    @if(count($joints) === 0 && !empty($search))
+        <div class="text-gray-900 mt-4 justify-center">
+            No data available for your search query "{{ $search }}".
+        </div>
+    @endif
+
+    @if(count($joints) > 0)
     @foreach ($joints as $joint )
 
     <div class='flex items-center mt-3'>
@@ -123,10 +151,24 @@
 
     @endforeach
 
+    <div class="text-start" style="color:rgb(83, 82, 82); margin-top: 15px;">
+        {{-- Showing {{ $joints->firstItem() }} to {{ $joints->lastItem() }} of {{ $joints->total() }} entries --}}
+    </div>
+
+    <div class="d-flex justify-content-end mt-2">
+        {{ $joints->onEachSide(1)->links() }}
+    </div>
+    @else
+    <div class="flex justify-center items-center">
+        <h1>No Joint Circular available</h1>
+    </div>
+    @endif
+
+
 </div>
-<dialog id="myModal" class="h-auto w-full md:w-1/2 p-5  bg-white rounded-md">
+{{-- <dialog id="myModal" class="h-auto w-full md:w-1/2 p-5  bg-white rounded-md">
     <div class="flex flex-col w-full h-auto">
-        <!-- Header -->
+
             <div class="flex w-full h-auto justify-center items-center">
                 <div class="flex w-10/12 h-auto py-3 justify-center items-center text-2xl font-bold ">
                     Create Joint Circulars
@@ -135,8 +177,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </div>
             </div>
-        <!--Header End-->
-        <!-- Modal Content-->
+
             <div class="flex items-center justify-center p-2">
                 <div class="w-full bg-white">
                     <form method="POST" action="{{route('joint.store')}}">
@@ -220,6 +261,93 @@
                 </form>
             </div>
         </div>
+
+    </div>
+</dialog> --}}
+
+<dialog id="myModal" class="h-auto w-full md:w-1/2 p-5  bg-white rounded-md">
+    <div class="flex flex-col w-full h-auto">
+        <!-- Header -->
+            <div class="flex w-full h-auto justify-center items-center">
+                <div class="flex w-10/12 h-auto py-3 justify-center items-center text-2xl font-bold ">
+                    Create Latest Issuances
+                </div>
+                <div onclick="document.getElementById('myModal').close();" class="flex w-1/12 h-auto justify-center cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </div>
+            </div>
+        <!--Header End-->
+        <!-- Modal Content-->
+            <div class="flex items-center justify-center p-2">
+                <div class="w-full bg-white">
+                    <form method="POST" action="{{route('joint.store')}}">
+                        @csrf
+                        <div class="mb-5">
+
+                        <div class="-mx-3 flex flex-wrap">
+                            <div class="w-full ">
+                                <div class="mb-5">
+                                    <label for="date" class="mb-3 block text-base font-medium text-[#07074D]">
+                                        Date
+                                    </label>
+                                    <input type="date" name="date" id="date"
+                                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="mb-5">
+                            <label for="title" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Title
+                            </label>
+                            <textarea type="text" name="title" id="title" placeholder="Enter your phone number"
+                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" /></textarea>
+                        </div>
+                        <div class="mb-5">
+                            <label for="reference_no" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Reference No
+                            </label>
+                            <input type="text" name="reference_no" id="reference_no" placeholder=""
+                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                        </div>
+                        <div class="mb-5">
+                            <label for="responsible_office" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Responsible Office
+                            </label>
+                            <input type="text" name="responsible_office" id="responsible_office" placeholder=""
+                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                        </div>
+                        <div class="mb-5">
+                            <label for="url_link" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Url Link
+                            </label>
+                            <input type="text" name="url_link" id="url_link" placeholder=""
+                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                        </div>
+
+                        <div id="keyword-container" class="mb-5">
+                            <label for="url_link" class="mb-3 block text-base font-medium text-[#07074D]">
+                                Keyword/s:
+                            </label>
+                            <div class="flex mb-2">
+                                <input type="text" name="keyword[]" placeholder=""
+                                       class="flex-1 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md keyword-input" />
+                                <button type="button" onclick="removeItem(this)"
+                                        class="ml-2 text-sm text-red-600 cursor-pointer keyword-remove" style="display: none;">Remove</button>
+                            </div>
+                        </div>
+                        <button type="button" onclick="addItem()" class="mt-2 text-sm text-blue-600 cursor-pointer">Add Item</button>
+                        <input type="hidden" name="concatenated_keywords" id="concatenated_keywords">
+
+
+                            <button
+                                type="submit" class=" hover:shadow-form w-full rounded-md bg-blue-400 hover:bg-blue-600 py-3 px-8 text-center text-base font-semibold text-white outline-none">
+                                Save
+                            </button>
+                        </div>
+                </form>
+            </div>
+        </div>
         <!-- End of Modal Content-->
     </div>
 </dialog>
@@ -250,6 +378,21 @@
       transform: translateX(0);
     }
   }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
   </style>
  <script>
    document.addEventListener('DOMContentLoaded', function () {
@@ -321,4 +464,9 @@
             })
         }
     };
+
+    function searchOnChange() {
+        var form = document.getElementById('searchForm');
+        form.submit();
+    }
 </script>

@@ -8,6 +8,7 @@ use App\Http\Controllers\MemoController;
 use App\Http\Controllers\PresidentialController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RepublicController;
+use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,10 +35,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/latest_issuances', [IssuanceController::class, 'index']);
+    //Route for latest Issuances - Eunizel
+    Route::get('/latest_issuances', [IssuanceController::class, 'index'])->name('latest.index');
     Route::post('/latest_issuances', [IssuanceController::class, 'store'])->name('latest.store');
+    Route::get('/latest_issuances/edit/{latest}', [IssuanceController::class, 'edit'])->name('latest.edit');
+    Route::put('/latest_issuances/{latest}', [IssuanceController::class, 'update'])->name('latest.update');
+    Route::delete('/latest_issuances/{latest}', [IssuanceController::class, 'destroy'])->name('latest.delete');
 
-    Route::get('/joint_circulars', [JointController::class, 'index']);
+    //Route for Joint Circulars - Eunizel
+    Route::get('/joint_circulars', [JointController::class, 'index'])->name('joint.index');
     Route::post('/joint_circulars', [JointController::class, 'store'])->name('joint.store');
     Route::get('/joint_circulars/edit/{joint}', [JointController::class, 'edit'])->name('joint.edit');
     Route::put('/joint_circulars/{joint}', [JointController::class, 'update'])->name('joint.update');
