@@ -19,4 +19,10 @@ class Issuances extends Model
     public function joint(){
         return $this->hasOne(Joint::class);
     }
+
+    public function memo(){
+        return $this->hasOne(Memo::class);
+    }
+
+
 }

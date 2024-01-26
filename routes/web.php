@@ -49,7 +49,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/joint_circulars/{joint}', [JointController::class, 'update'])->name('joint.update');
     Route::delete('/joint_circulars/{joint}', [JointController::class, 'destroy'])->name('joint.delete');
 
-    Route::get('/memo_circulars', [MemoController::class, 'index']);
+    Route::get('/memo_circulars', [MemoController::class, 'index'])->name('memo.index');
+    Route::post('/memo_circulars', [MemoController::class, 'store'])->name('memo.store');
+    Route::get('/memo_circulars/edit/{memo}', [MemoController::class, 'edit'])->name('memo.edit');
+    Route::put('/memo_circulars/{memo}', [MemoController::class, 'update'])->name('memo.update');
+    Route::delete('/memo_circulars/{memo}', [MemoController::class, 'destroy'])->name('memo.delete');
 
     Route::get('/presidential_directives', [PresidentialController::class, 'index']);
 
