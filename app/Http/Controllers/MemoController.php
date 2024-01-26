@@ -47,7 +47,7 @@ class MemoController extends Controller
             'date' => $data['date'],
             'url_link' => $data['url_link'],
             'keyword' => $keywordString, // Save concatenated keywords
-            'type' => 'Joint Circulars', // Automatically set the type
+            'type' => 'Memo Circulars', // Automatically set the type
         ]);
 
         // Create Latest record associated with the Issuances

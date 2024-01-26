@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Presidential extends Model
+class Legal extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['responsible_office', 'issuance_id'];
+    protected $fillable = ['category', 'issuance_id'];
 
     public function issuance()
     {

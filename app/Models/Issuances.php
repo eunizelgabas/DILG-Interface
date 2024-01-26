@@ -25,8 +25,19 @@ class Issuances extends Model
     }
 
     public function presidential(){
-        return $this->hasOne(Memo::class);
+        return $this->hasOne(Presidential::class);
     }
 
+    public function draft(){
+        return $this->hasOne(Draft::class);
+    }
+
+    public function repulic(){
+        return $this->hasOne(Republic::class);
+    }
+
+    public function legal(){
+        return $this->hasOne(Legal::class);
+    }
 
 }

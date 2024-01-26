@@ -63,11 +63,26 @@ Route::middleware('auth')->group(function () {
     Route::put('/presidential_directives/{presidential}', [PresidentialController::class, 'update'])->name('presidential.update');
     Route::delete('/presidential_directives/{presidential}', [PresidentialController::class, 'destroy'])->name('presidential.delete');
 
-    Route::get('/draft_issuances', [DraftController::class, 'index']);
+    //Route for Draft Issuance- Eunizel
+    Route::get('/draft_issuances', [DraftController::class, 'index'])->name('draft.index');
+    Route::post('/draft_issuances', [DraftController::class, 'store'])->name('draft.store');
+    Route::get('/draft_issuances/edit/{draft}', [DraftController::class, 'edit'])->name('draft.edit');
+    Route::put('/draft_issuances/{draft}', [DraftController::class, 'update'])->name('draft.update');
+    Route::delete('/draft_issuances/{draft}', [DraftController::class, 'destroy'])->name('draft.delete');
 
-    Route::get('/republic_acts', [RepublicController::class, 'index']);
+    //Route for Republic Acts- Eunizel
+    Route::get('/republic_acts', [RepublicController::class, 'index'])->name('republic.index');
+    Route::post('/republic_acts', [RepublicController::class, 'store'])->name('republic.store');
+    Route::get('/republic_acts/edit/{republic}', [RepublicController::class, 'edit'])->name('republic.edit');
+    Route::put('/republic_acts/{republic}', [RepublicController::class, 'update'])->name('republic.update');
+    Route::delete('/republic_acts/{republic}', [RepublicController::class, 'destroy'])->name('republic.delete');
 
-    Route::get('/legal_opinions', [LegalController::class, 'index']);
+    //Route for Legal Opinion- Eunizel
+    Route::get('/legal_opinions', [LegalController::class, 'index'])->name('legal.index');
+    Route::post('/legal_opinions', [LegalController::class, 'store'])->name('legal.store');
+    Route::get('/legal_opinions/edit/{legal}', [LegalController::class, 'edit'])->name('legal.edit');
+    Route::put('/legal_opinions/{legal}', [LegalController::class, 'update'])->name('legal.update');
+    Route::delete('/legal_opinions/{legal}', [LegalController::class, 'destroy'])->name('legal.delete');
 
 });
 

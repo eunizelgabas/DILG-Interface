@@ -46,7 +46,7 @@ class PresidentialController extends Controller
             'date' => $data['date'],
             'url_link' => $data['url_link'],
             'keyword' => $keywordString, // Save concatenated keywords
-            'type' => 'Joint Circulars', // Automatically set the type
+            'type' => 'Presidential Directives', // Automatically set the type
         ]);
 
         // Create Latest record associated with the Issuances
@@ -56,7 +56,7 @@ class PresidentialController extends Controller
         ]);
 
         // dd($request->all());
-        return redirect('/presidential_directives')->with('success', 'Latest Issuance successfully created');
+        return redirect('/presidential_directives')->with('success', 'Presidential Directives successfully created');
     }
 
     public function edit(Presidential $presidential){
@@ -94,7 +94,7 @@ class PresidentialController extends Controller
             'responsible_office' => $data['responsible_office']
         ]);
 
-        return redirect('/presidential_directives')->with('success', 'Latest Issuance successfully updated');
+        return redirect('/presidential_directives')->with('success', 'Presidential Directives successfully updated');
     }
 
 

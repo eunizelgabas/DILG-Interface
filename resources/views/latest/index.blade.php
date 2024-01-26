@@ -406,6 +406,10 @@
             container.getElementsByClassName('keyword-remove')[0].style.display = 'none';
         }
     }
+    function searchOnChange() {
+        var form = document.getElementById('searchForm');
+        form.submit();
+    }
 </script>
 
 

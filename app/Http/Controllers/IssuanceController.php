@@ -13,7 +13,8 @@ class IssuanceController extends Controller
         $search = $request->input('search');
 
         $latests = Latest::when($search, function ($query) use ($search) {
-            $query->where('responsible_office', 'like', '%' . $search . '%')
+            $query->where('outcome', 'like', '%' . $search . '%')
+                ->orWhere('category', 'like', '%' . $search . '%')
                 ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
                     $issuanceQuery->where('title', 'like', '%' . $search . '%')
                         ->orWhere('reference_no', 'like', '%' . $search . '%')
@@ -99,6 +100,16 @@ class IssuanceController extends Controller
         ]);
 
         return redirect('/latest_issuances')->with('success', 'Latest Issuance successfully updated');
+    }
+
+    public function destroy(Latest $latest){
+        $latest->issuance->delete();
+
+        // Now, delete the latest
+        $latest->delete();
+
+
+        return redirect('/latest_issuances')->with('Joint Circular deleted successfully.');
     }
 
 }
