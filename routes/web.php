@@ -49,13 +49,19 @@ Route::middleware('auth')->group(function () {
     Route::put('/joint_circulars/{joint}', [JointController::class, 'update'])->name('joint.update');
     Route::delete('/joint_circulars/{joint}', [JointController::class, 'destroy'])->name('joint.delete');
 
+     //Route for Memo Circulars - Eunizel
     Route::get('/memo_circulars', [MemoController::class, 'index'])->name('memo.index');
     Route::post('/memo_circulars', [MemoController::class, 'store'])->name('memo.store');
     Route::get('/memo_circulars/edit/{memo}', [MemoController::class, 'edit'])->name('memo.edit');
     Route::put('/memo_circulars/{memo}', [MemoController::class, 'update'])->name('memo.update');
     Route::delete('/memo_circulars/{memo}', [MemoController::class, 'destroy'])->name('memo.delete');
 
-    Route::get('/presidential_directives', [PresidentialController::class, 'index']);
+     //Route for Presidential Directives - Eunizel
+    Route::get('/presidential_directives', [PresidentialController::class, 'index'])->name('presidential.index');
+    Route::post('/presidential_directives', [PresidentialController::class, 'store'])->name('presidential.store');
+    Route::get('/presidential_directives/edit/{presidential}', [PresidentialController::class, 'edit'])->name('presidential.edit');
+    Route::put('/presidential_directives/{presidential}', [PresidentialController::class, 'update'])->name('presidential.update');
+    Route::delete('/presidential_directives/{presidential}', [PresidentialController::class, 'destroy'])->name('presidential.delete');
 
     Route::get('/draft_issuances', [DraftController::class, 'index']);
 

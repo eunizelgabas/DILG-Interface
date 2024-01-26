@@ -24,5 +24,9 @@ class Issuances extends Model
         return $this->hasOne(Memo::class);
     }
 
+    public function presidential(){
+        return $this->hasOne(Memo::class);
+    }
+
 
 }
