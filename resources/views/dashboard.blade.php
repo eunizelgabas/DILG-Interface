@@ -28,7 +28,7 @@
 
             </div>
             <div class="flex-grow flex flex-col ml-4">
-                <span class="text-xl font-bold">8,430</span>
+                <span class="text-xl font-bold">{{$user}}</span>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Total Users</span>
 
@@ -44,7 +44,7 @@
                 </svg>
             </div>
             <div class="flex-grow flex flex-col ml-4">
-                <span class="text-xl font-bold">211</span>
+                <span class="text-xl font-bold">{{$latest}}</span>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Latest Issuances</span>
 
@@ -60,7 +60,7 @@
                 </svg>
             </div>
             <div class="flex-grow flex flex-col ml-4">
-                <span class="text-xl font-bold">140</span>
+                <span class="text-xl font-bold">{{$joint}}</span>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Joint Circulars</span>
 
@@ -75,7 +75,7 @@
                 </svg>
             </div>
             <div class="flex-grow flex flex-col ml-4">
-                <span class="text-xl font-bold">140</span>
+                <span class="text-xl font-bold">{{$memo}}</span>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Memo Circulars</span>
 
@@ -89,7 +89,7 @@
                 </svg>
             </div>
             <div class="flex-grow flex flex-col ml-4">
-                <span class="text-xl font-bold">140</span>
+                <span class="text-xl font-bold">{{$presidential}}</span>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Presidential Directives</span>
 
@@ -103,7 +103,7 @@
                 </svg>
             </div>
             <div class="flex-grow flex flex-col ml-4">
-                <span class="text-xl font-bold">140</span>
+                <span class="text-xl font-bold">{{$draft}}</span>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Draft Issuances</span>
 
@@ -125,7 +125,7 @@
                 </svg>
             </div>
             <div class="flex-grow flex flex-col ml-4">
-                <span class="text-xl font-bold">140</span>
+                <span class="text-xl font-bold">{{$republic}}</span>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Republic Acts</span>
 
@@ -139,7 +139,7 @@
                   </svg>
             </div>
             <div class="flex-grow flex flex-col ml-4">
-                <span class="text-xl font-bold">140</span>
+                <span class="text-xl font-bold">{{$legal}}</span>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Legal Opinions</span>
 
@@ -158,9 +158,9 @@
                 <h3 class="flex items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark">
                     <span class="mr-3 text-dark font-bold">Recent Uploaded Issuances</span>
                 </h3>
-                <a href="" class=" inline-block text-[.925rem] font-medium leading-normal text-right align-right cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-blue-400 bg-light-dark border-light shadow-none border-0 py-2 px-5 sm:self-center">
+                {{-- <a href="" class=" inline-block text-[.925rem] font-medium leading-normal text-right align-right cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-blue-400 bg-light-dark border-light shadow-none border-0 py-2 px-5 sm:self-center">
                     See More
-                </a>
+                </a> --}}
             </div>
             <div class="flex flex-col">
                 <div class="-m-1.5 overflow-x-auto">
@@ -168,34 +168,44 @@
                     <div class=" rounded-lg divide-y divide-gray-200 ">
 
                         <div class="overflow-hidden">
-                        <table class="min-w-full divide-y divide-gray-200 ">
-                            <thead class="bg-gray-50 ">
-                                <tr>
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Reference No</th>
+                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Title</th>
+                                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Type</th>
+                                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">URL Link</th>
+                                    </tr>
+                                </thead>
 
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Reference No</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Title</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Type</th>
-                                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">URL Link</th>
-                               <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">Action</th>
-                                </tr>
-                            </thead>
                                 <tbody class="divide-y divide-gray-200">
-                                    <tr >
-                                        <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">
+                                    @if (count($issuance) == 0)
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 text-center">
                                             No issuances found.
                                         </td>
                                     </tr>
+                                    @endif
+
+                                    @foreach($issuance as $is)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 "></td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 "></td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 "></td>
-                                        <td class=" text-xs whitespace-nowrap  uppercase px-6 py-4  text-center font-bold "></td>
-                                        <!-- <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                        <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">Delete</button>
-                                        </td> -->
+                                        <td class="px-6 py-4 whitespace-nowrap overflow-hidden max-w-xs truncate text-sm font-medium text-gray-800">
+                                            {{$is->reference_no}}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap overflow-hidden max-w-xs truncate text-sm text-gray-800">
+                                            {{$is->title}}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap overflow-hidden max-w-xs truncate text-sm text-gray-800">
+                                            {{$is->type}}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap overflow-hidden max-w-xs truncate text-xs text-center font-bold uppercase">
+                                            {{$is->url_link}}
+                                        </td>
                                     </tr>
-                                 </tbody>
+                                    @endforeach
+                                </tbody>
                             </table>
+
                         </div>
                     </div>
                     </div>
@@ -213,3 +223,9 @@
 </div>
 
 </x-app-layout>
+
+<style>
+    .truncate {
+        max-width: 150px; /* Adjust the value based on your preference */
+    }
+</style>

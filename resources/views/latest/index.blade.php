@@ -212,7 +212,7 @@
                     <h1>No Latest issuance available</h1>
                 </div>
                 @endif
-                </div>
+            </div>
 
         </div>
     </div>
