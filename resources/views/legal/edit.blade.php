@@ -21,7 +21,7 @@
                         </label>
                         <select id="category"  name="category" autocomplete="category" class="w-full rounded-lg border py-2 px-3">
                             <option selected disabled>Select...</option>
-                            <option value="3 TERM_LIMIT RULE" {{ old('legal', $legal->category) == '3 TERM_LIMIT RULE' ? 'selected' : '' }}>
+                            <option value="3 TERM-LIMIT RULE" {{ old('legal', $legal->category) == '3 TERM-LIMIT RULE' ? 'selected' : '' }}>
                                 3 TERM-LIMIT RULE
                             </option>
                             <option value="ADMINISTRATIVE INVESTIGATION PROCESS(LOCAL OFFICIAL)" {{ old('legal', $legal->category) == 'ADMINISTRATIVE INVESTIGATION PROCESS(LOCAL OFFICIAL' ? 'selected' : '' }}>

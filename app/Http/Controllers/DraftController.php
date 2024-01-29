@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLog;
 use App\Models\Draft;
 use App\Models\Issuances;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DraftController extends Controller
 {
@@ -56,6 +58,9 @@ class DraftController extends Controller
         ]);
 
         // dd($request->all());
+        $log_entry = Auth::user()->name . " created a Draft Issuances  " . $draft->title . " with the id# " . $draft->id;
+        event(new UserLog($log_entry));
+
         return redirect('/draft_issuances')->with('success', 'Draft Issuance successfully created');
     }
 
@@ -94,6 +99,10 @@ class DraftController extends Controller
             'responsible_office' => $data['responsible_office']
         ]);
 
+
+        $log_entry = Auth::user()->name . " udpated a Draft Issuances  " . $draft->title . " with the id# " . $draft->id;
+        event(new UserLog($log_entry));
+
         return redirect('/draft_issuances')->with('success', 'Draft Issuance successfully updated');
     }
 
@@ -104,6 +113,8 @@ class DraftController extends Controller
         // Now, delete the presi$draft
         $draft->delete();
 
+        $log_entry = Auth::user()->name . " deleted a Draft Issuances  " . $draft->title . " with the id# " . $draft->id;
+        event(new UserLog($log_entry));
 
         return redirect('/draft_issuances')->with('Draft Issuance deleted successfully.');
     }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Joint;
 use App\Models\Memo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MemoController extends Controller
 {
@@ -57,6 +59,9 @@ class MemoController extends Controller
         ]);
 
         // dd($request->all());
+        $log_entry = Auth::user()->name . " created a Memo Circular  " . $memo->title . " with the id# " . $memo->id;
+        event(new UserLog($log_entry));
+
         return redirect('/memo_circulars')->with('success', 'Latest Issuance successfully created');
     }
 
@@ -95,6 +100,9 @@ class MemoController extends Controller
             'responsible_office' => $data['responsible_office']
         ]);
 
+        $log_entry = Auth::user()->name . " updated a Memo Circular  " . $memo->title . " with the id# " . $memo->id;
+        event(new UserLog($log_entry));
+
         return redirect('/memo_circulars')->with('success', 'Latest Issuance successfully updated');
     }
 
@@ -103,8 +111,10 @@ class MemoController extends Controller
         $memo->issuance->delete();
 
         // Now, delete the memo
-        $memo->delete();
 
+        $memo->delete();
+        $log_entry = Auth::user()->name . " deleted a Memo Circular with the id # " . $memo->id;
+        event(new UserLog($log_entry));
 
         return redirect('/memo_circulars')->with('Joint Circular deleted successfully.');
     }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Legal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LegalController extends Controller
 {
@@ -21,7 +23,29 @@ class LegalController extends Controller
                 });
          })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
-    return view('legal.index',compact('legals' ,'search'));
+         if ($request->expectsJson()) {
+            // Transform the data to include the foreign key relationship
+            $formattedLegals = $legals->map(function ($legal) {
+                return [
+                    'id' => $legal->id,
+                    'category' => $legal->category,
+                    'issuance' => [
+                        'id' => $legal->issuance->id,
+                        'date' => $legal->issuance->date,
+                        'title' => $legal->issuance->title,
+                        'reference_no' => $legal->issuance->reference_no,
+                        'keyword' => $legal->issuance->keyword,
+                        'url_link' => $legal->issuance->url_link,
+                    ],
+                ];
+            });
+
+            return response()->json(['legals' => $formattedLegals]);
+        } else {
+            // If the request is from the web view, return a Blade view
+            return view('legal.index',compact('legals' ,'search'));
+        }
+    // return view('legal.index',compact('legals' ,'search'));
     }
 
     public function store(Request $request){
@@ -54,6 +78,9 @@ class LegalController extends Controller
             'category' => $data['category'],
             'issuance_id' => $issuance->id,
         ]);
+
+        $log_entry = Auth::user()->name . " created a Legal Opinion  " . $legal->title . " with the id# " . $legal->id;
+        event(new UserLog($log_entry));
 
         return redirect('/legal_opinions')->with('success', 'Legal Opinion successfully created');
     }
@@ -94,6 +121,9 @@ class LegalController extends Controller
 
         ]);
 
+        $log_entry = Auth::user()->name . " updated a Legal Opinion  " . $legal->title . " with the id# " . $legal->id;
+        event(new UserLog($log_entry));
+
         return redirect('/legal_opinions')->with('success', 'Legal Opinion successfully updated');
     }
 
@@ -103,7 +133,8 @@ class LegalController extends Controller
         // Now, delete the legal
         $legal->delete();
 
-
+        $log_entry = Auth::user()->name . " deleted a Legal Opinion  " . $legal->title . " with the id# " . $legal->id;
+        event(new UserLog($log_entry));
         return redirect('/legal_opinions')->with('Joint Circular deleted successfully.');
     }
 

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Latest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class IssuanceController extends Controller
 {
@@ -22,7 +24,30 @@ class IssuanceController extends Controller
                 });
          })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
-    return view('latest.index',compact('latests' ,'search'));
+         if ($request->expectsJson()) {
+            // Transform the data to include the foreign key relationship
+            $formattedLatests = $latests->map(function ($latest) {
+                return [
+                    'id' => $latest->id,
+                    'category' => $latest->category,
+                    'outcome' => $latest->outcome,
+                    'issuance' => [
+                        'id' => $latest->issuance->id,
+                        'date' => $latest->issuance->date,
+                        'title' => $latest->issuance->title,
+                        'reference_no' => $latest->issuance->reference_no,
+                        'keyword' => $latest->issuance->keyword,
+                        'url_link' => $latest->issuance->url_link,
+                    ],
+                ];
+            });
+
+            return response()->json(['latests' => $formattedLatests]);
+        } else {
+            // If the request is from the web view, return a Blade view
+            return view('latest.index',compact('latests' ,'search'));
+        }
+    // return view('latest.index',compact('latests' ,'search'));
     }
 
     public function store(Request $request){
@@ -59,6 +84,9 @@ class IssuanceController extends Controller
         ]);
 
         // dd($request->all());
+        $log_entry = Auth::user()->name . " created a Latest Issuances  " . $latest->title . " with the id# " . $latest->id;
+        event(new UserLog($log_entry));
+
         return redirect('/latest_issuances')->with('success', 'Latest Issuance successfully created');
     }
 
@@ -99,6 +127,9 @@ class IssuanceController extends Controller
             'outcome' => $data['outcome']
         ]);
 
+        $log_entry = Auth::user()->name . " updated a Latest Issuances  " . $latest->title . " with the id# " . $latest->id;
+        event(new UserLog($log_entry));
+
         return redirect('/latest_issuances')->with('success', 'Latest Issuance successfully updated');
     }
 
@@ -108,6 +139,8 @@ class IssuanceController extends Controller
         // Now, delete the latest
         $latest->delete();
 
+        // $log_entry = Auth::user()->name . " deleted a Latest Issuances  " . $latest->title . " with the id# " . $latest->id;
+        // event(new UserLog($log_entry));
 
         return redirect('/latest_issuances')->with('Joint Circular deleted successfully.');
     }

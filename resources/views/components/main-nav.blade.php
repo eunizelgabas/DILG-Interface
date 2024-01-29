@@ -35,7 +35,7 @@
                 </a>
             </li>
             <li  class=" text-whiteborder-transparent border-indigo-900 ">
-                <a  href="" class=" relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-100  hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6">
+                <a  href="/logs" class=" relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-100  hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6">
                     <span class="inline-flex justify-center items-center ml-4">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />

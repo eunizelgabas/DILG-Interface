@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Presidential;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PresidentialController extends Controller
 {
@@ -56,6 +58,9 @@ class PresidentialController extends Controller
         ]);
 
         // dd($request->all());
+        $log_entry = Auth::user()->name . " created a Presidential Directive  " . $presidential->title . " with the id# " . $presidential->id;
+        event(new UserLog($log_entry));
+
         return redirect('/presidential_directives')->with('success', 'Presidential Directives successfully created');
     }
 
@@ -94,6 +99,10 @@ class PresidentialController extends Controller
             'responsible_office' => $data['responsible_office']
         ]);
 
+        $log_entry = Auth::user()->name . " udpated a Presidential Directive  " . $presidential->title . " with the id# " . $presidential->id;
+        event(new UserLog($log_entry));
+
+
         return redirect('/presidential_directives')->with('success', 'Presidential Directives successfully updated');
     }
 
@@ -102,6 +111,10 @@ class PresidentialController extends Controller
         $presidential->issuance->delete();
 
         // Now, delete the presi$presidential
+
+        $log_entry = Auth::user()->name . " deleted a Presidential Directive  " . $presidential->title . " with the id# " . $presidential->id;
+        event(new UserLog($log_entry));
+
         $presidential->delete();
 
 

@@ -50,7 +50,7 @@
                 @foreach ($legals as $legal )
 
                 <div class='flex items-center mt-3'>
-                    <div class="rounded-xl border p-5 shadow-md w-full bg-white">
+                    <div class="rounded-xl p-5 shadow-md w-full bg-white border-l-4 border-blue-500">
                     <div class="flex w-full items-center justify-between border-b pb-3">
                       <div class="flex items-center space-x-3">
                         {{-- <div class="h-8 w-8 rounded-full bg-slate-400 bg-[url('https://i.pravatar.cc/32')]"></div> --}}
@@ -99,7 +99,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Are you sure you want to delete this latest issuance?</h3>
+                                        <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Are you sure you want to delete this legal opinion?</h3>
                                         <div class="flex  justify-center">
                                             <form action="{{ route('legal.delete', $legal) }}" method="post">
                                                 @csrf
@@ -204,7 +204,7 @@
                                 </label>
                                 <select id="category"  name="category" autocomplete="category" class="w-full rounded-lg border py-2 px-3">
                                     <option selected disabled>Select...</option>
-                                    <option value="3 TERM_LIMIT RULE">
+                                    <option value="3 TERM-LIMIT RULE">
                                         3 TERM-LIMIT RULE
                                     </option>
                                     <option value="ADMINISTRATIVE INVESTIGATION PROCESS(LOCAL OFFICIAL)">
@@ -336,9 +336,24 @@
       transform: translateX(0);
     }
   }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
   </style>
  <script>
-    document.addEventListener('DOMContentLoaded', function () {
+   document.addEventListener('DOMContentLoaded', function () {
         addItem();
     });
 
@@ -373,27 +388,45 @@
         removeButton.textContent = 'Remove';
 
         var div = document.createElement('div');
-        div.className = 'flex mb-2';
+        div.className = 'flex mb-2 keyword-remove';
         div.appendChild(input);
-        div.appendChild(removeButton);
+
+        if (container.getElementsByClassName('keyword-input').length > 0) {
+            // Only add "Remove" button for additional inputs
+            div.appendChild(removeButton);
+        }
 
         container.appendChild(div);
 
-        // Display "Remove" button when there is more than one input
-        var inputCount = container.getElementsByClassName('keyword-input').length;
-        if (inputCount > 1) {
-            container.getElementsByClassName('keyword-remove').forEach(function(button) {
-                button.style.display = 'inline';
-            });
-        } else {
-            container.getElementsByClassName('keyword-remove')[0].style.display = 'none';
-        }
+        // Hide "Remove" button for the initial input
+        document.getElementById('initial-input').style.display = 'none';
     }
+    window.openModal = function(modalId) {
+        document.getElementById(modalId).style.display = 'block'
+        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
+    }
+
+    window.closeModal = function(modalId) {
+        document.getElementById(modalId).style.display = 'none'
+        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
+    }
+
+    // Close all modals when press ESC
+    document.onkeydown = function(event) {
+        event = event || window.event;
+        if (event.keyCode === 27) {
+            document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
+            let modals = document.getElementsByClassName('modal');
+            Array.prototype.slice.call(modals).forEach(i => {
+                i.style.display = 'none'
+            })
+        }
+    };
+
     function searchOnChange() {
         var form = document.getElementById('searchForm');
         form.submit();
     }
 </script>
-
 
 

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Republic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RepublicController extends Controller
 {
@@ -56,6 +58,9 @@ class RepublicController extends Controller
         ]);
 
         // dd($request->all());
+        $log_entry = Auth::user()->name . " created a Republic Act  " . $republic->title . " with the id# " . $republic->id;
+        event(new UserLog($log_entry));
+
         return redirect('/republic_acts')->with('success', 'Latest Issuance successfully created');
     }
 
@@ -94,6 +99,9 @@ class RepublicController extends Controller
             'responsible_office' => $data['responsible_office']
         ]);
 
+        $log_entry = Auth::user()->name . " updated a Republic Act  " . $republic->title . " with the id# " . $republic->id;
+        event(new UserLog($log_entry));
+
         return redirect('/republic_acts')->with('success', 'Latest Issuance successfully updated');
     }
 
@@ -104,6 +112,8 @@ class RepublicController extends Controller
         // Now, delete the republic
         $republic->delete();
 
+        $log_entry = Auth::user()->name . " deleted a Republic Act  " . $republic->title . " with the id# " . $republic->id;
+        event(new UserLog($log_entry));
 
         return redirect('/republic_acts')->with('Joint Circular deleted successfully.');
     }

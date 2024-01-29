@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Joint;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PDO;
 
 class JointController extends Controller
@@ -22,7 +24,30 @@ class JointController extends Controller
                 });
         })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
-        return view('joint.index', compact('joints', 'search'));
+        if ($request->expectsJson()) {
+            // Transform the data to include the foreign key relationship
+            $formattedJoints = $joints->map(function ($joint) {
+                return [
+                    'id' => $joint->id,
+                    'responsible_office' => $joint->responsible_office,
+                    'issuance' => [
+                        'id' => $joint->issuance->id,
+                        'date' => $joint->issuance->date,
+                        'title' => $joint->issuance->title,
+                        'reference_no' => $joint->issuance->reference_no,
+                        'keyword' => $joint->issuance->keyword,
+                        'url_link' => $joint->issuance->url_link,
+                    ],
+                ];
+            });
+
+            return response()->json(['joints' => $formattedJoints]);
+        } else {
+            // If the request is from the web view, return a Blade view
+            return view('joint.index', compact('joints', 'search'));
+        }
+
+        // return view('joint.index', compact('joints', 'search'));
     }
 
     public function store(Request $request){
@@ -57,6 +82,9 @@ class JointController extends Controller
         ]);
 
         // dd($request->all());
+        $log_entry = Auth::user()->name . " created a Joint Circular  " . $joint->title . " with the id# " . $joint->id;
+        event(new UserLog($log_entry));
+
         return redirect('/joint_circulars')->with('success', 'Latest Issuance successfully created');
     }
 
@@ -95,6 +123,10 @@ class JointController extends Controller
             'responsible_office' => $data['responsible_office']
         ]);
 
+
+        $log_entry = Auth::user()->name . " updated a Joint Circular  " . $joint->title . " with the id# " . $joint->id;
+        event(new UserLog($log_entry));
+
         return redirect('/joint_circulars')->with('success', 'Latest Issuance successfully updated');
     }
 
@@ -103,8 +135,11 @@ class JointController extends Controller
         $joint->issuance->delete();
 
         // Now, delete the Joint
+
         $joint->delete();
 
+        $log_entry = Auth::user()->name . " deleted a Joint Circular  " . $joint->title . " with the id# " . $joint->id;
+        event(new UserLog($log_entry));
 
         return redirect('/joint_circulars')->with('Joint Circular deleted successfully.');
     }

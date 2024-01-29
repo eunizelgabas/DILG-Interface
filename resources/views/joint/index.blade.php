@@ -44,7 +44,7 @@
     @foreach ($joints as $joint )
 
     <div class='flex items-center mt-3'>
-        <div class="rounded-xl border p-5 shadow-md w-full bg-white">
+        <div class="rounded-xl border-l-4 border-yellow-400 p-5 shadow-md w-full bg-white">
         <div class="flex w-full items-center justify-between border-b pb-3">
           <div class="flex items-center space-x-3">
             {{-- <div class="h-8 w-8 rounded-full bg-slate-400 bg-[url('https://i.pravatar.cc/32')]"></div> --}}

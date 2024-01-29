@@ -4,6 +4,7 @@ use App\Http\Controllers\DraftController;
 use App\Http\Controllers\IssuanceController;
 use App\Http\Controllers\JointController;
 use App\Http\Controllers\LegalController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\MemoController;
 use App\Http\Controllers\PresidentialController;
 use App\Http\Controllers\ProfileController;
@@ -83,6 +84,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/legal_opinions/edit/{legal}', [LegalController::class, 'edit'])->name('legal.edit');
     Route::put('/legal_opinions/{legal}', [LegalController::class, 'update'])->name('legal.update');
     Route::delete('/legal_opinions/{legal}', [LegalController::class, 'destroy'])->name('legal.delete');
+
+    //Route for Logs - Eula
+    Route::get('logs', [LogController::class, 'index'])->name('log.index');
 
 });
 
