@@ -83,7 +83,7 @@ class RepublicController extends Controller
         $log_entry = Auth::user()->name . " created a Republic Act  " . $republic->title . " with the id# " . $republic->id;
         event(new UserLog($log_entry));
 
-        return redirect('/republic_acts')->with('success', 'Latest Issuance successfully created');
+        return redirect('/republic_acts')->with('success', 'Republic Act successfully created');
     }
 
     public function edit(Republic $republic){
@@ -124,7 +124,7 @@ class RepublicController extends Controller
         $log_entry = Auth::user()->name . " updated a Republic Act  " . $republic->title . " with the id# " . $republic->id;
         event(new UserLog($log_entry));
 
-        return redirect('/republic_acts')->with('success', 'Latest Issuance successfully updated');
+        return redirect('/republic_acts')->with('success', 'Republic Act successfully updated');
     }
 
 
@@ -137,6 +137,6 @@ class RepublicController extends Controller
         $log_entry = Auth::user()->name . " deleted a Republic Act  " . $republic->title . " with the id# " . $republic->id;
         event(new UserLog($log_entry));
 
-        return redirect('/republic_acts')->with('Joint Circular deleted successfully.');
+        return redirect('/republic_acts')->with('success','Republic Act deleted successfully.');
     }
 }
