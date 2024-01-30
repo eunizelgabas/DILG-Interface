@@ -22,7 +22,7 @@
         <div class=" py-5 overflow-x-hidden px-4">
             <div class="align-middle rounded-tl-lg rounded-tr-lg inline-block w-full py-4 overflow-hidden bg-white shadow-lg px-12">
                 <div class="flex justify-between">
-                    <div class="inline-flex border rounded w-7/12 px-2 lg:px-6 h-12 bg-transparent">
+                    {{-- <div class="inline-flex border rounded w-7/12 px-2 lg:px-6 h-12 bg-transparent">
                         <div class="flex flex-wrap items-stretch w-full h-full mb-6 relative">
                             <div class="flex">
                                 <span class="flex items-center leading-normal bg-transparent rounded rounded-r-none border border-r-0 border-none lg:px-3 py-2 whitespace-no-wrap text-grey-dark text-sm">
@@ -32,7 +32,32 @@
                                     </svg>
                                 </span>
                             </div>
-                            <input type="text" class="flex-shrink flex-grow flex-auto leading-normal tracking-wide w-px flex-1 border border-none border-l-0 rounded rounded-l-none px-3 relative focus:outline-none text-xxs lg:text-xs lg:text-base text-gray-500 font-thin" placeholder="Search">
+                            <form action="{{ route('user.index') }}" method="GET" class="mb-4" id="searchForm">
+                                <input name="search" type="text" oninput="searchOnChange()" class="flex-shrink flex-grow flex-auto leading-normal tracking-wide w-px flex-1 border border-none border-l-0 rounded rounded-l-none px-3 relative focus:outline-none text-xxs lg:text-xs lg:text-base text-gray-500 font-thin" placeholder="Search">
+                            </form>
+                        </div>
+                    </div> --}}
+                    <div class="flex-1 pr-4">
+                        <div class="relative md:w-1/3">
+                            <form action="{{ route('user.index') }}" method="GET" class="mb-4" id="searchForm">
+                                <input type="text" name="search" value="{{ $search }}"
+                                       class="w-full pl-10 pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                                       placeholder="Search..." oninput="searchOnChange()">
+                                <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24"
+                                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                        <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
+                                        <circle cx="10" cy="10" r="7"/>
+                                        <line x1="21" y1="21" x2="15" y2="15"/>
+                                    </svg>
+                                </div>
+                                <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                                    <div id="loadingIndicator" class="hidden loader"></div>
+                                </div>
+                            </form>
+
+
                         </div>
                     </div>
                         <div class="flex-end rounded ">
@@ -41,6 +66,13 @@
                 </div>
             </div>
             <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-8 pt-3 rounded-bl-lg rounded-br-lg">
+                @if(count($users) === 0 && !empty($search))
+                <div class="text-gray-900 mt-4 justify-center">
+                    No data available for your search query "{{ $search }}".
+                </div>
+            @endif
+
+            @if(count($users) > 0)
                 <table class="min-w-full">
                     <thead>
                         <tr>
@@ -54,6 +86,7 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white">
+
                         @foreach ($users as $user )
                         <tr >
                             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
@@ -89,7 +122,11 @@
 
                     </tbody>
                 </table>
-
+                @else
+                    <div class="flex justify-center items-center">
+                        <h1>No user available</h1>
+                    </div>
+                @endif
                 <div class="d-flex justify-content-end mt-5 mb-5 ">
                     {{ $users->onEachSide(1)->links() }}
                 </div>
@@ -97,3 +134,27 @@
         </div>
     </div>
 </x-app-layout>
+
+
+<style scoped>
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+</style>
+<script>
+      function searchOnChange() {
+        var form = document.getElementById('searchForm');
+        form.submit();
+    }
+</script>
