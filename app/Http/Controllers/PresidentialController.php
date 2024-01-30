@@ -23,7 +23,30 @@ class PresidentialController extends Controller
                 });
         })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
-        return view('presidential.index', compact('presidentials', 'search'));
+        if ($request->expectsJson()) {
+            // Transform the data to include the foreign key relationship
+            $formattedPresidentials = $presidentials->map(function ($presidential) {
+                return [
+                    'id' => $presidential->id,
+                    'responsible_office' => $presidential->outcome,
+                    'issuance' => [
+                        'id' => $presidential->issuance->id,
+                        'date' => $presidential->issuance->date,
+                        'title' => $presidential->issuance->title,
+                        'reference_no' => $presidential->issuance->reference_no,
+                        'keyword' => $presidential->issuance->keyword,
+                        'url_link' => $presidential->issuance->url_link,
+                    ],
+                ];
+            });
+
+            return response()->json(['$presidentials' => $formattedPresidentials]);
+        } else {
+            // If the request is from the web view, return a Blade view
+            return view('presidential.index', compact('presidentials', 'search'));
+        }
+
+        // return view('presidential.index', compact('presidentials', 'search'));
     }
 
     public function store(Request $request){

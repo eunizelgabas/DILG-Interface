@@ -23,7 +23,30 @@ class DraftController extends Controller
                 });
         })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
-        return view('draft.index', compact('drafts', 'search'));
+        if ($request->expectsJson()) {
+            // Transform the data to include the foreign key relationship
+            $formattedDrafts = $drafts->map(function ($draft) {
+                return [
+                    'id' => $draft->id,
+                    'responsible_office' => $draft->outcome,
+                    'issuance' => [
+                        'id' => $draft->issuance->id,
+                        'date' => $draft->issuance->date,
+                        'title' => $draft->issuance->title,
+                        'reference_no' => $draft->issuance->reference_no,
+                        'keyword' => $draft->issuance->keyword,
+                        'url_link' => $draft->issuance->url_link,
+                    ],
+                ];
+            });
+
+            return response()->json(['drafts' => $formattedDrafts]);
+        } else {
+            // If the request is from the web view, return a Blade view
+            return view('draft.index', compact('drafts', 'search'));
+        }
+
+        // return view('draft.index', compact('drafts', 'search'));
     }
 
     public function store(Request $request){

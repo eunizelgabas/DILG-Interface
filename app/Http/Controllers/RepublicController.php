@@ -22,8 +22,30 @@ class RepublicController extends Controller
                         ->orWhere('keyword', 'like', '%' . $search . '%');
                 });
         })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+        if ($request->expectsJson()) {
+            // Transform the data to include the foreign key relationship
+            $formattedRepublics = $republics->map(function ($republic) {
+                return [
+                    'id' => $republic->id,
+                    'responsible_office' => $republic->outcome,
+                    'issuance' => [
+                        'id' => $republic->issuance->id,
+                        'date' => $republic->issuance->date,
+                        'title' => $republic->issuance->title,
+                        'reference_no' => $republic->issuance->reference_no,
+                        'keyword' => $republic->issuance->keyword,
+                        'url_link' => $republic->issuance->url_link,
+                    ],
+                ];
+            });
 
-        return view('republic.index', compact('republics', 'search'));
+            return response()->json(['$republics' => $formattedRepublics]);
+        } else {
+            // If the request is from the web view, return a Blade view
+            return view('republic.index', compact('republics', 'search'));
+        }
+
+        // return view('republic.index', compact('republics', 'search'));
     }
 
     public function store(Request $request){

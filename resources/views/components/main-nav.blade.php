@@ -1,12 +1,15 @@
 <div>
     <div class="overflow-y-auto overflow-x-hidden flex-grow">
         <ul class="flex flex-col py-2 space-y-1">
-            <li class="px-5">
+            <li class="px-5 ">
                 <div class="flex flex-row items-center h-6">
                     <div class="text-m font-light tracking-wide text-white">
                         <p class="font-semibold tracking-wide text-m text-white leading-tight">
-                            {{-- <span v-if="$page.props.auth.user.type  === 'Admin'">Administrator</span>
-                            <span v-else-if="$page.props.auth.user.type === 'Doctor'">Doctor</span> --}}
+                            @if(Auth::user()->hasRole('Admin'))
+                                <p class="font-semibold tracking-wide text-m text-white leading-tight">
+                                    Administrator
+                                </p>
+                        @endif
 
                         </p>
                     </div>

@@ -24,7 +24,30 @@ class MemoController extends Controller
                 });
         })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
-        return view('memo.index', compact('memos', 'search'));
+        if ($request->expectsJson()) {
+            // Transform the data to include the foreign key relationship
+            $formattedMemos = $memos->map(function ($memo) {
+                return [
+                    'id' => $memo->id,
+                    'responsible_office' => $memo->outcome,
+                    'issuance' => [
+                        'id' => $memo->issuance->id,
+                        'date' => $memo->issuance->date,
+                        'title' => $memo->issuance->title,
+                        'reference_no' => $memo->issuance->reference_no,
+                        'keyword' => $memo->issuance->keyword,
+                        'url_link' => $memo->issuance->url_link,
+                    ],
+                ];
+            });
+
+            return response()->json(['memos' => $formattedMemos]);
+        } else {
+            // If the request is from the web view, return a Blade view
+            return view('memo.index', compact('memos', 'search'));
+        }
+
+        // return view('memo.index', compact('memos', 'search'));
     }
 
     public function store(Request $request){
