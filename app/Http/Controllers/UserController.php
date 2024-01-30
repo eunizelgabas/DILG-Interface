@@ -50,9 +50,9 @@ class UserController extends Controller
         $user->assignRole($role);
         // $user->assignRole($data['role']);
         // Assign roles to the user
-        $token = $user->createToken('Personal Access Token')->plainTextToken;
-        $response = ['user' => $user, 'token' => $token];
-        return response()->json($response, 200);
+        // $token = $user->createToken('Personal Access Token')->plainTextToken;
+        // $response = ['user' => $user, 'token' => $token];
+        // return response()->json($response, 200);
 
         $log_entry = Auth::user()->name ." created a  user " . $user->name;
         event(new UserLog($log_entry));
