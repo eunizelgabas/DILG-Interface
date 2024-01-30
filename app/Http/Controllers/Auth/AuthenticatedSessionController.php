@@ -25,11 +25,32 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        // $request->authenticate();
 
-        $request->session()->regenerate();
+        // $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // return redirect()->intended(RouteServiceProvider::HOME);
+        $credentials = $request->only('email', 'password');
+
+        // Attempt to authenticate the user
+        if (auth()->attempt($credentials)) {
+            $user = auth()->user();
+
+            // Check if the user has the 'standard' role
+            if ($user->hasRole('Standard')) {
+                auth()->logout(); // Logout the user
+                return redirect()->route('login')->with('error', 'Unauthorized. You do not have the necessary role.');
+            }
+
+            // If the user does not have the 'standard' role, proceed with the login
+            $request->session()->regenerate();
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
+
+        // Authentication failed
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 
     /**

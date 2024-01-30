@@ -199,7 +199,9 @@
                                             {{$is->type}}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap overflow-hidden max-w-xs truncate text-xs text-center font-bold uppercase">
-                                            {{$is->url_link}}
+                                            <a href="{{ $is->url_link }}" class="font-bold ml-1 hover:underline" target="_blank">
+                                                <span class=" text-blue-500 font-light">{{ $is->url_link }}</span>
+                                               </a>
                                         </td>
                                     </tr>
                                     @endforeach

@@ -6,8 +6,8 @@
     </x-slot> --}}
     <!-- component -->
 <!-- This is an example component -->
-<div class=' flex items-center justify-center  px-6 from-[#F9F5F3] via-[#F9F5F3] to-[#F9F5F3] bg-gradient-to-br '>
-    <div class='w-full max-w-md  mx-auto bg-white rounded-3xl shadow-xl overflow-hidden'>
+{{-- <div class=' flex items-center justify-center  px-6 from-[#F9F5F3] via-[#F9F5F3] to-[#F9F5F3] bg-gradient-to-br '> --}}
+    <div class='w-full max-w-md mt-20 mx-auto bg-white rounded-3xl shadow-xl overflow-hidden'>
         <div class='max-w-md mx-auto'>
           <div class='h-[200px]' style='background-image:url(/images/boy.jpg);background-size:cover;background-position:center'>
            </div>
@@ -50,5 +50,5 @@
           </div>
         </div>
     </div>
-</div>
+{{-- </div> --}}
 </x-app-layout>

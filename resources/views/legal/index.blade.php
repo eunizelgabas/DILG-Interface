@@ -298,12 +298,13 @@
                                             class="ml-2 text-sm text-red-600 cursor-pointer keyword-remove" style="display: none;">Remove</button>
                                 </div>
                             </div>
-                            <button type="button" onclick="addItem()" class="mt-2 text-sm text-blue-600 cursor-pointer">Add Item</button>
+                            <button type="button" onclick="addItem()" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add keyword</button>
+                            {{-- <button type="button" onclick="addItem()" class="mt-2 text-sm text-blue-600 cursor-pointer">Add Item</button> --}}
                             <input type="hidden" name="concatenated_keywords" id="concatenated_keywords">
 
 
                                 <button
-                                    type="submit" class=" hover:shadow-form w-full rounded-md bg-blue-400 hover:bg-blue-600 py-3 px-8 text-center text-base font-semibold text-white outline-none">
+                                    type="submit" class=" mt-3 hover:shadow-form w-full rounded-md bg-blue-400 hover:bg-blue-600 py-3 px-8 text-center text-base font-semibold text-white outline-none">
                                     Save
                                 </button>
                             </div>
