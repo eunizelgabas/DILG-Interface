@@ -26,10 +26,8 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         // $request->authenticate();
-
         // $request->session()->regenerate();
 
-        // return redirect()->intended(RouteServiceProvider::HOME);
         $credentials = $request->only('email', 'password');
 
         // Attempt to authenticate the user
@@ -37,12 +35,13 @@ class AuthenticatedSessionController extends Controller
             $user = auth()->user();
 
             // Check if the user has the 'standard' role
-            if ($user->hasRole('Standard')) {
+            if ($user->hasRole('Standard') || $user->status == 0) {
                 auth()->logout(); // Logout the user
                 return redirect()->route('login')->with('error', 'Unauthorized. You do not have the necessary role.');
+                // Alternatively, redirect to a different route or show a more specific error message.
             }
 
-            // If the user does not have the 'standard' role, proceed with the login
+            // If the user does not have the 'standard' role or has status 0, proceed with the login
             $request->session()->regenerate();
             return redirect()->intended(RouteServiceProvider::HOME);
         }
@@ -52,6 +51,7 @@ class AuthenticatedSessionController extends Controller
             'email' => 'The provided credentials do not match our records.',
         ]);
     }
+
 
     /**
      * Destroy an authenticated session.

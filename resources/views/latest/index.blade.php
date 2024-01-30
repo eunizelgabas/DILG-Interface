@@ -12,6 +12,20 @@
             </button>
 
         </div>
+        @if(session('success'))
+        <div id="flash-message" class="bg-green-200 px-6 py-4 my-4 rounded-md text-lg flex items-center mx-auto max-w-lg absolute top-10 right-0">
+            <svg viewBox="0 0 24 24" class="text-green-600 w-5 h-5 sm:w-5 sm:h-5 mr-3">
+                <path fill="currentColor" d="M11.983,0a12.206,12.206,0,0,0-8.51,3.653A11.8,11.8,0,0,0,0,12.207,11.779,11.779,0,0,0,11.8,24h.214A12.111,12.111,0,0,0,24,11.791h0A11.766,11.766,0,0,0,11.983,0ZM10.5,16.542a1.476,1.476,0,0,1,1.449-1.53h.027a1.527,1.527,0,0,1,1.523,1.47,1.475,1.475,0,0,1-1.449,1.53h-.027A1.529,1.529,0,0,1,10.5,16.542ZM11,12.5v-6a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Z"></path>
+            </svg>
+            <span class="text-green-800 text-sm">{{ session('success') }}</span>
+        </div>
+
+        <script>
+            setTimeout(function(){
+                document.getElementById('flash-message').style.display = 'none';
+            }, 2000); // 2000 milliseconds = 2 seconds
+        </script>
+    @endif
         <div class="flex-1 pr-4">
             <div class="relative md:w-1/3">
                 <form action="{{ route('joint.index') }}" method="GET" class="mb-4" id="searchForm">
@@ -38,50 +52,6 @@
 
             <div class=" w-full z-10">
                 <div class="flex flex-col">
-                    {{-- @foreach ($latests as $lat )
-                    <div class="bg-white border border-white shadow-lg  rounded-3xl p-4 m-4 border-l-8 border-l-blue-400">
-                        <div class="flex-none sm:flex">
-
-                            <div class="flex-auto sm:ml-5 justify-evenly">
-                                <div class="flex items-center justify-between sm:mt-2">
-                                    <div class="flex items-center">
-                                        <div class="flex flex-col">
-                                            <div class="w-full flex-none text-lg text-gray-800 font-bold leading-none">{{$lat->issuance->title}}</div>
-                                            <div class="flex-auto text-gray-500 my-1">
-                                                <span class="mr-3 font-bold ">Category: <span class="font-light"> {{$lat->category}}</span> </span><span class="mr-3 border-r border-gray-200  max-h-0"></span><span class="font-bold">Date: <span class="font-light mr-3">{{ \Carbon\Carbon::parse($lat->issuance->date)->format('F j, Y') }} </span> </span> <span class="mr-3 border-r border-gray-200  max-h-0"></span> <span class="font-bold">Reference No: <span class="font-light">{{ $lat->issuance->reference_no }}</span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex pt-2  text-sm text-gray-500">
-                                    <div class="flex-1 inline-flex items-center">
-                                        <p class="font-bold">Outcome Area/Program: <span class="font-light"> {{$lat->outcome}}</span></p>
-                                    </div>
-                                    <button  class="flex-no-shrink bg-yellow-400 hover:bg-yellow-500 px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-yellow-300 hover:border-yellow-500 text-white rounded-full transition ease-in duration-300">Edit</button>
-                                </div>
-                                <div class="flex pt-2  text-sm text-gray-500">
-                                    <div class="flex-1 inline-flex items-center">
-                                        <p class="font-bold mr-2 ">Url Link:</p>
-                                        <a href="{{ $lat->issuance->url_link }}" class="font-bold  hover:underline" target="_blank">
-                                         <span class=" text-blue-500 font-light">{{ $lat->issuance->url_link }}</span>
-                                        </a>
-
-
-                                    </div>
-                                    <button  class="flex-no-shrink bg-red-400 hover:bg-red-500 px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-300 hover:border-red-500 text-white rounded-full transition ease-in duration-300">Delete</button>
-                                </div>
-                                <div class="flex pt-2  text-sm text-gray-500">
-                                    <div class="flex-1 inline-flex items-center">
-                                        <p class="font-bold">Keywords: <span class="font-light"> {{$lat->issuance->keyword}}</span></p>
-                                    </div>
-                                    <button  class="flex-no-shrink bg-yellow-400 hover:bg-yellow-500 px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-yellow-300 hover:border-yellow-500 text-white rounded-full transition ease-in duration-300">Edit</button>
-                                </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach --}}
 
                     @if(count($latests) === 0 && !empty($search))
                         <div class="text-gray-900 mt-4 justify-center">

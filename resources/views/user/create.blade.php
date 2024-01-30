@@ -7,7 +7,7 @@
                 <h1 class="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">Create User</h1>
                 <div>
                     <label class="text-gray-800 font-semibold block my-3 text-md" for="name">Name</label>
-                    <input class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="text" name="name" id="name" placeholder="name" />
+                    <input class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="text" name="name" id="name"  />
                 </div>
                 <div>
                     <label class="text-gray-800 font-semibold block my-3 text-md" for="role">Roles</label>
@@ -21,15 +21,15 @@
                 </div>
                 <div>
                     <label class="text-gray-800 font-semibold block my-3 text-md" for="email">Email</label>
-                    <input class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="text" name="email" id="email" placeholder="@email" />
+                    <input class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="text" name="email" id="email"  />
                 </div>
                 <div>
                     <label class="text-gray-800 font-semibold block my-3 text-md" for="password">Password</label>
-                    <input class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="password" name="password" id="password" placeholder="password" />
+                    <input class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="password" name="password" id="password"  />
                 </div>
                 <div>
-                    <label class="text-gray-800 font-semibold block my-3 text-md" for="password_confirmation">Password</label>
-                    <input class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="password" name="password_confirmation" id="password_confirmation" placeholder="password" />
+                    <label class="text-gray-800 font-semibold block my-3 text-md" for="password_confirmation">Password Confirmation</label>
+                    <input class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="password" name="password_confirmation" id="password_confirmation"  />
                 </div>
                 <button type="submit" class="w-full mt-6 mb-3 bg-blue-500  hover:bg-blue-600 rounded-lg px-4 py-2 text-lg text-gray-800 tracking-wide font-semibold font-sans">Create account</button>
             </form>

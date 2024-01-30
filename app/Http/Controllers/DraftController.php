@@ -116,7 +116,7 @@ class DraftController extends Controller
         $log_entry = Auth::user()->name . " deleted a Draft Issuances  " . $draft->title . " with the id# " . $draft->id;
         event(new UserLog($log_entry));
 
-        return redirect('/draft_issuances')->with('Draft Issuance deleted successfully.');
+        return redirect('/draft_issuances')->with('success','Draft Issuance deleted successfully.');
     }
 }
 

@@ -11,6 +11,21 @@
         </button>
 
     </div>
+    @if(session('success'))
+        <div id="flash-message" class="bg-green-200 px-6 py-4 my-4 rounded-md text-lg flex items-center mx-auto max-w-lg absolute top-10 right-0">
+            <svg viewBox="0 0 24 24" class="text-green-600 w-5 h-5 sm:w-5 sm:h-5 mr-3">
+                <path fill="currentColor" d="M11.983,0a12.206,12.206,0,0,0-8.51,3.653A11.8,11.8,0,0,0,0,12.207,11.779,11.779,0,0,0,11.8,24h.214A12.111,12.111,0,0,0,24,11.791h0A11.766,11.766,0,0,0,11.983,0ZM10.5,16.542a1.476,1.476,0,0,1,1.449-1.53h.027a1.527,1.527,0,0,1,1.523,1.47,1.475,1.475,0,0,1-1.449,1.53h-.027A1.529,1.529,0,0,1,10.5,16.542ZM11,12.5v-6a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Z"></path>
+            </svg>
+            <span class="text-green-800 text-sm">{{ session('success') }}</span>
+        </div>
+
+        <script>
+            setTimeout(function(){
+                document.getElementById('flash-message').style.display = 'none';
+            }, 2000); // 2000 milliseconds = 2 seconds
+        </script>
+    @endif
+
     <div class="flex-1 pr-4">
         <div class="relative md:w-1/3">
             <form action="{{ route('draft.index') }}" method="GET" class="mb-4" id="searchForm">
@@ -166,104 +181,6 @@
 
 
 </div>
-{{-- <dialog id="myModal" class="h-auto w-full md:w-1/2 p-5  bg-white rounded-md">
-    <div class="flex flex-col w-full h-auto">
-
-            <div class="flex w-full h-auto justify-center items-center">
-                <div class="flex w-10/12 h-auto py-3 justify-center items-center text-2xl font-bold ">
-                    Create draft Circulars
-                </div>
-                <div onclick="document.getElementById('myModal').close();" class="flex w-1/12 h-auto justify-center cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-center p-2">
-                <div class="w-full bg-white">
-                    <form method="POST" action="{{route('draft.store')}}">
-                        @csrf
-
-                        <div class="-mx-3 flex flex-wrap">
-                            <div class="w-full px-3">
-                                <div class="mb-5">
-                                    <label for="date" class="mb-3 block text-base font-medium text-[#07074D]">
-                                        Date
-                                    </label>
-                                    <input type="date" name="date" id="date"
-                                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                                        @error('date')
-                                        <p class="text-red-500 text-xs mt-2">{{$message}}</p>
-                                        @enderror
-                                    </div>
-                            </div>
-
-                        </div>
-                        <div class="mb-5">
-                            <label for="title" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Title
-                            </label>
-                            <textarea type="text" name="title" id="title"
-                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" /></textarea>
-                                @error('title')
-                                <p class="text-red-500 text-xs mt-2">{{$message}}</p>
-                                @enderror
-                            </div>
-                        <div class="mb-5">
-                            <label for="reference_no" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Reference No
-                            </label>
-                            <input type="text" name="reference_no" id="reference_no" placeholder=""
-                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                                @error('reference_no')
-                                <p class="text-red-500 text-xs mt-2">{{$message}}</p>
-                                @enderror
-                        </div>
-                        <div class="mb-5">
-                            <label for="responsible_office" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Responsible Office
-                            </label>
-                            <input type="text" name="responsible_office" id="responsible_office" placeholder=""
-                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                                @error('responsible_office')
-                                <p class="text-red-500 text-xs mt-2">{{$message}}</p>
-                                @enderror
-                        </div>
-                        <div class="mb-5">
-                            <label for="url_link" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Url Link
-                            </label>
-                            <input type="text" name="url_link" id="url_link" placeholder=""
-                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                            @error('url_link')
-                            <p class="text-red-500 text-xs mt-2">{{$message}}</p>
-                            @enderror
-                        </div>
-                        <div id="keyword-container" class="mb-5">
-                            <label for="url_link" class="mb-3 block text-base font-medium text-[#07074D]">
-                                Keyword/s:
-                            </label>
-                            <div class="flex mb-2" id="initial-input">
-                                <input type="text" name="keyword[]" placeholder=""
-                                       class="flex-1 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md keyword-input" />
-                            </div>
-                            @error('keyword')
-                            <p class="text-red-500 text-xs mt-2">{{$message}}</p>
-                            @enderror
-                        </div>
-                        <button type="button" onclick="addItem()" class="mt-2 text-sm text-blue-600 cursor-pointer">Add Item</button>
-                        <input type="hidden" name="concatenated_keywords" id="concatenated_keywords">
-
-                            <button
-                                type="submit" class=" hover:shadow-form w-full rounded-md bg-blue-400 hover:bg-blue-600 py-3 px-8 text-center text-base font-semibold text-white outline-none">
-                                Save
-                            </button>
-                        </div>
-                </form>
-            </div>
-        </div>
-
-    </div>
-</dialog> --}}
 
 <dialog id="myModal" class="h-auto w-full md:w-1/2 p-5  bg-white rounded-md">
     <div class="flex flex-col w-full h-auto">
