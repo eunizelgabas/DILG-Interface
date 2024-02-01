@@ -47,7 +47,7 @@ class IssuanceController extends Controller
             // If the request is from the web view, return a Blade view
             return view('latest.index',compact('latests' ,'search'));
         }
-    // return view('latest.index',compact('latests' ,'search'));
+
     }
 
     public function store(Request $request){
