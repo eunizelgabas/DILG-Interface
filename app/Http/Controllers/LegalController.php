@@ -12,23 +12,6 @@ class LegalController extends Controller
 {
     public function index(Request $request){
 
-        // $search = $request->input('search');
-
-        // $legals = Legal::when($search, function ($query) use ($search) {
-        //     $query->where('category', 'like', '%' . $search . '%')
-        //         ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
-        //             $issuanceQuery->where('title', 'like', '%' . $search . '%')
-        //                 ->orWhere('reference_no', 'like', '%' . $search . '%')
-        //                 ->orWhere('keyword', 'like', '%' . $search . '%');
-        //         });
-        //  })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
-
-        //  $categories = $legals->pluck('category')->unique();
-        //  $selectedCategory = $request->input('category', 'All');
-
-        //  if ($selectedCategory !== 'All') {
-        //      $legals = $legals->where('category', $selectedCategory);
-        //  }
         $search = $request->input('search');
         $selectedCategory = $request->input('category', 'All');
 
@@ -49,7 +32,7 @@ class LegalController extends Controller
             $legalsQuery->where('category', $selectedCategory);
         }
 
-        $legals = $legalsQuery->with('issuance')->whereNotNull('category')->orderBy('created_at', 'desc')->paginate(5);
+        $legals = $legalsQuery->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
         $categories = Legal::whereNotNull('category')->pluck('category')->unique();
 

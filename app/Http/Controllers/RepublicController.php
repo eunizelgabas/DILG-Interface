@@ -27,7 +27,7 @@ class RepublicController extends Controller
             $formattedRepublics = $republics->map(function ($republic) {
                 return [
                     'id' => $republic->id,
-                    'responsible_office' => $republic->outcome,
+                    'responsible_office' => $republic->responsible_office,
                     'issuance' => [
                         'id' => $republic->issuance->id,
                         'date' => $republic->issuance->date,

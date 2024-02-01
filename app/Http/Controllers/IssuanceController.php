@@ -10,21 +10,80 @@ use Illuminate\Support\Facades\Auth;
 
 class IssuanceController extends Controller
 {
-    public function index(Request $request){
+    // public function index(Request $request){
 
+    //     $search = $request->input('search');
+
+    //     $latests = Latest::when($search, function ($query) use ($search) {
+    //         $query->where('outcome', 'like', '%' . $search . '%')
+    //             ->orWhere('category', 'like', '%' . $search . '%')
+    //             ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
+    //                 $issuanceQuery->where('title', 'like', '%' . $search . '%')
+    //                     ->orWhere('reference_no', 'like', '%' . $search . '%')
+    //                     ->orWhere('keyword', 'like', '%' . $search . '%');
+    //             });
+    //      })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+
+    //      if ($request->expectsJson()) {
+    //         // Transform the data to include the foreign key relationship
+    //         $formattedLatests = $latests->map(function ($latest) {
+    //             return [
+    //                 'id' => $latest->id,
+    //                 'category' => $latest->category,
+    //                 'outcome' => $latest->outcome,
+    //                 'issuance' => [
+    //                     'id' => $latest->issuance->id,
+    //                     'date' => $latest->issuance->date,
+    //                     'title' => $latest->issuance->title,
+    //                     'reference_no' => $latest->issuance->reference_no,
+    //                     'keyword' => $latest->issuance->keyword,
+    //                     'url_link' => $latest->issuance->url_link,
+    //                 ],
+    //             ];
+    //         });
+
+    //         return response()->json(['latests' => $formattedLatests]);
+    //     } else {
+    //         // If the request is from the web view, return a Blade view
+    //         return view('latest.index',compact('latests' ,'search'));
+    //     }
+
+    // }
+    public function index(Request $request)
+    {
         $search = $request->input('search');
+        $selectedOutcome = $request->input('outcome');
 
-        $latests = Latest::when($search, function ($query) use ($search) {
-            $query->where('outcome', 'like', '%' . $search . '%')
-                ->orWhere('category', 'like', '%' . $search . '%')
-                ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
-                    $issuanceQuery->where('title', 'like', '%' . $search . '%')
-                        ->orWhere('reference_no', 'like', '%' . $search . '%')
-                        ->orWhere('keyword', 'like', '%' . $search . '%');
-                });
-         })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+        $latestsQuery = Latest::query();
 
-         if ($request->expectsJson()) {
+        if ($selectedOutcome) {
+            $latestsQuery->where('outcome', $selectedOutcome);
+        }
+
+        if ($search) {
+            $latestsQuery->where(function ($query) use ($search) {
+                $query->where('category', 'like', '%' . $search . '%')
+                    ->orWhere('outcome', 'like', '%' . $search . '%')
+                    ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
+                        $issuanceQuery->where('title', 'like', '%' . $search . '%')
+                            ->orWhere('reference_no', 'like', '%' . $search . '%')
+                            ->orWhere('keyword', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+        $outcomeOptions = [
+            "ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE",
+            "PEACEFUL, ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES",
+            "SOCIALLY PROTECTIVE LGUS",
+            "ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT LGUS",
+            "BUSINESS-FRIENDLY AND COMPETITIVE LGUS",
+            "STRENGTHENING OF INTERNAL GOVERNANCE",
+        ];
+
+
+        if ($request->expectsJson()) {
             // Transform the data to include the foreign key relationship
             $formattedLatests = $latests->map(function ($latest) {
                 return [
@@ -45,10 +104,11 @@ class IssuanceController extends Controller
             return response()->json(['latests' => $formattedLatests]);
         } else {
             // If the request is from the web view, return a Blade view
-            return view('latest.index',compact('latests' ,'search'));
+            return view('latest.index', compact('latests', 'search', 'outcomeOptions', 'selectedOutcome'));
         }
-
     }
+
+
 
     public function store(Request $request){
         $data = $request->validate([
