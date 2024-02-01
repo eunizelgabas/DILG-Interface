@@ -216,7 +216,9 @@
                                 <label for="category" class="mb-3 block text-base font-bold text-[#07074D]">
                                     Category
                                 </label>
-                                <select id="category"  name="category" autocomplete="category" class="w-full rounded-lg border py-2 px-3">
+                                <input type="category" name="category" id="category"
+                                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                {{-- <select id="category"  name="category" autocomplete="category" class="w-full rounded-lg border py-2 px-3">
                                     <option selected disabled>Select...</option>
                                     <option value="3 TERM-LIMIT RULE">
                                         3 TERM-LIMIT RULE
@@ -277,7 +279,40 @@
                                     <option value="COVID/SAP MATTERS">
                                         COVID/SAP MATTERS
                                     </option>
-                                </select>
+                                    <option value="Creation of LGU">
+                                       Creation of LGU
+                                    </option>
+                                    <option value="Designation/Appointment">
+                                        Designation/Appointment
+                                     </option>
+                                     <option value="DILG Women's Bulletin 2016">
+                                        DILG Women's Bulletin 2016
+                                     </option>
+                                     <option value="Disaster Risk">
+                                        Disaster Risk
+                                     </option>
+                                     <option value="Donation/Structure/Road">
+                                        Donation/Structure/Road
+                                     </option>
+                                     <option value="Effect of Filing COC">
+                                        Effect of Filing COC
+                                     </option>
+                                     <option value="Election Ban">
+                                        Election Ban
+                                     </option>
+                                     <option value="ELECTIVE/APPOINTIVE LOCAL OFFICIALS">
+                                        ELECTIVE/APPOINTIVE LOCAL OFFICIALS
+                                     </option>
+                                     <option value="EXECUTION/IMPLEMENTATION OF DECISION OF OMBUDSMAN/COMELEC">
+                                        EXECUTION/IMPLEMENTATION OF DECISION OF OMBUDSMAN/COMELEC
+                                     </option>
+                                     <option value="FAILURE OF SANGGUNIAN TO PASS AN APPROPRIATION ORDINANCE">
+                                        FAILURE OF SANGGUNIAN TO PASS AN APPROPRIATION ORDINANCE
+                                     </option>
+                                     <option value="Filing Complaint">
+                                        Filing Complaint
+                                     </option>
+                                </select> --}}
                             </div>
 
                             <div class="mb-5">

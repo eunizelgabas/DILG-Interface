@@ -54,7 +54,7 @@ class LegalController extends Controller
             'reference_no' => 'required|string',
             'date' => 'nullable|date',
             'url_link' => 'required|string',
-            'category' => 'required|string',
+            'category' => 'nullable|string',
             'keyword.*' => 'required|string',
         ]);
 
