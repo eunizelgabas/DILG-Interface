@@ -28,7 +28,7 @@ class DraftController extends Controller
             $formattedDrafts = $drafts->map(function ($draft) {
                 return [
                     'id' => $draft->id,
-                    'responsible_office' => $draft->responsible_office,
+                    'responsible_office' => $draft->responsible_office ?? 'N/A',
                     'issuance' => [
                         'id' => $draft->issuance->id,
                         'date' => $draft->issuance->date,

@@ -29,43 +29,37 @@
     <div class="flex">
         <div class="pr-4">
             <div class="relative md:w-full">
-                <form action="{{ route('latest.index') }}" method="GET" class="mb-4" id="filterForm">
+                <form action="{{ route('latest.index') }}" method="GET" class="mb-4" id="combinedForm">
                     <select id="outcome" name="outcome" autocomplete="outcome" class="w-full rounded-lg border py-2 px-3">
-                        <option selected disabled>All Outcome Area</option>
+                        <option value="All" @if(!$selectedOutcome || $selectedOutcome === 'All') selected @endif>All Outcome Area</option>
                         @foreach ($outcomeOptions as $option)
-                            <option value="{{ $option }}" @if($selectedOutcome == $option) selected @endif>
-                                {{ $option }}
-                            </option>
+                            <option value="{{ $option }}" @if($selectedOutcome === $option) selected @endif>{{ $option }}</option>
                         @endforeach
                     </select>
-                </form>
-            </div>
-        </div>
 
-        <div class="flex-1 pr-4">
-            <div class="relative md:w-1/3">
-                <form action="{{ route('latest.index') }}" method="GET" class="mb-4" id="searchForm">
-                    <input type="text" id="searchInput" name="search" value="{{ $search }}"
-                           class="w-full pl-10 pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                           placeholder="Search...">
-                    <div class="absolute top-0 left-0 inline-flex items-center p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24"
-                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
-                            <circle cx="10" cy="10" r="7"/>
-                            <line x1="21" y1="21" x2="15" y2="15"/>
-                        </svg>
+                    <div class="relative md:w-1/2 mt-3">
+                        <input type="text" name="search" value="{{ $search }}"
+                            class="w-full pl-10 pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                            placeholder="Search..." oninput="searchOnChange()">
+                        <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
+                                <circle cx="10" cy="10" r="7" />
+                                <line x1="21" y1="21" x2="15" y2="15" />
+                            </svg>
+                        </div>
+                        <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                            <div id="loadingIndicator" class="hidden loader"></div>
+                        </div>
                     </div>
-                    <div class="absolute top-0 left-0 inline-flex items-center p-2">
-                        <div id="loadingIndicator" class="hidden loader"></div>
-                    </div>
+
+                    {{-- <button type="submit">Apply Filter</button> --}}
                 </form>
             </div>
         </div>
     </div>
-
-
 
             <div class=" w-full z-10">
                 <div class="flex flex-col">
@@ -427,15 +421,17 @@
         }
     };
 
-    function searchOnChange() {
-        var form = document.getElementById('searchForm');
-        form.submit();
-    }
     $(document).ready(function() {
         $('#outcome').change(function() {
-            $('#filterForm').submit();
+            $('#combinedForm').submit();
         });
     });
+
+    function searchOnChange() {
+        var form = document.getElementById('combinedForm');
+        form.submit();
+    }
+
 </script>
 
 

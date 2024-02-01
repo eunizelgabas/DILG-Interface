@@ -58,7 +58,6 @@ class LegalController extends Controller
             // If the request is from the web view, return a Blade view
             return view('legal.index',compact('legals' ,'search', 'categories' ,'selectedCategory'));
         }
-    // return view('legal.index',compact('legals' ,'search'));
     }
 
     public function store(Request $request){

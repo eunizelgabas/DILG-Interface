@@ -56,10 +56,6 @@ class IssuanceController extends Controller
 
         $latestsQuery = Latest::query();
 
-        if ($selectedOutcome) {
-            $latestsQuery->where('outcome', $selectedOutcome);
-        }
-
         if ($search) {
             $latestsQuery->where(function ($query) use ($search) {
                 $query->where('category', 'like', '%' . $search . '%')
@@ -72,16 +68,14 @@ class IssuanceController extends Controller
             });
         }
 
-        $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
-        $outcomeOptions = [
-            "ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE",
-            "PEACEFUL, ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES",
-            "SOCIALLY PROTECTIVE LGUS",
-            "ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT LGUS",
-            "BUSINESS-FRIENDLY AND COMPETITIVE LGUS",
-            "STRENGTHENING OF INTERNAL GOVERNANCE",
-        ];
+        if ($selectedOutcome && $selectedOutcome !== 'All') {
+            // $latestsQuery->where('outcome', 'like', '%' . $selectedOutcome . '%');
+            $latestsQuery->where('outcome', $selectedOutcome);
+        }
 
+
+
+        $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
         if ($request->expectsJson()) {
             // Transform the data to include the foreign key relationship
@@ -104,10 +98,18 @@ class IssuanceController extends Controller
             return response()->json(['latests' => $formattedLatests]);
         } else {
             // If the request is from the web view, return a Blade view
+            $outcomeOptions = [
+                "ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE",
+                "PEACEFUL, ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES",
+                "SOCIALLY PROTECTIVE LGUS",
+                "ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT LGUS",
+                "BUSINESS-FRIENDLY AND COMPETITIVE LGUS",
+                "STRENGTHENING OF INTERNAL GOVERNANCE",
+            ];
+
             return view('latest.index', compact('latests', 'search', 'outcomeOptions', 'selectedOutcome'));
         }
     }
-
 
 
     public function store(Request $request){
