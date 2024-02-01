@@ -29,7 +29,7 @@ class MemoController extends Controller
             $formattedMemos = $memos->map(function ($memo) {
                 return [
                     'id' => $memo->id,
-                    'responsible_office' => $memo->responsible_office,
+                    'responsible_office' => $memo->responsible_office ?? 'N/A',
                     'issuance' => [
                         'id' => $memo->issuance->id,
                         'date' => $memo->issuance->date,
