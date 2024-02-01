@@ -28,7 +28,7 @@ class PresidentialController extends Controller
             $formattedPresidentials = $presidentials->map(function ($presidential) {
                 return [
                     'id' => $presidential->id,
-                    'responsible_office' => $presidential->responsible_office,
+                    'responsible_office' => $presidential->responsible_office ?? 'N/A',
                     'issuance' => [
                         'id' => $presidential->issuance->id,
                         'date' => $presidential->issuance->date,

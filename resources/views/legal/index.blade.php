@@ -26,29 +26,47 @@
                 }, 2000); // 2000 milliseconds = 2 seconds
             </script>
         @endif
-        <div class="flex-1 pr-4">
-            <div class="relative md:w-1/3">
-                <form action="{{ route('legal.index') }}" method="GET" class="mb-4" id="searchForm">
-                    <input type="text" name="search" value="{{ $search }}"
-                           class="w-full pl-10 pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                           placeholder="Search..." oninput="searchOnChange()">
-                    <div class="absolute top-0 left-0 inline-flex items-center p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24"
-                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
-                            <circle cx="10" cy="10" r="7"/>
-                            <line x1="21" y1="21" x2="15" y2="15"/>
-                        </svg>
-                    </div>
-                    <div class="absolute top-0 left-0 inline-flex items-center p-2">
-                        <div id="loadingIndicator" class="hidden loader"></div>
-                    </div>
-                </form>
-
-
+        <div class="flex">
+            <div class="pr-4">
+                <div class="relative md:w-full">
+                    <form action="{{ route('legal.index') }}" method="GET" class="mb-4" id="filterForm">
+                        <select id="category" name="category" autocomplete="category" class="w-full rounded-lg border py-2 px-3">
+                            <option value="All" @if(!isset($selectedCategory) || $selectedCategory === 'All') selected @endif>All</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category }}" @if(isset($selectedCategory) && $selectedCategory === $category) selected @endif>
+                                    {{ $category }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <div class="flex-1 pr-4">
+                <div class="relative md:w-1/3">
+                    <form action="{{ route('legal.index') }}" method="GET" class="mb-4" id="searchForm">
+                        <input type="text" name="search" value="{{ $search }}"
+                               class="w-full pl-10 pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                               placeholder="Search..." oninput="searchOnChange()">
+                        <!-- Include the selected category in the form -->
+                        <input type="hidden" name="category" value="{{ $selectedCategory }}">
+                        <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24"
+                                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                 stroke-linejoin="round">
+                                <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
+                                <circle cx="10" cy="10" r="7"/>
+                                <line x1="21" y1="21" x2="15" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                            <div id="loadingIndicator" class="hidden loader"></div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+
+
 
             <div class=" w-full z-10">
                 <div class="flex flex-col">
@@ -218,101 +236,7 @@
                                 </label>
                                 <input type="category" name="category" id="category"
                                     class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                                {{-- <select id="category"  name="category" autocomplete="category" class="w-full rounded-lg border py-2 px-3">
-                                    <option selected disabled>Select...</option>
-                                    <option value="3 TERM-LIMIT RULE">
-                                        3 TERM-LIMIT RULE
-                                    </option>
-                                    <option value="ADMINISTRATIVE INVESTIGATION PROCESS(LOCAL OFFICIAL)">
-                                        ADMINISTRATIVE INVESTIGATION PROCESS(LOCAL OFFICIAL)
-                                    </option>
-                                    <option value="APPOINTIVE BARANGAY OFFICIALS">
-                                        APPOINTIVE BARANGAY OFFICIALS
-                                    </option>
-                                    <option
-                                        value="APPOINTMENT / DESIGNATION OF LOCAL FUNCTIONARIES">
-                                        APPOINTMENT / DESIGNATION OF LOCAL FUNCTIONARIES
 
-                                    </option>
-                                    <option value="APROPRIATION/FUNDS/BUDGET MATTERS">
-                                        APROPRIATION/FUNDS/BUDGET MATTERS
-                                    </option>
-                                    <option value="Attachment of the Name, Image/Likeness of Public Officials">
-                                        Attachment of the Name, Image/Likeness of Public Officials
-                                    </option>
-                                    <option value="AUTHORITY TO ADMINISTER OATHS">
-                                        AUTHORITY TO ADMINISTER OATHS
-                                    </option>
-                                    <option value="BARANGAY MATTERS">
-                                        BARANGAY MATTERS
-                                    </option>
-                                    <option value="BENEFITS OF BARANGAY OFFICIALS">
-                                        BENEFITS OF BARANGAY OFFICIALS
-                                    </option>
-                                    <option value="Benefits of Employees">
-                                        Benefits of Employees
-                                    </option>
-                                    <option value="Benefits of local officials">
-                                        Benefits of local officials
-                                    </option>
-                                    <option value="Cockpit/Illegal Gambling/Smoking">
-                                        Cockpit/Illegal Gambling/Smoking
-                                    </option>
-                                    <option value="Comelec Matters">
-                                        Comelec Matters
-                                    </option>
-                                    <option value="COMPOSITION OF SANGGUNIANG BAYAN">
-                                        COMPOSITION OF SANGGUNIANG BAYAN
-                                    </option>
-                                    <option value="CONFLICT OF INTEREST">
-                                        CONFLICT OF INTEREST
-                                    </option>
-                                    <option value="Contracts Agreements">
-                                        Contracts/ Agreements
-                                    </option>
-                                    <option value="Control and Supervision">
-                                        Control and Supervision
-                                    </option>
-                                    <option value="CONVERSION MERGER/ CREATION OF LGU">
-                                        CONVERSION MERGER/ CREATION OF LGU
-                                    </option>
-                                    <option value="COVID/SAP MATTERS">
-                                        COVID/SAP MATTERS
-                                    </option>
-                                    <option value="Creation of LGU">
-                                       Creation of LGU
-                                    </option>
-                                    <option value="Designation/Appointment">
-                                        Designation/Appointment
-                                     </option>
-                                     <option value="DILG Women's Bulletin 2016">
-                                        DILG Women's Bulletin 2016
-                                     </option>
-                                     <option value="Disaster Risk">
-                                        Disaster Risk
-                                     </option>
-                                     <option value="Donation/Structure/Road">
-                                        Donation/Structure/Road
-                                     </option>
-                                     <option value="Effect of Filing COC">
-                                        Effect of Filing COC
-                                     </option>
-                                     <option value="Election Ban">
-                                        Election Ban
-                                     </option>
-                                     <option value="ELECTIVE/APPOINTIVE LOCAL OFFICIALS">
-                                        ELECTIVE/APPOINTIVE LOCAL OFFICIALS
-                                     </option>
-                                     <option value="EXECUTION/IMPLEMENTATION OF DECISION OF OMBUDSMAN/COMELEC">
-                                        EXECUTION/IMPLEMENTATION OF DECISION OF OMBUDSMAN/COMELEC
-                                     </option>
-                                     <option value="FAILURE OF SANGGUNIAN TO PASS AN APPROPRIATION ORDINANCE">
-                                        FAILURE OF SANGGUNIAN TO PASS AN APPROPRIATION ORDINANCE
-                                     </option>
-                                     <option value="Filing Complaint">
-                                        Filing Complaint
-                                     </option>
-                                </select> --}}
                             </div>
 
                             <div class="mb-5">
@@ -477,6 +401,12 @@
         var form = document.getElementById('searchForm');
         form.submit();
     }
+    $(document).ready(function() {
+        $('#category').change(function() {
+            $('#filterForm').submit();
+        });
+    });
 </script>
+
 
 

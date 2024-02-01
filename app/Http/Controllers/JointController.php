@@ -29,7 +29,7 @@ class JointController extends Controller
             $formattedJoints = $joints->map(function ($joint) {
                 return [
                     'id' => $joint->id,
-                    'responsible_office' => $joint->responsible_office,
+                    'responsible_office' => $joint->responsible_office ?? 'N/A',
                     'issuance' => [
                         'id' => $joint->issuance->id,
                         'date' => $joint->issuance->date,

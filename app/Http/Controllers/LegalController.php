@@ -12,23 +12,53 @@ class LegalController extends Controller
 {
     public function index(Request $request){
 
-        $search = $request->input('search');
+        // $search = $request->input('search');
 
-        $legals = Legal::when($search, function ($query) use ($search) {
-            $query->where('category', 'like', '%' . $search . '%')
-                ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
-                    $issuanceQuery->where('title', 'like', '%' . $search . '%')
-                        ->orWhere('reference_no', 'like', '%' . $search . '%')
-                        ->orWhere('keyword', 'like', '%' . $search . '%');
-                });
-         })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+        // $legals = Legal::when($search, function ($query) use ($search) {
+        //     $query->where('category', 'like', '%' . $search . '%')
+        //         ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
+        //             $issuanceQuery->where('title', 'like', '%' . $search . '%')
+        //                 ->orWhere('reference_no', 'like', '%' . $search . '%')
+        //                 ->orWhere('keyword', 'like', '%' . $search . '%');
+        //         });
+        //  })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+
+        //  $categories = $legals->pluck('category')->unique();
+        //  $selectedCategory = $request->input('category', 'All');
+
+        //  if ($selectedCategory !== 'All') {
+        //      $legals = $legals->where('category', $selectedCategory);
+        //  }
+        $search = $request->input('search');
+        $selectedCategory = $request->input('category', 'All');
+
+        $legalsQuery = Legal::query();
+
+        if ($search) {
+            $legalsQuery->where(function ($query) use ($search) {
+                $query->where('category', 'like', '%' . $search . '%')
+                    ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
+                        $issuanceQuery->where('title', 'like', '%' . $search . '%')
+                            ->orWhere('reference_no', 'like', '%' . $search . '%')
+                            ->orWhere('keyword', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+
+        if ($selectedCategory !== 'All') {
+            $legalsQuery->where('category', $selectedCategory);
+        }
+
+        $legals = $legalsQuery->with('issuance')->whereNotNull('category')->orderBy('created_at', 'desc')->paginate(5);
+
+        $categories = Legal::whereNotNull('category')->pluck('category')->unique();
 
          if ($request->expectsJson()) {
             // Transform the data to include the foreign key relationship
             $formattedLegals = $legals->map(function ($legal) {
                 return [
                     'id' => $legal->id,
-                    'category' => $legal->category,
+                    'category' => $legal->category ?? 'N/A',
                     'issuance' => [
                         'id' => $legal->issuance->id,
                         'date' => $legal->issuance->date,
@@ -43,7 +73,7 @@ class LegalController extends Controller
             return response()->json(['legals' => $formattedLegals]);
         } else {
             // If the request is from the web view, return a Blade view
-            return view('legal.index',compact('legals' ,'search'));
+            return view('legal.index',compact('legals' ,'search', 'categories' ,'selectedCategory'));
         }
     // return view('legal.index',compact('legals' ,'search'));
     }

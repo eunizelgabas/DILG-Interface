@@ -26,6 +26,46 @@
             }, 2000); // 2000 milliseconds = 2 seconds
         </script>
     @endif
+    <div class="flex">
+        <div class="pr-4">
+            <div class="relative md:w-full">
+                <form action="{{ route('latest.index') }}" method="GET" class="mb-4" id="filterForm">
+                    {{-- <select id="category" name="category" autocomplete="category" class="w-full rounded-lg border py-2 px-3">
+                        <option value="All" @if(!isset($selectedCategory) || $selectedCategory === 'All') selected @endif>All</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category }}" @if(isset($selectedCategory) && $selectedCategory === $category) selected @endif>
+                                {{ $category }}
+                            </option>
+                        @endforeach
+                    </select> --}}
+                    <select id="outcome"  name="outcome" autocomplete="outcome" class="w-full rounded-lg border py-2 px-3">
+                        <option selected disabled>All Outcome Area</option>
+                        <option value="ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE">
+                            ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE
+                        </option>
+                        <option value="PEACEFUL, ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES">
+                            PEACEFUL,
+                            ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES
+                        </option>
+                        <option value="SOCIALLY PROTECTIVE LGUS">
+                            SOCIALLY PROTECTIVE LGUS
+                        </option>
+                        <option
+                            value="ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT LGUS">
+                            ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT  LGUS
+
+                        </option>
+                        <option value="BUSINESS-FRIENDLY AND COMPETITIVE LGUS">
+                            BUSINESS-FRIENDLY AND COMPETITIVE LGUS
+                        </option>
+                        <option value="STRENGTHENING OF INTERNAL GOVERNANCE">
+                            STRENGTHENING OF INTERNAL GOVERNANCE
+                        </option>
+                    </select>
+                </form>
+            </div>
+        </div>
+
         <div class="flex-1 pr-4">
             <div class="relative md:w-1/3">
                 <form action="{{ route('joint.index') }}" method="GET" class="mb-4" id="searchForm">
@@ -49,6 +89,8 @@
 
             </div>
         </div>
+    </div>
+
 
             <div class=" w-full z-10">
                 <div class="flex flex-col">
