@@ -18,7 +18,7 @@
 
                     <div class="col-span-6 sm:col-span-6">
                         <label for="date" class="text-sm font-medium text-gray-900 block mb-2">Date</label>
-                        <input type="text" name="date" id="date" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="" value="{{ old('republic', $republic->issuance->date) }}">
+                        <input type="date" name="date" id="date" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="" value="{{ old('republic', $republic->issuance->date) }}">
                     </div>
 
 
