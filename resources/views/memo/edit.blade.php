@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-span-full">
                         <label for="responsible_office" class="text-sm font-medium text-gray-900 block mb-2">Responsible Office</label>
-                        <input type="text" name="responsible_office" id="responsible_office" value="{{ old('memo', $memo->responsible_office) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
+                        <input type="text" name="responsible_office" id="responsible_office" value="{{ old('memo', $memo->responsible_office) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
                     </div>
                     <div class="col-span-full">
                         <label for="url_link" class="text-sm font-medium text-gray-900 block mb-2">Url Link</label>
