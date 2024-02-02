@@ -39,7 +39,7 @@ class RepublicController extends Controller
                 ];
             });
 
-            return response()->json(['$republics' => $formattedRepublics]);
+            return response()->json(['republics' => $formattedRepublics]);
         } else {
             // If the request is from the web view, return a Blade view
             return view('republic.index', compact('republics', 'search'));
