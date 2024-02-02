@@ -40,7 +40,7 @@ class PresidentialController extends Controller
                 ];
             });
 
-            return response()->json(['$presidentials' => $formattedPresidentials]);
+            return response()->json(['presidentials' => $formattedPresidentials]);
         } else {
             // If the request is from the web view, return a Blade view
             return view('presidential.index', compact('presidentials', 'search'));
