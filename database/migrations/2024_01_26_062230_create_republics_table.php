@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('republics', function (Blueprint $table) {
             $table->id();
             $table->string('responsible_office')->nullable();
-            $table->bigInteger('issuance_id')->unsigned();
-            $table->foreign('issuance_id')->references('id')->on('issuances')->onDelete('cascade');
+            $table->foreignId('issuance_id')->constrained('issuances')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -13,31 +13,32 @@ class Issuances extends Model
 
     public function latest()
     {
-        return $this->hasOne(Latest::class);
+        return $this->hasOne(Latest::class, 'issuance_id');
     }
 
     public function joint(){
-        return $this->hasOne(Joint::class);
+        return $this->hasOne(Joint::class, 'issuance_id');
     }
 
     public function memo(){
-        return $this->hasOne(Memo::class);
+        return $this->hasOne(Memo::class, 'issuance_id');
     }
 
     public function presidential(){
-        return $this->hasOne(Presidential::class);
+        return $this->hasOne(Presidential::class, 'issuance_id');
     }
 
     public function draft(){
-        return $this->hasOne(Draft::class);
+        return $this->hasOne(Draft::class, 'issuance_id');
     }
 
-    public function repulic(){
-        return $this->hasOne(Republic::class);
+    public function republic()
+    {
+        return $this->hasOne(Republic::class, 'issuance_id');
     }
 
     public function legal(){
-        return $this->hasOne(Legal::class);
+        return $this->hasOne(Legal::class, 'issuance_id');
     }
 
 }

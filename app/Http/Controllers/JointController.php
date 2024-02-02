@@ -141,6 +141,6 @@ class JointController extends Controller
         $log_entry = Auth::user()->name . " deleted a Joint Circular  " . $joint->title . " with the id# " . $joint->id;
         event(new UserLog($log_entry));
 
-        return redirect('/joint_circulars')->with('Joint Circular deleted successfully.');
+        return redirect('/joint_circulars')->with('success','Joint Circular deleted successfully.');
     }
 }

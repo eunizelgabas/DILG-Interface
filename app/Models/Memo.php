@@ -13,7 +13,7 @@ class Memo extends Model
 
     public function issuance()
     {
-        return $this->belongsTo(Issuances::class);
+        return $this->belongsTo(Issuances::class, 'issuance_id');
     }
 
 }

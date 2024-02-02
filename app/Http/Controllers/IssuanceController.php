@@ -204,7 +204,7 @@ class IssuanceController extends Controller
         // $log_entry = Auth::user()->name . " deleted a Latest Issuances  " . $latest->title . " with the id# " . $latest->id;
         // event(new UserLog($log_entry));
 
-        return redirect('/latest_issuances')->with('Joint Circular deleted successfully.');
+        return redirect('/latest_issuances')->with('success','Latest Issuance deleted successfully.');
     }
 
 }

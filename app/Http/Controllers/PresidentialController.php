@@ -133,7 +133,7 @@ class PresidentialController extends Controller
     public function destroy(Presidential $presidential){
         $presidential->issuance->delete();
 
-        // Now, delete the presi$presidential
+        // Now, delete the $presidential
 
         $log_entry = Auth::user()->name . " deleted a Presidential Directive  " . $presidential->title . " with the id# " . $presidential->id;
         event(new UserLog($log_entry));
@@ -141,6 +141,6 @@ class PresidentialController extends Controller
         $presidential->delete();
 
 
-        return redirect('/presidential_directives')->with('Joint Circular deleted successfully.');
+        return redirect('/presidential_directives')->with('success','Presidential Directives deleted successfully.');
     }
 }

@@ -83,8 +83,8 @@
                        Edit
                     </a>
 
-                    <a onclick="openModal('modelConfirm')" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-red-500 hover:text-white">
-                       Delete
+                    <a onclick="openDeleteModal({{ $presidential->id }})" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-red-500 hover:text-white">
+                        Delete
                     </a>
                 </div>
                 <div id="modelConfirm" class="fixed hidden z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
@@ -107,9 +107,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Are you sure you want to delete this presidential circular?</h3>
+                            <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Are you sure you want to delete this presidential issuance?</h3>
                             <div class="flex  justify-center">
-                                <form action="{{ route('presidential.delete', $presidential) }}" method="post">
+                                <form id="deleteForm" method="POST" action="{{ url('/presidential_directives'. $presidential->id) }}">
                                     @csrf
                                     @method('DELETE')
 
@@ -385,5 +385,13 @@
     function searchOnChange() {
         var form = document.getElementById('searchForm');
         form.submit();
+    }
+
+    function openDeleteModal(id) {
+        if (confirm("Are you sure you want to delete this Presidential Directive?")) {
+            const form = document.getElementById('deleteForm');
+            form.action = `{{ url('/presidential_directives') }}/${id}`;
+            form.submit();
+        }
     }
 </script>

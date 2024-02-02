@@ -85,7 +85,7 @@ class MemoController extends Controller
         $log_entry = Auth::user()->name . " created a Memo Circular  " . $memo->title . " with the id# " . $memo->id;
         event(new UserLog($log_entry));
 
-        return redirect('/memo_circulars')->with('success', 'Latest Issuance successfully created');
+        return redirect('/memo_circulars')->with('success', 'Memo Circular successfully created');
     }
 
     public function edit(Memo $memo){
@@ -139,6 +139,6 @@ class MemoController extends Controller
         $log_entry = Auth::user()->name . " deleted a Memo Circular with the id # " . $memo->id;
         event(new UserLog($log_entry));
 
-        return redirect('/memo_circulars')->with('Joint Circular deleted successfully.');
+        return redirect('/memo_circulars')->with('success','Memo Circular deleted successfully.');
     }
 }

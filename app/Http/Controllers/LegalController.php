@@ -147,7 +147,7 @@ class LegalController extends Controller
 
         $log_entry = Auth::user()->name . " deleted a Legal Opinion  " . $legal->title . " with the id# " . $legal->id;
         event(new UserLog($log_entry));
-        return redirect('/legal_opinions')->with('Joint Circular deleted successfully.');
+        return redirect('/legal_opinions')->with( 'success','Legal Opinion deleted successfully.');
     }
 
 }

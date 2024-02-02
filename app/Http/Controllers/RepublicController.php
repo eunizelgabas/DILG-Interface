@@ -129,9 +129,8 @@ class RepublicController extends Controller
 
 
     public function destroy(Republic $republic){
-        $republic->issuance->delete();
 
-        // Now, delete the republic
+        $republic->issuance()->delete(); // Make sure to use the correct relationship method
         $republic->delete();
 
         $log_entry = Auth::user()->name . " deleted a Republic Act  " . $republic->title . " with the id# " . $republic->id;
@@ -139,4 +138,5 @@ class RepublicController extends Controller
 
         return redirect('/republic_acts')->with('success','Republic Act deleted successfully.');
     }
+
 }
