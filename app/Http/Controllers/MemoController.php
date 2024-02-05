@@ -126,7 +126,7 @@ class MemoController extends Controller
         $log_entry = Auth::user()->name . " updated a Memo Circular  " . $memo->title . " with the id# " . $memo->id;
         event(new UserLog($log_entry));
 
-        return redirect('/memo_circulars')->with('success', 'Latest Issuance successfully updated');
+        return redirect('/memo_circulars')->with('success', 'Memo Circular successfully updated');
     }
 
 

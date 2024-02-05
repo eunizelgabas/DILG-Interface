@@ -85,7 +85,7 @@ class JointController extends Controller
         $log_entry = Auth::user()->name . " created a Joint Circular  " . $joint->title . " with the id# " . $joint->id;
         event(new UserLog($log_entry));
 
-        return redirect('/joint_circulars')->with('success', 'Latest Issuance successfully created');
+        return redirect('/joint_circulars')->with('success', 'Joint Circular successfully created');
     }
 
     public function edit(Joint $joint){
@@ -127,7 +127,7 @@ class JointController extends Controller
         $log_entry = Auth::user()->name . " updated a Joint Circular  " . $joint->title . " with the id# " . $joint->id;
         event(new UserLog($log_entry));
 
-        return redirect('/joint_circulars')->with('success', 'Latest Issuance successfully updated');
+        return redirect('/joint_circulars')->with('success', 'Joint Circular successfully updated');
     }
 
 
