@@ -109,7 +109,7 @@ class LegalController extends Controller
             'date' => 'nullable|date',
             'url_link' => 'required|string',
             'keyword.*' => 'required|string',
-            'category' => 'required|string'
+            'category' => 'nullable|string'
         ]);
 
         $keywords = $data['keyword'];

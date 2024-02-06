@@ -19,68 +19,8 @@
                         <label for="category" class="mb-3 block text-base font-bold text-[#07074D]">
                             Category
                         </label>
-                        <select id="category"  name="category" autocomplete="category" class="w-full rounded-lg border py-2 px-3">
-                            <option selected disabled>Select...</option>
-                            <option value="3 TERM-LIMIT RULE" {{ old('legal', $legal->category) == '3 TERM-LIMIT RULE' ? 'selected' : '' }}>
-                                3 TERM-LIMIT RULE
-                            </option>
-                            <option value="ADMINISTRATIVE INVESTIGATION PROCESS(LOCAL OFFICIAL)" {{ old('legal', $legal->category) == 'ADMINISTRATIVE INVESTIGATION PROCESS(LOCAL OFFICIAL' ? 'selected' : '' }}>
-                                ADMINISTRATIVE INVESTIGATION PROCESS(LOCAL OFFICIAL)
-                            </option>
-                            <option value="APPOINTIVE BARANGAY OFFICIALS" {{ old('legal', $legal->category) == 'APPOINTIVE BARANGAY OFFICIALS' ? 'selected' : '' }}>
-                                APPOINTIVE BARANGAY OFFICIALS
-                            </option>
-                            <option
-                                value="APPOINTMENT / DESIGNATION OF LOCAL FUNCTIONARIES" {{ old('legal', $legal->category) == 'APPOINTMENT / DESIGNATION OF LOCAL FUNCTIONARIES' ? 'selected' : '' }}>
-                                APPOINTMENT / DESIGNATION OF LOCAL FUNCTIONARIES
-
-                            </option>
-                            <option value="APROPRIATION/FUNDS/BUDGET MATTERS" {{ old('legal', $legal->category) == 'APROPRIATION/FUNDS/BUDGET MATTERS' ? 'selected' : '' }}>
-                                APROPRIATION/FUNDS/BUDGET MATTERS
-                            </option>
-                            <option value="Attachment of the Name, Image/Likeness of Public Officials" {{ old('legal', $legal->category) == 'Attachment of the Name, Image/Likeness of Public Officials' ? 'selected' : '' }}>
-                                Attachment of the Name, Image/Likeness of Public Officials
-                            </option>
-                            <option value="AUTHORITY TO ADMINISTER OATHS" {{ old('legal', $legal->category) == 'AUTHORITY TO ADMINISTER OATHS' ? 'selected' : '' }}>
-                                AUTHORITY TO ADMINISTER OATHS
-                            </option>
-                            <option value="BARANGAY MATTERS" {{ old('legal', $legal->category) == 'BARANGAY MATTERS' ? 'selected' : '' }}>
-                                BARANGAY MATTERS
-                            </option>
-                            <option value="BENEFITS OF BARANGAY OFFICIALS" {{ old('legal', $legal->category) == 'BENEFITS OF BARANGAY OFFICIALS' ? 'selected' : '' }}>
-                                BENEFITS OF BARANGAY OFFICIALS
-                            </option>
-                            <option value="Benefits of Employees" {{ old('legal', $legal->category) == 'Benefits of Employees' ? 'selected' : '' }}>
-                                Benefits of Employees
-                            </option>
-                            <option value="Benefits of local officials" {{ old('legal', $legal->category) == 'Benefits of local officials' ? 'selected' : '' }}>
-                                Benefits of local officials
-                            </option>
-                            <option value="Cockpit/Illegal Gambling/Smoking" {{ old('legal', $legal->category) == 'Cockpit/Illegal Gambling/Smoking' ? 'selected' : '' }}>
-                                Cockpit/Illegal Gambling/Smoking
-                            </option>
-                            <option value="Comelec Matters" {{ old('legal', $legal->category) == 'Comelec Matters' ? 'selected' : '' }}>
-                                Comelec Matters
-                            </option>
-                            <option value="COMPOSITION OF SANGGUNIANG BAYAN" {{ old('legal', $legal->category) == 'COMPOSITION OF SANGGUNIANG BAYAN' ? 'selected' : '' }}>
-                                COMPOSITION OF SANGGUNIANG BAYAN
-                            </option>
-                            <option value="CONFLICT OF INTEREST" {{ old('legal', $legal->category) == 'CONFLICT OF INTEREST' ? 'selected' : '' }}>
-                                CONFLICT OF INTEREST
-                            </option>
-                            <option value="Contracts Agreements" {{ old('legal', $legal->category) == 'Contracts Agreements' ? 'selected' : '' }}>
-                                Contracts/ Agreements
-                            </option>
-                            <option value="Control and Supervision" {{ old('legal', $legal->category) == 'Control and Supervision' ? 'selected' : '' }}>
-                                Control and Supervision
-                            </option>
-                            <option value="CONVERSION MERGER/ CREATION OF LGU" {{ old('legal', $legal->category) == 'CONVERSION MERGER/ CREATION OF LGU' ? 'selected' : '' }}>
-                                CONVERSION MERGER/ CREATION OF LGU
-                            </option>
-                            <option value="COVID/SAP MATTERS" {{ old('legal', $legal->category) == 'COVID/SAP MATTERS' ? 'selected' : '' }}>
-                                COVID/SAP MATTERS
-                            </option>
-                        </select>
+                        <input type="category" name="category" id="category" value="{{ old('legal', $legal->category) }}"
+                            class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
                     </div>
                     <div class="col-span-full">
                         <div class="mb-2">
