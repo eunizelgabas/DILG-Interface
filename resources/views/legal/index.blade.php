@@ -162,7 +162,11 @@
 
                     <div class="mt-4 mb-">
                       <div class="mb-3 text-xl font-bold">{{$legal->issuance->title}}</div>
-                      <div class="text-sm text-neutral-600 font-bold">Category: <span class="font-light">{{$legal->category}}</span></div>
+                      <div class="text-sm text-neutral-600 font-bold">
+                        @if($legal->category)
+                            Responsible Office: <span class="font-light">{{ $legal->category }}</span>
+                        @endif
+                    </div>
                       <div class="flex-1 inline-flex items-center">
                         <div class="text-sm text-neutral-600 font-bold">URL link: </div>
                         <a href="{{ $legal->issuance->url_link }}" class="font-bold ml-1 hover:underline" target="_blank">

@@ -138,7 +138,11 @@
 
         <div class="mt-4 mb-">
           <div class="mb-3 text-xl font-bold">{{$republic->issuance->title}}</div>
-          <div class="text-sm text-neutral-600 font-bold">Responsible Office: <span class="font-light">{{$republic->responsible_office}}</span></div>
+          <div class="text-sm text-neutral-600 font-bold">
+                @if($republic->responsible_office)
+                    Responsible Office: <span class="font-light">{{ $republic->responsible_office }}</span>
+                @endif
+            </div>
           <div class="flex-1 inline-flex items-center">
             <div class="text-sm text-neutral-600 font-bold">URL link: </div>
             <a href="{{ $republic->issuance->url_link }}" class="font-bold ml-1 hover:underline" target="_blank">
