@@ -36,6 +36,7 @@ class DraftController extends Controller
                         'reference_no' => $draft->issuance->reference_no,
                         'keyword' => $draft->issuance->keyword,
                         'url_link' => $draft->issuance->url_link,
+                        'type' => $draft->issuance->type
                     ],
                 ];
             });

@@ -91,7 +91,9 @@ class IssuanceController extends Controller
                         'reference_no' => $latest->issuance->reference_no,
                         'keyword' => $latest->issuance->keyword,
                         'url_link' => $latest->issuance->url_link,
+                        'type' => $latest->issuance->type
                     ],
+
                 ];
             });
 
@@ -166,6 +168,7 @@ class IssuanceController extends Controller
             'keyword.*' => 'required|string',
             'outcome' => 'required|string',
             'category' => 'required|string'
+
         ]);
 
         $keywords = $data['keyword'];

@@ -36,6 +36,7 @@ class PresidentialController extends Controller
                         'reference_no' => $presidential->issuance->reference_no,
                         'keyword' => $presidential->issuance->keyword,
                         'url_link' => $presidential->issuance->url_link,
+                        'type' => $presidential->issuance->type
                     ],
                 ];
             });

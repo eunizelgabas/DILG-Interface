@@ -37,6 +37,7 @@ class JointController extends Controller
                         'reference_no' => $joint->issuance->reference_no,
                         'keyword' => $joint->issuance->keyword,
                         'url_link' => $joint->issuance->url_link,
+                        'type' => $joint->issuance->type
                     ],
                 ];
             });

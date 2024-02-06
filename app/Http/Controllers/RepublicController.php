@@ -35,6 +35,7 @@ class RepublicController extends Controller
                         'reference_no' => $republic->issuance->reference_no,
                         'keyword' => $republic->issuance->keyword,
                         'url_link' => $republic->issuance->url_link,
+                        'type' => $republic->issuance->type
                     ],
                 ];
             });

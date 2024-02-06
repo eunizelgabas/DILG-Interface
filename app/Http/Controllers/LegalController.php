@@ -49,6 +49,7 @@ class LegalController extends Controller
                         'reference_no' => $legal->issuance->reference_no,
                         'keyword' => $legal->issuance->keyword,
                         'url_link' => $legal->issuance->url_link,
+                        'type' => $legal->issuance->type
                     ],
                 ];
             });

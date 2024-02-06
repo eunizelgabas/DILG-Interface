@@ -37,6 +37,7 @@ class MemoController extends Controller
                         'reference_no' => $memo->issuance->reference_no,
                         'keyword' => $memo->issuance->keyword,
                         'url_link' => $memo->issuance->url_link,
+                        'type' => $memo->issuance->type
                     ],
                 ];
             });
