@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+    Route::post('/logout', UserController::class, 'logout');
 });
 
 Route::post('/auth/login', [UserController::class, 'login']);
@@ -41,5 +42,6 @@ Route::get('/memo_circulars', [MemoController::class, 'index']);
 Route::get('/presidential_directives', [PresidentialController::class, 'index']);
 Route::get('/draft_issuances', [DraftController::class, 'index']);
 Route::get('/republic_acts', [RepublicController::class, 'index']);
+
 // Route::get('/legal_opinions', [LegalController::class, 'index']);
 // Route::get('/api/download_issuance/{issuance}', [IssuanceController::class, 'downloadIssuanceFile']);

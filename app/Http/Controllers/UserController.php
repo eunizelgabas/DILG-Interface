@@ -132,4 +132,11 @@ class UserController extends Controller
         $response =['message'=> 'Incorrect email or password'];
         return response()->json($response, 400);
     }
+
+    public function logout(Request $request)
+        {
+            $request->user()->tokens()->delete();
+
+            return response()->json(['message' => 'Logged out successfully']);
+        }
 }
