@@ -56,7 +56,7 @@ class MemoController extends Controller
             'title' => 'required|string',
             'reference_no' => 'required|string',
             'date' => 'nullable|date',
-            'url_link' => 'required|string',
+            'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
             'responsible_office' => 'nullable|string'
         ]);
@@ -99,7 +99,7 @@ class MemoController extends Controller
             'title' => 'required|string',
             'reference_no' => 'required|string',
             'date' => 'nullable|date',
-            'url_link' => 'required|string',
+            'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
             'responsible_office' => 'nullable|string'
         ]);

@@ -112,25 +112,27 @@ class UserController extends Controller
         return redirect()->route('user.show', ['user' => $user->id])->with('success', 'User activated successfully');
     }
 
-    public function login(Request $request){
-
-        $rules =[
-            'email'     => 'required',
-            'password'  =>'required'
+    public function login(Request $request) {
+        $rules = [
+            'email' => 'required|email',
+            'password' => 'required'
         ];
 
         $request->validate($rules);
 
         $user = User::where('email', $request->email)->first();
 
-        if($user && Hash::check($request->password, $user->password)){
-            $token= $user->createToken('Personal Access Token')->plainTextToken;
-            $response =['user' => $user, 'token'=>$token];
-            return response()->json($response, 200);
+        if ($user && Hash::check($request->password, $user->password)) {
+            $token = $user->createToken('Personal Access Token')->plainTextToken;
+            return response()->json([
+                'user' => $user,
+                'token' => $token
+            ], 200);
         }
 
-        $response =['message'=> 'Incorrect email or password'];
-        return response()->json($response, 400);
+        return response()->json([
+            'message' => 'Unauthorized'
+        ], 401);
     }
 
     public function logout(Request $request)

@@ -66,7 +66,7 @@ class LegalController extends Controller
             'title' => 'required|string',
             'reference_no' => 'required|string',
             'date' => 'nullable|date',
-            'url_link' => 'required|string',
+            'url_link' => 'nullable|string',
             'category' => 'nullable|string',
             'keyword.*' => 'required|string',
         ]);
@@ -108,7 +108,7 @@ class LegalController extends Controller
             'title' => 'required|string',
             'reference_no' => 'required|string',
             'date' => 'nullable|date',
-            'url_link' => 'required|string',
+            'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
             'category' => 'nullable|string'
         ]);

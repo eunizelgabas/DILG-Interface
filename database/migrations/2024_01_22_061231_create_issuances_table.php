@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title', 1000);
             $table->string('type');
             $table->string('reference_no');
-            $table->string('url_link');
+            $table->string('url_link')->nullable();
             $table->date('date');
             $table->string('keyword');
             $table->timestamps();
