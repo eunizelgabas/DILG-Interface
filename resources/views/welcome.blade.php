@@ -12,10 +12,14 @@
 
 
     </head>
+
     <body class="antialiased">
-        <div class="h-screen w-screen bg-gray-50 flex items-center justify-center">
+
+        <div class="h-screen w-screen  flex items-center justify-center">
+
             <div class="container flex flex-col md:flex-row items-center justify-between px-5 text-gray-700">
                 <div class="w-full lg:w-1/2 mx-3">
+
                     <div class="text-4xl text-red-500 font-dark font-extrabold mb-5"> Department of the Interior and Local Government- BOHOL</div>
                     <p class="text-xl  font-light leading-normal mb-8 justify-center">
                         The DILG is the executive department of the Philippine government responsible for promoting peace and order, ensuring public safety and strengthening local government capability aimed towards the effective delivery of basic services to the citizenry.
@@ -28,9 +32,49 @@
                 </div>
             </div>
 
+            <div class="bg"></div>
+    <div class="bg bg2"></div>
+    <div class="bg bg3"></div>
         </div>
+
+
 
     </body>
 
 
 </html>
+
+<style scoped>
+    .bg {
+        animation: slide 3s ease-in-out infinite alternate;
+        background-image: linear-gradient(-60deg, rgb(221, 216, 216) 50%, white 50%);
+        bottom: 0;
+        left: -50%;
+        opacity: .5;
+        position: fixed;
+        right: -50%;
+        top: 0;
+        z-index: -1;
+    }
+
+    .bg2 {
+        animation-direction: alternate-reverse;
+        animation-duration: 4s;
+    }
+
+    .bg3 {
+        animation-duration: 5s;
+    }
+
+    @keyframes slide {
+        0% {
+            transform: translateX(-25%);
+        }
+
+        100% {
+            transform: translateX(25%);
+        }
+    }
+
+</style>
+
