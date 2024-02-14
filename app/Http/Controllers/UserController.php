@@ -95,6 +95,14 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+
+        $authenticatedUser = Auth::user();
+
+        // Check if the authenticated user is authorized to update the user data
+        if ($authenticatedUser->id !== $user->id) {
+            return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
+        }
+
         if ($user) {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
