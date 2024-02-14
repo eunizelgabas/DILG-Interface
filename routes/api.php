@@ -27,6 +27,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::post('/logout', UserController::class, 'logout');
 });
 
+Route::middleware('auth:sanctum')->get('/auth/validate-token', function (Request $request) {
+    return response()->json(['message' => 'Token is valid']);
+});
 Route::post('/auth/login', [UserController::class, 'login']);
 
 // Route::get('/test', function() {
