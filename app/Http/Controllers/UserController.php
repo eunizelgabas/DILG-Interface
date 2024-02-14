@@ -61,11 +61,7 @@ class UserController extends Controller
         $user = User::create($data);
 
         $user->assignRole($role);
-        // $user->assignRole($data['role']);
-        // Assign roles to the user
-        // $token = $user->createToken('Personal Access Token')->plainTextToken;
-        // $response = ['user' => $user, 'token' => $token];
-        // return response()->json($response, 200);
+
 
         $log_entry = Auth::user()->name ." created a  user " . $user->name;
         event(new UserLog($log_entry));
@@ -95,35 +91,32 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-
-        $authenticatedUser = Auth::user();
+        $authenticatedUser = Auth::guard('sanctum')->user();
 
         // Check if the authenticated user is authorized to update the user data
-        if ($authenticatedUser->id !== $user->id) {
+        if (!$authenticatedUser || $authenticatedUser->id !== $user->id) {
             return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
         }
 
-        if ($user) {
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-                'password' => 'nullable|string|min:8|confirmed', // Add password validation
-            ]);
+        // Validate the request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+            'password' => 'nullable|string|min:8|confirmed', // Add password validation
+        ]);
 
-            $user->name = $validatedData['name'];
-            $user->email = $validatedData['email'];
-            // Update other fields as needed
+        // Update user data
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        // Update other fields as needed
 
-            if (isset($validatedData['password'])) {
-                $user->password = Hash::make($validatedData['password']);
-            }
-
-            $user->save();
-
-            return response()->json($user);
-        } else {
-            return response()->json(['error' => 'Unauthenticated'], 401);
+        if (!empty($validatedData['password'])) {
+            $user->password = Hash::make($validatedData['password']);
         }
+
+        $user->save();
+
+        return response()->json($user);
     }
 
     /**
@@ -178,7 +171,8 @@ class UserController extends Controller
 
     public function logout(Request $request)
         {
-            $request->user()->tokens()->delete();
+            // $request->user()->tokens()->delete();
+            $request->user()->token()->revoke();
 
             return response()->json(['message' => 'Logged out successfully']);
         }
