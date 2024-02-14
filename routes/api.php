@@ -43,8 +43,5 @@ Route::get('/presidential_directives', [PresidentialController::class, 'index'])
 Route::get('/draft_issuances', [DraftController::class, 'index']);
 Route::get('/republic_acts', [RepublicController::class, 'index']);
 
-Route::get('/user',[UserController::class, 'apiIndex']);
+// Route::get('/user',[UserController::class, 'apiIndex']);
 Route::put('/user/update', [UserController::class, 'update']);
-
-// Route::get('/legal_opinions', [LegalController::class, 'index']);
-// Route::get('/api/download_issuance/{issuance}', [IssuanceController::class, 'downloadIssuanceFile']);
