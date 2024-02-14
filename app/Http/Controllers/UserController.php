@@ -21,8 +21,21 @@ class UserController extends Controller
                 ->orWhere('email', 'like', '%' . $search . '%');
          })->with('roles')->orderBy('created_at', 'desc')->paginate(6);
 
+
         return view('user.index', compact('users', 'search'));
     }
+
+    public function apiIndex(Request $request)
+{
+    // Authenticate the user
+    $user = Auth::user();
+
+    if ($user) {
+        return response()->json($user);
+    } else {
+        return response()->json(['error' => 'Unauthenticated'], 401);
+    }
+}
 
     public function create()
     {
@@ -80,9 +93,29 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        if ($user) {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+                'password' => 'nullable|string|min:8|confirmed', // Add password validation
+            ]);
+
+            $user->name = $validatedData['name'];
+            $user->email = $validatedData['email'];
+            // Update other fields as needed
+
+            if (isset($validatedData['password'])) {
+                $user->password = Hash::make($validatedData['password']);
+            }
+
+            $user->save();
+
+            return response()->json($user);
+        } else {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
     }
 
     /**
