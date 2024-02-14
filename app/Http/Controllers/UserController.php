@@ -21,21 +21,8 @@ class UserController extends Controller
                 ->orWhere('email', 'like', '%' . $search . '%');
          })->with('roles')->orderBy('created_at', 'desc')->paginate(6);
 
-
         return view('user.index', compact('users', 'search'));
     }
-
-    public function apiIndex(Request $request)
-{
-    // Authenticate the user
-    $user = Auth::user();
-
-    if ($user) {
-        return response()->json($user);
-    } else {
-        return response()->json(['error' => 'Unauthenticated'], 401);
-    }
-}
 
     public function create()
     {
@@ -61,7 +48,11 @@ class UserController extends Controller
         $user = User::create($data);
 
         $user->assignRole($role);
-
+        // $user->assignRole($data['role']);
+        // Assign roles to the user
+        // $token = $user->createToken('Personal Access Token')->plainTextToken;
+        // $response = ['user' => $user, 'token' => $token];
+        // return response()->json($response, 200);
 
         $log_entry = Auth::user()->name ." created a  user " . $user->name;
         event(new UserLog($log_entry));
@@ -171,8 +162,7 @@ class UserController extends Controller
 
     public function logout(Request $request)
         {
-            // $request->user()->tokens()->delete();
-            $request->user()->token()->revoke();
+            $request->user()->tokens()->delete();
 
             return response()->json(['message' => 'Logged out successfully']);
         }
