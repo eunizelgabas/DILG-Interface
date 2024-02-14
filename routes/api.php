@@ -44,4 +44,4 @@ Route::get('/draft_issuances', [DraftController::class, 'index']);
 Route::get('/republic_acts', [RepublicController::class, 'index']);
 
 // Route::get('/user',[UserController::class, 'apiIndex']);
-Route::put('/user/update', [UserController::class, 'update']);
+Route::put('/user/update/{user}', [UserController::class, 'update'])->middleware('auth:sanctum');
