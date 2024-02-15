@@ -114,16 +114,16 @@ class UserController extends Controller
         $authenticatedUserId = $request->user()->id;
 
         // Check if the authenticated user is trying to update their own data
-        if ($authenticatedUserId != $user) {
+        if ($authenticatedUserId != $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         // Update user data
-        $user = User::findOrFail($user);
         $user->update($request->all());
 
         return response()->json(['message' => 'User updated successfully'], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
