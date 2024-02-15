@@ -176,9 +176,35 @@ class UserController extends Controller
     }
 
     public function logout(Request $request)
-        {
-            $request->user()->tokens()->delete();
+    {
+        $request->user()->tokens()->delete();
 
-            return response()->json(['message' => 'Logged out successfully']);
+        return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    public function validateToken(Request $request)
+        {
+            // Check if the request contains a valid authorization header
+            if (!$request->header('Authorization')) {
+                return response()->json(['message' => 'Authorization header is missing'], 401);
+            }
+
+            // Extract the token from the authorization header
+            $token = str_replace('Bearer ', '', $request->header('Authorization'));
+
+            // Perform token validation logic here
+            // This could involve verifying the token against your authentication provider,
+            // checking token expiration, etc.
+
+            // For example, if you're using Laravel Sanctum for token-based authentication:
+            if (auth()->guard('api')->check()) {
+                // Token is valid
+                return response()->json(['message' => 'Token is valid'], 200);
+            } else {
+                // Token is invalid
+                return response()->json(['message' => 'Token is invalid'], 401);
+            }
         }
+
+
 }

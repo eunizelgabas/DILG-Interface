@@ -45,3 +45,4 @@ Route::get('/republic_acts', [RepublicController::class, 'index']);
 
 // Route::get('/user',[UserController::class, 'apiIndex']);
 Route::put('/user/update/{user}', [UserController::class, 'update'])->middleware('auth:sanctum');
+Route::get('/auth/validate-token', [UserController::class, 'validateToken']);
