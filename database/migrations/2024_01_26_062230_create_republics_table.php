@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('republics', function (Blueprint $table) {
             $table->id();
-            $table->string('responsible_office')->nullable();
+            $table->string('responsible_office',1000)->nullable();
             $table->foreignId('issuance_id')->constrained('issuances')->onDelete('cascade');
             $table->timestamps();
         });

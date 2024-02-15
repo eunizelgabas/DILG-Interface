@@ -207,4 +207,12 @@ class UserController extends Controller
         }
 
 
+        public function getUser(Request $request)
+        {
+            // Retrieve the authenticated user based on the provided token
+            $user = $request->user();
+
+            // Return the user's information
+            return response()->json(['user' => $user], 200);
+        }
 }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('memos', function (Blueprint $table) {
             $table->id();
-            $table->string('responsible_office')->nullable();
+            $table->string('responsible_office',1000)->nullable();
             $table->bigInteger('issuance_id')->unsigned();
             $table->foreign('issuance_id')->references('id')->on('issuances')->onDelete('cascade');
             $table->timestamps();

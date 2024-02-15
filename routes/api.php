@@ -22,11 +22,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-    Route::post('/logout', UserController::class, 'logout');
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+//     Route::post('/logout', UserController::class, 'logout');
+// });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [UserController::class, 'getUser']); // Endpoint to fetch user data
+    Route::post('/logout', [UserController::class, 'logout']); // Endpoint to log out
+});
 Route::post('/auth/login', [UserController::class, 'login']);
 
 // Route::get('/test', function() {
