@@ -11,68 +11,31 @@ use PDO;
 
 class JointController extends Controller
 {
-    // public function index(Request $request){
-
-    //     $search = $request->input('search');
-
-    //     $joints = Joint::when($search, function ($query) use ($search) {
-    //         $query->where('responsible_office', 'like', '%' . $search . '%')
-    //             ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
-    //                 $issuanceQuery->where('title', 'like', '%' . $search . '%')
-    //                     ->orWhere('reference_no', 'like', '%' . $search . '%')
-    //                     ->orWhere('keyword', 'like', '%' . $search . '%');
-    //             });
-    //     })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
-
-    //     if ($request->expectsJson()) {
-    //         // Transform the data to include the foreign key relationship
-    //         $formattedJoints = $joints->map(function ($joint) {
-    //             return [
-    //                 'id' => $joint->id,
-    //                 'responsible_office' => $joint->responsible_office ?? 'N/A',
-    //                 'issuance' => [
-    //                     'id' => $joint->issuance->id,
-    //                     'date' => $joint->issuance->date,
-    //                     'title' => $joint->issuance->title,
-    //                     'reference_no' => $joint->issuance->reference_no,
-    //                     'keyword' => $joint->issuance->keyword,
-    //                     'url_link' => $joint->issuance->url_link,
-    //                     'type' => $joint->issuance->type
-    //                 ],
-    //             ];
-    //         });
-
-    //         return response()->json(['joints' => $formattedJoints]);
-    //     } else {
-    //         // If the request is from the web view, return a Blade view
-    //         return view('joint.index', compact('joints', 'search'));
-    //     }
-
-    //     // return view('joint.index', compact('joints', 'search'));
-    // }
     public function index(Request $request){
 
         $search = $request->input('search');
 
-        $jointsQuery = Joint::when($search, function ($query) use ($search) {
+        $joints = Joint::when($search, function ($query) use ($search) {
             $query->where('responsible_office', 'like', '%' . $search . '%')
                 ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
                     $issuanceQuery->where('title', 'like', '%' . $search . '%')
                         ->orWhere('reference_no', 'like', '%' . $search . '%')
                         ->orWhere('keyword', 'like', '%' . $search . '%');
                 });
-        })->with('issuance')->orderBy('created_at', 'desc');
+        })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
-        // Check if the request is from a mobile device
-        if ($request->header('User-Agent') === 'Mobile') {
-            $joints = $jointsQuery->get(); // Return all data for mobile
-        } else {
-            $joints = $jointsQuery->paginate(5); // Paginate for web requests
-        }
+        $jointQuery = Joint::when($search, function ($query) use ($search) {
+            $query->where('responsible_office', 'like', '%' . $search . '%')
+                ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
+                    $issuanceQuery->where('title', 'like', '%' . $search . '%')
+                        ->orWhere('reference_no', 'like', '%' . $search . '%')
+                        ->orWhere('keyword', 'like', '%' . $search . '%');
+                });
+        })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
         if ($request->expectsJson()) {
             // Transform the data to include the foreign key relationship
-            $formattedJoints = $joints->map(function ($joint) {
+            $formattedJoints = $jointQuery->map(function ($joint) {
                 return [
                     'id' => $joint->id,
                     'responsible_office' => $joint->responsible_office ?? 'N/A',
@@ -96,7 +59,6 @@ class JointController extends Controller
 
         // return view('joint.index', compact('joints', 'search'));
     }
-
 
     public function store(Request $request){
         $data = $request->validate([
