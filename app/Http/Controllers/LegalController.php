@@ -32,9 +32,16 @@ class LegalController extends Controller
             $legalsQuery->where('category', $selectedCategory);
         }
 
-        $legals = $legalsQuery->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+        $legals = $legalsQuery->with('issuance')->orderBy('created_at', 'desc');
 
         $categories = Legal::whereNotNull('category')->pluck('category')->unique();
+
+
+        if ($request->expectsJson()) {
+            $legals = $legalsQuery->get(); // Get all data for JSON API requests
+        } else {
+            $legals = $legalsQuery->paginate(5); // Paginate for web requests
+        }
 
          if ($request->expectsJson()) {
             // Transform the data to include the foreign key relationship

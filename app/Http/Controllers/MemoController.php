@@ -15,14 +15,21 @@ class MemoController extends Controller
 
         $search = $request->input('search');
 
-        $memos = Memo::when($search, function ($query) use ($search) {
+        $memosQuery = Memo::when($search, function ($query) use ($search) {
             $query->where('responsible_office', 'like', '%' . $search . '%')
                 ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
                     $issuanceQuery->where('title', 'like', '%' . $search . '%')
                         ->orWhere('reference_no', 'like', '%' . $search . '%')
                         ->orWhere('keyword', 'like', '%' . $search . '%');
                 });
-        })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+        })->with('issuance')->orderBy('created_at', 'desc');
+
+
+        if ($request->expectsJson()) {
+            $memos = $memosQuery->get(); // Get all data for JSON API requests
+        } else {
+            $memos = $memosQuery->paginate(5); // Paginate for web requests
+        }
 
         if ($request->expectsJson()) {
             // Transform the data to include the foreign key relationship

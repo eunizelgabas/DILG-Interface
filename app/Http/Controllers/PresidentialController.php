@@ -14,14 +14,21 @@ class PresidentialController extends Controller
 
         $search = $request->input('search');
 
-        $presidentials = Presidential::when($search, function ($query) use ($search) {
+        $presidentialsQuery = Presidential::when($search, function ($query) use ($search) {
             $query->where('responsible_office', 'like', '%' . $search . '%')
                 ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
                     $issuanceQuery->where('title', 'like', '%' . $search . '%')
                         ->orWhere('reference_no', 'like', '%' . $search . '%')
                         ->orWhere('keyword', 'like', '%' . $search . '%');
                 });
-        })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+        })->with('issuance')->orderBy('created_at', 'desc');
+
+
+        if ($request->expectsJson()) {
+            $presidentials = $presidentialsQuery->get(); // Get all data for JSON API requests
+        } else {
+            $presidentials = $presidentialsQuery->paginate(5); // Paginate for web requests
+        }
 
         if ($request->expectsJson()) {
             // Transform the data to include the foreign key relationship

@@ -14,14 +14,21 @@ class RepublicController extends Controller
 
         $search = $request->input('search');
 
-        $republics = Republic::when($search, function ($query) use ($search) {
+        $republicsQuery = Republic::when($search, function ($query) use ($search) {
             $query->where('responsible_office', 'like', '%' . $search . '%')
                 ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
                     $issuanceQuery->where('title', 'like', '%' . $search . '%')
                         ->orWhere('reference_no', 'like', '%' . $search . '%')
                         ->orWhere('keyword', 'like', '%' . $search . '%');
                 });
-        })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+        })->with('issuance')->orderBy('created_at', 'desc');
+
+        if ($request->expectsJson()) {
+            $republics = $republicsQuery->get(); // Get all data for JSON API requests
+        } else {
+            $republics = $republicsQuery->paginate(5); // Paginate for web requests
+        }
+
         if ($request->expectsJson()) {
             // Transform the data to include the foreign key relationship
             $formattedRepublics = $republics->map(function ($republic) {

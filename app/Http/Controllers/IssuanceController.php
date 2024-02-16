@@ -75,7 +75,13 @@ class IssuanceController extends Controller
 
 
 
-        $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+        $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc');
+
+        if ($request->expectsJson()) {
+            $latests = $latestsQuery->get(); // Get all data for JSON API requests
+        } else {
+            $latests = $latestsQuery->paginate(5); // Paginate for web requests
+        }
 
         if ($request->expectsJson()) {
             // Transform the data to include the foreign key relationship
