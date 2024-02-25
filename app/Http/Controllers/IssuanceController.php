@@ -126,7 +126,7 @@ class IssuanceController extends Controller
             'reference_no' => 'required|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
-            'category' => 'required|string',
+            'category' => 'nullable|string',
             'outcome' => 'required',
             'keyword.*' => 'required|string',
         ]);
@@ -173,7 +173,7 @@ class IssuanceController extends Controller
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
             'outcome' => 'required|string',
-            'category' => 'required|string'
+            'category' => 'nullable|string'
 
         ]);
 

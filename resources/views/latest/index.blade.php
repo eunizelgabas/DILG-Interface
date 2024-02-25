@@ -154,7 +154,12 @@
 
                     <div class="mt-4 mb-">
                       <div class="mb-3 text-xl font-bold">{{$lat->issuance->title}}</div>
-                      <div class="text-sm text-neutral-600 font-bold">Category: <span class="font-light">{{$lat->category}}</span></div>
+                      {{-- <div class="text-sm text-neutral-600 font-bold">Category: <span class="font-light">{{$lat->category}}</span></div> --}}
+                      <div class="text-sm text-neutral-600 font-bold">
+                        @if($lat->category)
+                            Category: <span class="font-light">{{$lat->category }}</span>
+                        @endif
+                    </div>
                       <div class="text-sm text-neutral-600 font-bold">Outcome Area/Program: <span class="font-light">{{$lat->outcome}}</span></div>
                       <div class="flex-1 inline-flex items-center">
                         <div class="text-sm text-neutral-600 font-bold">URL link: </div>

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('latests', function (Blueprint $table) {
             $table->id();
-            $table->string('category');
+            $table->string('category')->nullable();
             $table->string('outcome');
             $table->bigInteger('issuance_id')->unsigned();
             $table->foreign('issuance_id')->references('id')->on('issuances')->onDelete('cascade');
