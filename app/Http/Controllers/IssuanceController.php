@@ -166,7 +166,7 @@ class IssuanceController extends Controller
     $formattedLatests = $latests->map(function ($latest) {
         return [
             'id' => $latest->id,
-            'category' => $latest->category,
+            'category' => $latest->category ?? 'N/A',
             'outcome' => $latest->outcome,
             'issuance' => [
                 'id' => $latest->issuance->id,
