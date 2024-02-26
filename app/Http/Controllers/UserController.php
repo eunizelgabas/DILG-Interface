@@ -80,49 +80,63 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, User $user)
-    // {
-    //     $authenticatedUser = Auth::guard('sanctum')->user();
-
-    //     // Check if the authenticated user is authorized to update the user data
-    //     if (!$authenticatedUser || $authenticatedUser->id !== $user->id) {
-    //         return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
-    //     }
-
-    //     // Validate the request data
-    //     $validatedData = $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-    //         'password' => 'nullable|string|min:8|confirmed', // Add password validation
-    //     ]);
-
-    //     // Update user data
-    //     $user->name = $validatedData['name'];
-    //     $user->email = $validatedData['email'];
-    //     // Update other fields as needed
-
-    //     if (!empty($validatedData['password'])) {
-    //         $user->password = Hash::make($validatedData['password']);
-    //     }
-
-    //     $user->save();
-
-    //     return response()->json($user);
-    // }
     public function update(Request $request, User $user)
-    {
-        $authenticatedUserId = $request->user()->id;
+{
+    // Check if the request is authenticated
+    if (Auth::check()) {
+        // Get the authenticated user
+        $authenticatedUser = Auth::user();
 
-        // Check if the authenticated user is trying to update their own data
-        if ($authenticatedUserId != $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+        // Check if the authenticated user is authorized to update the user data
+        if ($authenticatedUser->id !== $user->id) {
+            // Return a forbidden response if the authenticated user is not authorized
+            return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
         }
 
-        // Update user data
-        $user->update($request->all());
+        // Validate the request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+            'password' => 'nullable|string|min:8|confirmed', // Add password validation
+        ]);
 
-        return response()->json(['message' => 'User updated successfully'], 200);
+        // Update user data
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+
+        // Update password if provided
+        if (!empty($validatedData['password'])) {
+            $user->password = Hash::make($validatedData['password']);
+        }
+
+        // Save the changes
+        $user->save();
+
+        // Return the updated user data
+        return response()->json($user);
+    } else {
+        // User is not authenticated, return an unauthorized response
+        return response()->json(['error' => 'Unauthenticated'], 401);
     }
+}
+
+
+    // public function update(Request $request, User $user)
+    // {
+    //     $authenticatedUserId = $request->user()->id;
+
+    //     // Check if the authenticated user is trying to update their own data
+    //     if ($authenticatedUserId != $user->id) {
+    //         return response()->json(['message' => 'Unauthorized'], 403);
+    //     }
+
+    //     return response()->json(['message' => $user]);
+
+    //     // Update user data
+    //     $user->update($request->all());
+
+    //     return response()->json(['message' => 'User updated successfully'], 200);
+    // }
 
 
     /**

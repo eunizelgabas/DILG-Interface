@@ -48,5 +48,6 @@ Route::get('/draft_issuances', [DraftController::class, 'index']);
 Route::get('/republic_acts', [RepublicController::class, 'index']);
 
 // Route::get('/user',[UserController::class, 'apiIndex']);
-Route::put('/user/update/{user}', [UserController::class, 'update'])->middleware('auth:sanctum');
+// Route::put('/user/update', [UserController::class, 'update'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->put('/user/update/{user}', [UserController::class, 'update']);
 Route::get('/auth/validate-token', [UserController::class, 'validateToken']);
