@@ -49,75 +49,139 @@ class IssuanceController extends Controller
     //     }
 
     // }
+    // public function index(Request $request)
+    // {
+    //     $search = $request->input('search');
+    //     $selectedOutcome = $request->input('outcome');
+
+    //     $latestsQuery = Latest::query();
+
+    //     if ($search) {
+    //         $latestsQuery->where(function ($query) use ($search) {
+    //             $query->where('category', 'like', '%' . $search . '%')
+    //                 ->orWhere('outcome', 'like', '%' . $search . '%')
+    //                 ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
+    //                     $issuanceQuery->where('title', 'like', '%' . $search . '%')
+    //                         ->orWhere('reference_no', 'like', '%' . $search . '%')
+    //                         ->orWhere('keyword', 'like', '%' . $search . '%');
+    //                 });
+    //         });
+    //     }
+
+    //     if ($selectedOutcome && $selectedOutcome !== 'All') {
+    //         // $latestsQuery->where('outcome', 'like', '%' . $selectedOutcome . '%');
+    //         $latestsQuery->where('outcome', $selectedOutcome);
+    //     }
+
+
+
+    //     $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc');
+
+    //     if ($request->expectsJson()) {
+    //         $latests = $latestsQuery->get(); // Get all data for JSON API requests
+    //     } else {
+    //         $latests = $latestsQuery->paginate(5); // Paginate for web requests
+    //     }
+
+    //     if ($request->expectsJson()) {
+    //         // Transform the data to include the foreign key relationship
+    //         $formattedLatests = $latests->map(function ($latest) {
+    //             return [
+    //                 'id' => $latest->id,
+    //                 'category' => $latest->category,
+    //                 'outcome' => $latest->outcome,
+    //                 'issuance' => [
+    //                     'id' => $latest->issuance->id,
+    //                     'date' => $latest->issuance->date,
+    //                     'title' => $latest->issuance->title,
+    //                     'reference_no' => $latest->issuance->reference_no,
+    //                     'keyword' => $latest->issuance->keyword,
+    //                     'url_link' => $latest->issuance->url_link,
+    //                     'type' => $latest->issuance->type
+    //                 ],
+
+    //             ];
+    //         });
+
+    //         return response()->json(['latests' => $formattedLatests]);
+    //     } else {
+    //         // If the request is from the web view, return a Blade view
+    //         $outcomeOptions = [
+    //             "ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE",
+    //             "PEACEFUL, ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES",
+    //             "SOCIALLY PROTECTIVE LGUS",
+    //             "ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT LGUS",
+    //             "BUSINESS-FRIENDLY AND COMPETITIVE LGUS",
+    //             "STRENGTHENING OF INTERNAL GOVERNANCE",
+    //         ];
+
+    //         return view('latest.index', compact('latests', 'search', 'outcomeOptions', 'selectedOutcome'));
+    //     }
+    // }
+
     public function index(Request $request)
-    {
-        $search = $request->input('search');
-        $selectedOutcome = $request->input('outcome');
+{
+    $search = $request->input('search');
+    $selectedOutcome = $request->input('outcome');
 
-        $latestsQuery = Latest::query();
+    $latestsQuery = Latest::query();
 
-        if ($search) {
-            $latestsQuery->where(function ($query) use ($search) {
-                $query->where('category', 'like', '%' . $search . '%')
-                    ->orWhere('outcome', 'like', '%' . $search . '%')
-                    ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
-                        $issuanceQuery->where('title', 'like', '%' . $search . '%')
-                            ->orWhere('reference_no', 'like', '%' . $search . '%')
-                            ->orWhere('keyword', 'like', '%' . $search . '%');
-                    });
-            });
-        }
-
-        if ($selectedOutcome && $selectedOutcome !== 'All') {
-            // $latestsQuery->where('outcome', 'like', '%' . $selectedOutcome . '%');
-            $latestsQuery->where('outcome', $selectedOutcome);
-        }
-
-
-
-        $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc');
-
-        if ($request->expectsJson()) {
-            $latests = $latestsQuery->get(); // Get all data for JSON API requests
-        } else {
-            $latests = $latestsQuery->paginate(5); // Paginate for web requests
-        }
-
-        if ($request->expectsJson()) {
-            // Transform the data to include the foreign key relationship
-            $formattedLatests = $latests->map(function ($latest) {
-                return [
-                    'id' => $latest->id,
-                    'category' => $latest->category,
-                    'outcome' => $latest->outcome,
-                    'issuance' => [
-                        'id' => $latest->issuance->id,
-                        'date' => $latest->issuance->date,
-                        'title' => $latest->issuance->title,
-                        'reference_no' => $latest->issuance->reference_no,
-                        'keyword' => $latest->issuance->keyword,
-                        'url_link' => $latest->issuance->url_link,
-                        'type' => $latest->issuance->type
-                    ],
-
-                ];
-            });
-
-            return response()->json(['latests' => $formattedLatests]);
-        } else {
-            // If the request is from the web view, return a Blade view
-            $outcomeOptions = [
-                "ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE",
-                "PEACEFUL, ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES",
-                "SOCIALLY PROTECTIVE LGUS",
-                "ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT LGUS",
-                "BUSINESS-FRIENDLY AND COMPETITIVE LGUS",
-                "STRENGTHENING OF INTERNAL GOVERNANCE",
-            ];
-
-            return view('latest.index', compact('latests', 'search', 'outcomeOptions', 'selectedOutcome'));
-        }
+    if ($search) {
+        $latestsQuery->where(function ($query) use ($search) {
+            $query->where('category', 'like', '%' . $search . '%')
+                ->orWhere('outcome', 'like', '%' . $search . '%')
+                ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
+                    $issuanceQuery->where('title', 'like', '%' . $search . '%')
+                        ->orWhere('reference_no', 'like', '%' . $search . '%')
+                        ->orWhere('keyword', 'like', '%' . $search . '%');
+                });
+        });
     }
+
+    if ($selectedOutcome && $selectedOutcome !== 'All') {
+        $latestsQuery->where('outcome', $selectedOutcome);
+    }
+
+    // Apply pagination if it's a web request
+    if (!$request->expectsJson()) {
+        $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+
+        // Return a Blade view
+        $outcomeOptions = [
+            "ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE",
+            "PEACEFUL, ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES",
+            "SOCIALLY PROTECTIVE LGUS",
+            "ENVIRONMENT-PROTECTIVE, CLIMATE CHANGE ADAPTIVE AND DISASTER RESILIENT LGUS",
+            "BUSINESS-FRIENDLY AND COMPETITIVE LGUS",
+            "STRENGTHENING OF INTERNAL GOVERNANCE",
+        ];
+
+        return view('latest.index', compact('latests', 'search', 'outcomeOptions', 'selectedOutcome'));
+    }
+
+    // For JSON API requests
+    $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc')->get();
+
+    // Transform the data
+    $formattedLatests = $latests->map(function ($latest) {
+        return [
+            'id' => $latest->id,
+            'category' => $latest->category,
+            'outcome' => $latest->outcome,
+            'issuance' => [
+                'id' => $latest->issuance->id,
+                'date' => $latest->issuance->date,
+                'title' => $latest->issuance->title,
+                'reference_no' => $latest->issuance->reference_no,
+                'keyword' => $latest->issuance->keyword,
+                'url_link' => $latest->issuance->url_link,
+                'type' => $latest->issuance->type
+            ],
+        ];
+    });
+
+    return response()->json(['latests' => $formattedLatests]);
+}
 
 
     public function store(Request $request){
