@@ -41,7 +41,7 @@ class MemoController extends Controller
                         'id' => $memo->issuance->id,
                         'date' => $memo->issuance->date,
                         'title' => $memo->issuance->title,
-                        'reference_no' => $memo->issuance->reference_no,
+                        'reference_no' => $memo->issuance->reference_no ?? 'N/A',
                         'keyword' => $memo->issuance->keyword,
                         'url_link' => $memo->issuance->url_link,
                         'type' => $memo->issuance->type
@@ -61,7 +61,7 @@ class MemoController extends Controller
     public function store(Request $request){
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
@@ -104,7 +104,7 @@ class MemoController extends Controller
     public function update(Request $request, Memo $memo) {
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',

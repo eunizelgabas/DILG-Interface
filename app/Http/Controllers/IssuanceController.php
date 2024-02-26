@@ -94,7 +94,7 @@ class IssuanceController extends Controller
                         'id' => $latest->issuance->id,
                         'date' => $latest->issuance->date,
                         'title' => $latest->issuance->title,
-                        'reference_no' => $latest->issuance->reference_no,
+                        'reference_no' => $latest->issuance->reference_no ?? 'N/A',
                         'keyword' => $latest->issuance->keyword,
                         'url_link' => $latest->issuance->url_link,
                         'type' => $latest->issuance->type
@@ -187,7 +187,7 @@ class IssuanceController extends Controller
     public function store(Request $request){
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'category' => 'nullable|string',
@@ -232,7 +232,7 @@ class IssuanceController extends Controller
     public function update(Request $request, Latest $latest){
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',

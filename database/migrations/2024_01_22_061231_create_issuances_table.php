@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 1000);
             $table->string('type');
-            $table->string('reference_no');
+            $table->string('reference_no')->nullable();
             $table->string('url_link')->nullable();
             $table->date('date')->nullable();
             $table->string('keyword');

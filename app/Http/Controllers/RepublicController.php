@@ -39,7 +39,7 @@ class RepublicController extends Controller
                         'id' => $republic->issuance->id,
                         'date' => $republic->issuance->date,
                         'title' => $republic->issuance->title,
-                        'reference_no' => $republic->issuance->reference_no,
+                        'reference_no' => $republic->issuance->reference_no ?? 'N/A',
                         'keyword' => $republic->issuance->keyword,
                         'url_link' => $republic->issuance->url_link,
                         'type' => $republic->issuance->type
@@ -59,7 +59,7 @@ class RepublicController extends Controller
     public function store(Request $request){
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
@@ -102,7 +102,7 @@ class RepublicController extends Controller
     public function update(Request $request, Republic $republic) {
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',

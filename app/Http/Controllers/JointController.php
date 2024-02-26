@@ -79,7 +79,7 @@ class JointController extends Controller
                     'id' => $joint->issuance->id,
                     'date' => $joint->issuance->date,
                     'title' => $joint->issuance->title,
-                    'reference_no' => $joint->issuance->reference_no,
+                    'reference_no' => $joint->issuance->reference_no ?? 'N/A',
                     'keyword' => $joint->issuance->keyword,
                     'url_link' => $joint->issuance->url_link,
                     'type' => $joint->issuance->type
@@ -101,7 +101,7 @@ class JointController extends Controller
     public function store(Request $request){
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
@@ -144,7 +144,7 @@ class JointController extends Controller
     public function update(Request $request, Joint $joint) {
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',

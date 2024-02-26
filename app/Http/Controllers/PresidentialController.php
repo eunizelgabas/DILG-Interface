@@ -40,7 +40,7 @@ class PresidentialController extends Controller
                         'id' => $presidential->issuance->id,
                         'date' => $presidential->issuance->date,
                         'title' => $presidential->issuance->title,
-                        'reference_no' => $presidential->issuance->reference_no,
+                        'reference_no' => $presidential->issuance->reference_no ?? 'N/A',
                         'keyword' => $presidential->issuance->keyword,
                         'url_link' => $presidential->issuance->url_link,
                         'type' => $presidential->issuance->type
@@ -60,7 +60,7 @@ class PresidentialController extends Controller
     public function store(Request $request){
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
@@ -103,7 +103,7 @@ class PresidentialController extends Controller
     public function update(Request $request, Presidential $presidential) {
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',

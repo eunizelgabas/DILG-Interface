@@ -53,7 +53,7 @@ class LegalController extends Controller
                         'id' => $legal->issuance->id,
                         'date' => $legal->issuance->date,
                         'title' => $legal->issuance->title,
-                        'reference_no' => $legal->issuance->reference_no,
+                        'reference_no' => $legal->issuance->reference_no ?? 'N/A',
                         'keyword' => $legal->issuance->keyword,
                         'url_link' => $legal->issuance->url_link,
                         'type' => $legal->issuance->type
@@ -71,7 +71,7 @@ class LegalController extends Controller
     public function store(Request $request){
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'category' => 'nullable|string',
@@ -113,7 +113,7 @@ class LegalController extends Controller
     public function update(Request $request, Legal $legal){
         $data = $request->validate([
             'title' => 'required|string',
-            'reference_no' => 'required|string',
+            'reference_no' => 'nullable|string',
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
