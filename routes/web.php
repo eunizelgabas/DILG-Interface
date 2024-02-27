@@ -41,11 +41,11 @@ Route::middleware('auth')->group(function () {
      //Route for User - Eula
     Route::get('/users', [UserController::class,'index'])->name('user.index');
     Route::get('/users/create', [UserController::class,'create'])->name('user.create');
-    Route::post('/users/create', [UserController::class,'store'])->name('user.store');
-    Route::post('/users/create', [UserController::class,'store'])->name('user.store');
+    Route::post('/users', [UserController::class,'store'])->name('user.store');
     Route::get('/users/edit/{user}', [UserController::class, 'edit'])->name('user.edit');
     Route::get('/users/show/{user}', [UserController::class,'show'])->name('user.show');
     Route::put('/users/{user}', [UserController::class, 'updateNotApi'])->name('user.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('user.delete');
 
     Route::put('/users/activate/{user}', [UserController::class, 'activate'])->name('user.activate');
     Route::put('/users/deactivate/{user}', [UserController::class, 'deactivate'])->name('user.deactivate');

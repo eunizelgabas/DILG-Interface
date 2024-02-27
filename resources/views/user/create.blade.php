@@ -70,6 +70,10 @@
     </div>
     </x-app-layout>
     <script>
+        // Set default image source
+        const defaultAvatar = "{{ asset('images/boy.jpg') }}";
+        document.getElementById('avatar-preview').src = defaultAvatar;
+
         function previewAvatar(event) {
             const preview = document.getElementById('avatar-preview');
             const file = event.target.files[0];
@@ -81,11 +85,10 @@
 
             if (file) {
                 reader.readAsDataURL(file);
+            } else {
+                // If no file is selected, revert to the default image
+                preview.src = defaultAvatar;
             }
         }
-
-        // Set default image source
-        const defaultAvatar = "{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('images/boy.jpg') }}";
-        document.getElementById('avatar-preview').src = defaultAvatar;
     </script>
 

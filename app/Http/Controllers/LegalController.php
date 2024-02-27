@@ -49,6 +49,7 @@ class LegalController extends Controller
                 return [
                     'id' => $legal->id,
                     'category' => $legal->category ?? 'N/A',
+                    'responsible_office' => $legal->responsible_office ?? 'N/A',
                     'issuance' => [
                         'id' => $legal->issuance->id,
                         'date' => $legal->issuance->date ?? 'N/A',
@@ -76,6 +77,7 @@ class LegalController extends Controller
             'url_link' => 'nullable|string',
             'category' => 'nullable|string',
             'keyword.*' => 'required|string',
+            'responsible_office' => 'nullable|string'
         ]);
 
         $keywords = $data['keyword'];
@@ -96,6 +98,7 @@ class LegalController extends Controller
         // Create Latest record associated with the Issuances
         $legal = Legal::create([
             'category' => $data['category'],
+            'responsible_office' => $data['responsible_office'],
             'issuance_id' => $issuance->id,
         ]);
 
@@ -117,7 +120,8 @@ class LegalController extends Controller
             'date' => 'nullable|date',
             'url_link' => 'nullable|string',
             'keyword.*' => 'required|string',
-            'category' => 'nullable|string'
+            'category' => 'nullable|string',
+            'responsible_office' => 'nullable|string'
         ]);
 
         $keywords = $data['keyword'];
@@ -138,6 +142,7 @@ class LegalController extends Controller
         // Update or create Joint record associated with the Issuances
         $legal->update([
             'category' => $data['category'],
+            'responsible_office' => $data['responsible_office']
 
         ]);
 

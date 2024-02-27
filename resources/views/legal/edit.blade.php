@@ -32,8 +32,6 @@
                         </div>
                     </div>
 
-
-
                     <div class="col-span-full">
                         <label for="title" class="text-sm font-medium text-gray-900 block mb-2">Title</label>
                         <textarea id="title" name="title" rows="2" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" >{{ old('legal', $legal->issuance->title) }}</textarea>
@@ -42,10 +40,10 @@
                         <label for="reference_no" class="text-sm font-medium text-gray-900 block mb-2">Reference No</label>
                         <input type="text" name="reference_no" id="reference_no" value="{{ old('legal', $legal->issuance->reference_no) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
                     </div>
-                    {{-- <div class="col-span-full">
+                    <div class="col-span-full">
                         <label for="responsible_office" class="text-sm font-medium text-gray-900 block mb-2">Responsible Office</label>
-                        <input type="text" name="responsible_office" id="responsible_office" value="{{ old('joint', $joint->responsible_office) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
-                    </div> --}}
+                        <input type="text" name="responsible_office" id="responsible_office" value="{{ old('legal', $legal->responsible_office) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
+                    </div>
                     <div class="col-span-full">
                         <label for="url_link" class="text-sm font-medium text-gray-900 block mb-2">Url Link</label>
                         <input type="text" name="url_link" id="url_link" value="{{ old('legal', $legal->issuance->url_link) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">

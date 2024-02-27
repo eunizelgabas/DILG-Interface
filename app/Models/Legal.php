@@ -9,7 +9,7 @@ class Legal extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category', 'issuance_id'];
+    protected $fillable = ['category', 'issuance_id', 'responsible_office'];
 
     public function issuance()
     {

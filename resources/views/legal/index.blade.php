@@ -163,8 +163,13 @@
                     <div class="mt-4 mb-">
                       <div class="mb-3 text-xl font-bold">{{$legal->issuance->title}}</div>
                       <div class="text-sm text-neutral-600 font-bold">
+                        @if($legal->responsible_office)
+                            Responsible Office: <span class="font-light">{{ $legal->responsible_office }}</span>
+                        @endif
+                    </div>
+                      <div class="text-sm text-neutral-600 font-bold">
                         @if($legal->category)
-                            Responsible Office: <span class="font-light">{{ $legal->category }}</span>
+                            Category: <span class="font-light">{{ $legal->category }}</span>
                         @endif
                     </div>
                       <div class="flex-1 inline-flex items-center">
@@ -255,6 +260,13 @@
                                 Reference No
                                 </label>
                                 <input type="text" name="reference_no" id="reference_no" placeholder=""
+                                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                            </div>
+                            <div class="mb-5">
+                                <label for="responsible_office" class="mb-3 block text-base font-medium text-[#07074D]">
+                                Responsible Office
+                                </label>
+                                <input type="text" name="responsible_office" id="responsible_office" placeholder=""
                                     class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
                             </div>
                             <div class="mb-5">

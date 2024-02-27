@@ -32,43 +32,77 @@ class UserController extends Controller
         return view('user.create', compact('roles', 'user'));
     }
 
+    // public function store(Request $request)
+    // {
+    //     $data = $request->validate([
+    //         'name'      => 'required',
+    //         'email'     => 'required|email|unique:users',
+    //         'password'  => 'required|confirmed|string|min:6',
+    //         'avatar'     =>'nullable|file|mimes:jpeg,png,jpg,gif|max:10240',
+    //         'role'      => 'required'
+    //     ]);
+
+    //     $fileName = null;
+    //     if ($request->hasFile('avatar')) {
+    //         $fileName = time() . "." . $request->avatar->extension();
+    //         $request->avatar->move(public_path('avatars/'), $fileName);
+    //         $data['avatar'] = $fileName;
+    //     }
+
+    //     // Hash the password before creating the user
+    //     $data['password'] = bcrypt($data['password']);
+    //     unset($data['role']);
+    //      // $type = $data['type'];
+    //     $role = $request->role;
+
+    //     $user = User::create($data);
+
+    //     $user->assignRole($role);
+    //     // $user->assignRole($data['role']);
+    //     // Assign roles to the user
+    //     // $token = $user->createToken('Personal Access Token')->plainTextToken;
+    //     // $response = ['user' => $user, 'token' => $token];
+    //     // return response()->json($response, 200);
+
+    //     $log_entry = Auth::user()->name ." created a  user " . $user->name;
+    //     event(new UserLog($log_entry));
+
+    //     return redirect('/users')->with('success', 'Account created successfully.');
+    // }
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name'      => 'required',
-            'email'     => 'required|email|unique:users',
-            'password'  => 'required|confirmed|string|min:6',
-            'avatar'     =>'nullable|file|mimes:jpeg,png,jpg,gif|max:10240',
-            'role'      => 'required'
-        ]);
+{
+    $data = $request->validate([
+        'name'      => 'required',
+        'email'     => 'required|email|unique:users',
+        'password'  => 'required|confirmed|string|min:6',
+        'avatar'    => 'nullable|file|mimes:jpeg,png,jpg,gif|max:10240',
+        'role'      => 'required'
+    ]);
 
-        $fileName = null;
-        if ($request->hasFile('avatar')) {
-            $fileName = time() . "." . $request->avatar->extension();
-            $request->avatar->move(public_path('avatars/'), $fileName);
-            $data['avatar'] = $fileName;
-        }
-
-        // Hash the password before creating the user
-        $data['password'] = bcrypt($data['password']);
-        unset($data['role']);
-         // $type = $data['type'];
-        $role = $request->role;
-
-        $user = User::create($data);
-
-        $user->assignRole($role);
-        // $user->assignRole($data['role']);
-        // Assign roles to the user
-        // $token = $user->createToken('Personal Access Token')->plainTextToken;
-        // $response = ['user' => $user, 'token' => $token];
-        // return response()->json($response, 200);
-
-        $log_entry = Auth::user()->name ." created a  user " . $user->name;
-        event(new UserLog($log_entry));
-
-        return redirect('/users')->with('success', 'Account created successfully.');
+    $fileName = null;
+    if ($request->hasFile('avatar')) {
+        $fileName = time() . "." . $request->avatar->extension();
+        $request->avatar->move(public_path('avatars/'), $fileName);
+        $data['avatar'] = $fileName;
     }
+
+    // Hash the password before creating the user
+    $data['password'] = bcrypt($data['password']);
+    unset($data['role']);
+
+    $role = $request->role;
+
+    $user = User::create($data);
+
+    $user->assignRole($role);
+
+    // Log the user creation event
+    $log_entry = Auth::user()->name . " created a user " . $user->name;
+    event(new UserLog($log_entry));
+
+    return redirect('/users')->with('success', 'Account created successfully.');
+}
+
 
     /**
      * Display the specified resource.
@@ -187,9 +221,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(User $user){
+        $user->delete();
+
+        return redirect('/users')->with('success','User deleted successfully.');
     }
 
     public function deactivate(User $user){
