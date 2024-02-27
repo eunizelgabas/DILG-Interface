@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -27,7 +28,8 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return view('user.create', compact('roles'));
+        $user = new User();
+        return view('user.create', compact('roles', 'user'));
     }
 
     public function store(Request $request)
@@ -36,8 +38,16 @@ class UserController extends Controller
             'name'      => 'required',
             'email'     => 'required|email|unique:users',
             'password'  => 'required|confirmed|string|min:6',
+            'avatar'     =>'nullable|file|mimes:jpeg,png,jpg,gif|max:10240',
             'role'      => 'required'
         ]);
+
+        $fileName = null;
+        if ($request->hasFile('avatar')) {
+            $fileName = time() . "." . $request->avatar->extension();
+            $request->avatar->move(public_path('avatars/'), $fileName);
+            $data['avatar'] = $fileName;
+        }
 
         // Hash the password before creating the user
         $data['password'] = bcrypt($data['password']);
@@ -76,37 +86,76 @@ class UserController extends Controller
         // $user = User::with('roles')->find($user->id);
         $roles = Role::all();
         $user->find($user->id);
-        return view('user.edit', [
-            'user' => $user,
-            'roles' => $roles,
-            'currentRole' => $user->roles->first()->name,
-        ]);
+        return view('user.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, User $user)
-{
-    // Check if the request is authenticated
-    if (Auth::check()) {
-        // Get the authenticated user
-        $authenticatedUser = Auth::user();
+    {
+        // Check if the request is authenticated
+        if (Auth::check()) {
+            // Get the authenticated user
+            $authenticatedUser = Auth::user();
 
-        // Check if the authenticated user is authorized to update the user data
-        if ($authenticatedUser->id !== $user->id) {
-            // Return a forbidden response if the authenticated user is not authorized
-            return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
+            // Check if the authenticated user is authorized to update the user data
+            if ($authenticatedUser->id !== $user->id) {
+                // Return a forbidden response if the authenticated user is not authorized
+                return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
+            }
+
+            // Validate the request data
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+                'password' => 'nullable|string|min:8|confirmed', // Add password validation
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
+            ]);
+
+            // Update user data
+            $user->name = $validatedData['name'];
+            $user->email = $validatedData['email'];
+
+            // Update password if provided
+            if (!empty($validatedData['password'])) {
+                $user->password = Hash::make($validatedData['password']);
+            }
+
+            if ($request->hasFile('avatar')) {
+                // Store the new avatar and get its path
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
+
+                // Delete the old avatar if exists
+                if ($user->avatar) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+
+                // Update the user's avatar path
+                $user->avatar = $avatarPath;
+            }
+
+
+            // Save the changes
+            $user->save();
+
+            // Return the updated user data
+            return response()->json($user);
+        } else {
+            // User is not authenticated, return an unauthorized response
+            return response()->json(['error' => 'Unauthenticated'], 401);
         }
+    }
 
-        // Validate the request data
+    public function updateNotApi(Request $request, User $user)
+    {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed', // Add password validation
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
         ]);
 
-        // Update user data
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
 
@@ -115,35 +164,25 @@ class UserController extends Controller
             $user->password = Hash::make($validatedData['password']);
         }
 
+        if ($request->hasFile('avatar')) {
+            // Store the new avatar and get its path
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+
+            // Delete the old avatar if exists
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            // Update the user's avatar path
+            $user->avatar = $avatarPath;
+        }
+
         // Save the changes
         $user->save();
 
-        // Return the updated user data
-        return response()->json($user);
-    } else {
-        // User is not authenticated, return an unauthorized response
-        return response()->json(['error' => 'Unauthenticated'], 401);
+        // Redirect back with success message
+        return redirect('/users')->with('success', 'User details updated successfully.');
     }
-}
-
-
-    // public function update(Request $request, User $user)
-    // {
-    //     $authenticatedUserId = $request->user()->id;
-
-    //     // Check if the authenticated user is trying to update their own data
-    //     if ($authenticatedUserId != $user->id) {
-    //         return response()->json(['message' => 'Unauthorized'], 403);
-    //     }
-
-    //     return response()->json(['message' => $user]);
-
-    //     // Update user data
-    //     $user->update($request->all());
-
-    //     return response()->json(['message' => 'User updated successfully'], 200);
-    // }
-
 
     /**
      * Remove the specified resource from storage.
