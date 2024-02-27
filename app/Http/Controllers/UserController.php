@@ -79,11 +79,17 @@ class UserController extends Controller
         'role'      => 'required'
     ]);
 
-    $fileName = null;
+    // $fileName = null;
+    // if ($request->hasFile('avatar')) {
+    //     $fileName = time() . "." . $request->avatar->extension();
+    //     $request->avatar->move(public_path('avatars/'), $fileName);
+    //     $data['avatar'] = $fileName;
+    // }
     if ($request->hasFile('avatar')) {
-        $fileName = time() . "." . $request->avatar->extension();
-        $request->avatar->move(public_path('avatars/'), $fileName);
-        $data['avatar'] = $fileName;
+        $avatarPath = $request->file('avatar')->store('avatars', 'public');
+
+        // Update the user's avatar path
+        $data['avatar'] = $avatarPath;
     }
 
     // Hash the password before creating the user

@@ -2,7 +2,7 @@
 
     <div class=" flex justify-center items-center mt-8">
         <div class="lg:w-1/2 md:w-1/2 w-1/2">
-            <form method="POST" action="{{ route('user.store') }}" class="bg-white p-10 rounded-lg shadow-lg min-w-full">
+            <form method="POST" action="{{ route('user.store') }}" class="bg-white p-10 rounded-lg shadow-lg min-w-full" enctype="multipart/form-data">
                 @csrf
                 <h1 class="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">Create User</h1>
                 <div class="mb-5 text-center">
