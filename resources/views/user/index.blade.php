@@ -76,7 +76,7 @@
                 <table class="min-w-full">
                     <thead>
                         <tr>
-                            <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">ID</th>
+                            <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">Profile</th>
                             <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">Fullname</th>
                             <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">Email</th>
                             <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">Role</th>
@@ -92,10 +92,12 @@
                             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                                 <div class="flex items-center">
                                     <div>
-                                        <div class="text-sm leading-5 text-gray-800">{{$user->id}}</div>
+                                        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('images/boy.jpg') }}" alt="User Avatar" class="inline-block relative object-center rounded-full w-12 h-12 border border-gray-300 bg-gray-100 p-1">
+                                        {{-- <div class="text-sm leading-5 text-gray-800">{{ $user->id }}</div> --}}
                                     </div>
                                 </div>
                             </td>
+
                             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                                 <div class="text-sm leading-5 text-blue-900">{{$user->name}}</div>
                             </td>
