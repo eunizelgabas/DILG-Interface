@@ -92,11 +92,11 @@ class IssuanceController extends Controller
                     'outcome' => $latest->outcome,
                     'issuance' => [
                         'id' => $latest->issuance->id,
-                        'date' => $latest->issuance->date,
+                        'date' => $latest->issuance->date ?? 'N/A',
                         'title' => $latest->issuance->title,
                         'reference_no' => $latest->issuance->reference_no ?? 'N/A',
                         'keyword' => $latest->issuance->keyword,
-                        'url_link' => $latest->issuance->url_link,
+                        'url_link' => $latest->issuance->url_link ?? 'N/A',
                         'type' => $latest->issuance->type
                     ],
 

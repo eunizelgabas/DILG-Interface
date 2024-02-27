@@ -37,11 +37,11 @@ class RepublicController extends Controller
                     'responsible_office' => $republic->responsible_office ?? 'N/A',
                     'issuance' => [
                         'id' => $republic->issuance->id,
-                        'date' => $republic->issuance->date,
+                        'date' => $republic->issuance->date ?? 'N/A',
                         'title' => $republic->issuance->title,
                         'reference_no' => $republic->issuance->reference_no ?? 'N/A',
                         'keyword' => $republic->issuance->keyword,
-                        'url_link' => $republic->issuance->url_link,
+                        'url_link' => $republic->issuance->url_link ?? 'N/A',
                         'type' => $republic->issuance->type
                     ],
                 ];

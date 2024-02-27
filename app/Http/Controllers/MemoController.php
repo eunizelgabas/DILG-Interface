@@ -39,11 +39,11 @@ class MemoController extends Controller
                     'responsible_office' => $memo->responsible_office ?? 'N/A',
                     'issuance' => [
                         'id' => $memo->issuance->id,
-                        'date' => $memo->issuance->date,
+                        'date' => $memo->issuance->date ?? 'N/A',
                         'title' => $memo->issuance->title,
                         'reference_no' => $memo->issuance->reference_no ?? 'N/A',
                         'keyword' => $memo->issuance->keyword,
-                        'url_link' => $memo->issuance->url_link,
+                        'url_link' => $memo->issuance->url_link ?? 'N/A',
                         'type' => $memo->issuance->type
                     ],
                 ];

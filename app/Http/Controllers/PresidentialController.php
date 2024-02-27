@@ -38,11 +38,11 @@ class PresidentialController extends Controller
                     'responsible_office' => $presidential->responsible_office ?? 'N/A',
                     'issuance' => [
                         'id' => $presidential->issuance->id,
-                        'date' => $presidential->issuance->date,
+                        'date' => $presidential->issuance->date ?? 'N/A',
                         'title' => $presidential->issuance->title,
                         'reference_no' => $presidential->issuance->reference_no ?? 'N/A',
                         'keyword' => $presidential->issuance->keyword,
-                        'url_link' => $presidential->issuance->url_link,
+                        'url_link' => $presidential->issuance->url_link ?? 'N/A',
                         'type' => $presidential->issuance->type
                     ],
                 ];

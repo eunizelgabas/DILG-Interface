@@ -51,11 +51,11 @@ class LegalController extends Controller
                     'category' => $legal->category ?? 'N/A',
                     'issuance' => [
                         'id' => $legal->issuance->id,
-                        'date' => $legal->issuance->date,
+                        'date' => $legal->issuance->date ?? 'N/A',
                         'title' => $legal->issuance->title,
                         'reference_no' => $legal->issuance->reference_no ?? 'N/A',
                         'keyword' => $legal->issuance->keyword,
-                        'url_link' => $legal->issuance->url_link,
+                        'url_link' => $legal->issuance->url_link ?? 'N/A',
                         'type' => $legal->issuance->type
                     ],
                 ];

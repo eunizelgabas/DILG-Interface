@@ -77,11 +77,11 @@ class JointController extends Controller
                 'responsible_office' => $joint->responsible_office ?? 'N/A',
                 'issuance' => [
                     'id' => $joint->issuance->id,
-                    'date' => $joint->issuance->date,
+                    'date' => $joint->issuance->date ?? 'N/A',
                     'title' => $joint->issuance->title,
                     'reference_no' => $joint->issuance->reference_no ?? 'N/A',
                     'keyword' => $joint->issuance->keyword,
-                    'url_link' => $joint->issuance->url_link,
+                    'url_link' => $joint->issuance->url_link ?? 'N/A',
                     'type' => $joint->issuance->type
                 ],
             ];
