@@ -347,4 +347,21 @@ class UserController extends Controller
                 'avatar' => $user->avatar, // assuming you have a column named 'avatar' in your users table
             ]);
         }
+
+        public function avatar(Request $request)
+        {
+            // Retrieve the authenticated user's details
+            $user = $request->user();
+
+            if ($user && $user->avatar) {
+                // Construct the avatar image URL
+                $avatarUrl = Storage::url($user->avatar); // Adjust based on your avatar storage path
+
+                // Return a redirect response to the avatar image URL
+                return redirect()->away($avatarUrl);
+            } else {
+                // Return a default image or an error response if user or avatar not found
+                return response()->json(['error' => 'Avatar not found'], 404);
+            }
+        }
 }
