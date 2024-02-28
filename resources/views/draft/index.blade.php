@@ -205,7 +205,7 @@
                         @csrf
                         <div class="mb-5">
 
-                        <div class="-mx-3 flex flex-wrap">
+                        <div class="mb-5">
                             <div class="w-full ">
                                 <div class="mb-5">
                                     <label for="date" class="mb-3 block text-base font-medium text-[#07074D]">

@@ -310,9 +310,41 @@ class UserController extends Controller
         public function getUser(Request $request)
         {
             // Retrieve the authenticated user based on the provided token
+            // $user = $request->user();
+
+            // // Return the user's information
+            // return response()->json(['user' => $user], 200);
             $user = $request->user();
 
-            // Return the user's information
-            return response()->json(['user' => $user], 200);
+            if ($user) {
+                // Retrieve the user's avatar image URL
+                $avatarUrl = null;
+                if ($user->avatar) {
+                    $avatarUrl = Storage::url($user->avatar); // Assuming the avatar field stores the image path
+                }
+
+                // Return user details along with avatar URL
+                return response()->json(['user' => $user, 'avatar_url' => $avatarUrl]);
+            } else {
+                // Return error if user not found
+                return response()->json(['error' => 'User not found'], 404);
+            }
+        }
+        public function getUserDetails(User $user)
+        {
+            // Retrieve the authenticated user
+            $user = Auth::user();
+
+            if (!$user) {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
+
+            // Return user details as JSON response
+            return response()->json([
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar' => $user->avatar, // assuming you have a column named 'avatar' in your users table
+            ]);
         }
 }
