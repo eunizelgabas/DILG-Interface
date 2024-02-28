@@ -29,25 +29,39 @@
                             </label>
                             <input type="date" name="date" id="date" value="{{ old('legal', $legal->issuance->date) }}"
                                 class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
+                                @error('date')
+                                <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                                @enderror
                         </div>
                     </div>
 
                     <div class="col-span-full">
                         <label for="title" class="text-sm font-medium text-gray-900 block mb-2">Title</label>
-                        <textarea id="title" name="title" rows="2" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" >{{ old('legal', $legal->issuance->title) }}</textarea>
+                        <textarea id="title" name="title" rows="2" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" required="" >{{ old('legal', $legal->issuance->title) }}</textarea>
+                        @error('title')
+                        <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                        @enderror
                     </div>
                     <div class="col-span-6 sm:col-span-6">
                         <label for="reference_no" class="text-sm font-medium text-gray-900 block mb-2">Reference No</label>
-                        <input type="text" name="reference_no" id="reference_no" value="{{ old('legal', $legal->issuance->reference_no) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
+                        <input type="text" name="reference_no" id="reference_no" value="{{ old('legal', $legal->issuance->reference_no) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                        @error('reference_no')
+                        <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                        @enderror
                     </div>
                     <div class="col-span-full">
                         <label for="responsible_office" class="text-sm font-medium text-gray-900 block mb-2">Responsible Office</label>
                         <input type="text" name="responsible_office" id="responsible_office" value="{{ old('legal', $legal->responsible_office) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                        @error('responsible_office')
+                        <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                        @enderror
                     </div>
                     <div class="col-span-full">
                         <label for="url_link" class="text-sm font-medium text-gray-900 block mb-2">Url Link</label>
-                        <input type="text" name="url_link" id="url_link" value="{{ old('legal', $legal->issuance->url_link) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
-
+                        <input type="text" name="url_link" id="url_link" value="{{ old('legal', $legal->issuance->url_link) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                        @error('url_link')
+                        <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                        @enderror
                     </div>
 
                     <div id="keyword-container" class="col-span-full">

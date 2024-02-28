@@ -44,6 +44,9 @@
                                 STRENGTHENING OF INTERNAL GOVERNANCE
                             </option>
                         </select>
+                        @error('outcome')
+                        <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                        @enderror
                     </div>
                     <div class="col-span-3">
                         <div class="mb-5">
@@ -52,6 +55,9 @@
                             </label>
                             <input type="date" name="date" id="date" value="{{ old('latest', $latest->issuance->date) }}"
                                 class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                @error('date')
+                                <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                                @enderror
                         </div>
                     </div>
                     <div class="col-span-3">
@@ -61,17 +67,26 @@
                             </label>
                             <input type="text" name="category" id="category" value="{{ old('latest', $latest->category) }}"
                                 class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                @error('category')
+                                <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                                @enderror
                         </div>
                     </div>
 
 
                     <div class="col-span-full">
                         <label for="title" class="text-sm font-medium text-gray-900 block mb-2">Title</label>
-                        <textarea id="title" name="title" rows="2" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" >{{ old('latest', $latest->issuance->title) }}</textarea>
+                        <textarea id="title" name="title" rows="2" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" required="" >{{ old('latest', $latest->issuance->title) }}</textarea>
+                        @error('title')
+                        <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                        @enderror
                     </div>
                     <div class="col-span-6 sm:col-span-6">
                         <label for="reference_no" class="text-sm font-medium text-gray-900 block mb-2">Reference No</label>
-                        <input type="text" name="reference_no" id="reference_no" value="{{ old('latest', $latest->issuance->reference_no) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
+                        <input type="text" name="reference_no" id="reference_no" value="{{ old('latest', $latest->issuance->reference_no) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                        @error('reference_no')
+                        <p class="text-red-500 text-xs mt-2">{{$message}}</p>
+                        @enderror
                     </div>
                     {{-- <div class="col-span-full">
                         <label for="responsible_office" class="text-sm font-medium text-gray-900 block mb-2">Responsible Office</label>
@@ -79,23 +94,12 @@
                     </div> --}}
                     <div class="col-span-full">
                         <label for="url_link" class="text-sm font-medium text-gray-900 block mb-2">Url Link</label>
-                        <input type="text" name="url_link" id="url_link" value="{{ old('latest', $latest->issuance->url_link) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
-
-                    </div>
-                    {{-- <div id="keyword-container" class="col-span-full">
-                        <label for="url_link" class="text-sm font-medium text-gray-900 block mb-2">Keyword/s</label>
-                        <input type="text" name="keyword[]" value="{{ old('joint', $joint->issuance->keyword) }}" class=" keyword-input shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required="">
-                        @error('keyword')
+                        <input type="text" name="url_link" id="url_link" value="{{ old('latest', $latest->issuance->url_link) }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                        @error('url_link')
                         <p class="text-red-500 text-xs mt-2">{{$message}}</p>
                         @enderror
-                        <button type="button" onclick="removeItem(this)"
-                        class="ml-2 text-sm text-red-600 cursor-pointer keyword-remove" style="display: none;">Remove</button>
-                        <input type="hidden" name="concatenated_keywords" id="concatenated_keywords">
-
                     </div>
-                    <div class="col-span-full mt-0">
-                        <button type="button" onclick="addItem()" class="mt-2 text-sm text-blue-600 cursor-pointer">Add keyword</button>
-                    </div> --}}
+
                     <div id="keyword-container" class="col-span-full">
                         <label for="url_link" class="mb-3 block text-base font-medium text-[#07074D]">
                             Keyword/s:
@@ -118,8 +122,6 @@
                 </div>
             </form>
         </div>
-
-
 
     </div>
 </x-app-layout>
