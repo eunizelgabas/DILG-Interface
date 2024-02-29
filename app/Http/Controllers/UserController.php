@@ -139,16 +139,17 @@ class UserController extends Controller
             // Get the authenticated user
             $authenticatedUser = Auth::user();
 
-            // Check if the authenticated user is authorized to update the user data
-            if ($authenticatedUser->id !== $user->id) {
-                // Return a forbidden response if the authenticated user is not authorized
-                return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
-            }
+            // // Check if the authenticated user is authorized to update the user data
+            // if ($authenticatedUser->id !== $user->id) {
+            //     // Return a forbidden response if the authenticated user is not authorized
+            //     return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
+            // }
 
             // Validate the request data
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
+                // 'password' => 'nullable|string|min:8|confirmed', // Add password validation
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
             ]);
 
@@ -156,7 +157,10 @@ class UserController extends Controller
             $user->name = $validatedData['name'];
             $user->email = $validatedData['email'];
 
-
+            // // Update password if provided
+            // if (!empty($validatedData['password'])) {
+            //     $user->password = Hash::make($validatedData['password']);
+            // }
 
             if ($request->hasFile('avatar')) {
                 // Store the new avatar and get its path
