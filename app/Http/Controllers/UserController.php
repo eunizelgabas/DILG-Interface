@@ -149,7 +149,6 @@ class UserController extends Controller
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-                'password' => 'nullable|string|min:8|confirmed', // Add password validation
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
             ]);
 
@@ -157,10 +156,7 @@ class UserController extends Controller
             $user->name = $validatedData['name'];
             $user->email = $validatedData['email'];
 
-            // Update password if provided
-            if (!empty($validatedData['password'])) {
-                $user->password = Hash::make($validatedData['password']);
-            }
+
 
             if ($request->hasFile('avatar')) {
                 // Store the new avatar and get its path
@@ -364,4 +360,59 @@ class UserController extends Controller
                 return response()->json(['error' => 'Avatar not found'], 404);
             }
         }
+
+    //     public function changePassword(Request $request, User $user)
+    //     {
+    //         if (Auth::check()) {
+    //             // Get the authenticated user
+    //             $authenticatedUser = Auth::user();
+
+    //             // Check if the authenticated user is authorized to update the user data
+    //             if ($authenticatedUser->id !== $user->id) {
+    //                 // Return a forbidden response if the authenticated user is not authorized
+    //                 return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
+    //             }
+    //             $request->validate([
+    //                 'new_password' => 'required|min:8',
+    //             ]);
+
+    //             // Update the user's password
+    //             $user->password = Hash::make($request->new_password);
+
+    //             // Save the updated user model
+    //             $user->save();
+
+    //         return response()->json(['message' => 'Password updated successfully']);
+    //     }
+    // }
+    public function changePassword(Request $request, User $user)
+{
+    // Validation for the new password
+    $request->validate([
+        'new_password' => 'required|min:8',
+    ]);
+
+    if (Auth::check()) {
+        // Get the authenticated user
+        $authenticatedUser = Auth::user();
+
+        // Check if the authenticated user is authorized to update the user data
+        if ($authenticatedUser->id !== $user->id) {
+            // Return a forbidden response if the authenticated user is not authorized
+            return response()->json(['error' => 'Forbidden - You are not authorized to update this user'], 403);
+        }
+
+        // Update the user's password
+        $user->password = Hash::make($request->new_password);
+
+        // Save the updated user model
+        $user->save();
+
+        return response()->json(['message' => 'Password updated successfully']);
+    } else {
+        // Return an unauthorized response if the user is not authenticated
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+}
+
 }
