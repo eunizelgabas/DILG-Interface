@@ -93,7 +93,6 @@
                                 <div class="flex items-center">
                                     <div>
                                         <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('images/boy.jpg') }}" alt="User Avatar" class="inline-block relative object-center rounded-full w-12 h-12 border border-gray-300 bg-gray-100 p-1">
-                                        {{-- <div class="text-sm leading-5 text-gray-800">{{ $user->id }}</div> --}}
                                     </div>
                                 </div>
                             </td>

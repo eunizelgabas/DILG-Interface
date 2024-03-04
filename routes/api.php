@@ -54,4 +54,7 @@ Route::get('/auth/validate-token', [UserController::class, 'validateToken']);
 Route::get('/user/{user}', [UserController::class, 'getUserDetails']);
 
 Route::get('/images/{filename}', [UserController::class, 'avatar'])->name('image.get');
+Route::get('/{filename}', [UserController::class, 'getAvatar'])
+    ->middleware('auth');
+
 Route::middleware('auth:sanctum')->put('/users/{user}/change-password', [UserController::class, 'changePassword']);
