@@ -38,7 +38,7 @@
                             <option value="{{ $role->name }}">{{ $role->name }}</option>
                         @endforeach
                     </select>
-                    @error('roke')
+                    @error('role')
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
 

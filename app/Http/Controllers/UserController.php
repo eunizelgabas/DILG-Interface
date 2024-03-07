@@ -79,12 +79,7 @@ class UserController extends Controller
         'role'      => 'required'
     ]);
 
-    // $fileName = null;
-    // if ($request->hasFile('avatar')) {
-    //     $fileName = time() . "." . $request->avatar->extension();
-    //     $request->avatar->move(public_path('avatars/'), $fileName);
-    //     $data['avatar'] = $fileName;
-    // }
+
     if ($request->hasFile('avatar')) {
         $avatarPath = $request->file('avatar')->store('avatars', 'public');
 
@@ -126,7 +121,7 @@ class UserController extends Controller
         // $user = User::with('roles')->find($user->id);
         $roles = Role::all();
         $user->find($user->id);
-        return view('user.edit', compact('user'));
+        return view('user.edit', compact('user', 'roles'));
     }
 
     /**
@@ -150,7 +145,8 @@ class UserController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
                 'password' => 'nullable|string|min:8|confirmed', // Add password validation
-                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+
             ]);
 
             // Update user data
@@ -176,6 +172,7 @@ class UserController extends Controller
             }
 
 
+
             // Save the changes
             $user->save();
 
@@ -193,7 +190,8 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed', // Add password validation
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'role' => 'required',
         ]);
 
         $user->name = $validatedData['name'];
@@ -217,6 +215,10 @@ class UserController extends Controller
             $user->avatar = $avatarPath;
         }
 
+        $role = $request->role;
+        $user->syncRoles([$role]);
+
+        $currentRole = $user->getRoleNames()->first();
         // Save the changes
         $user->save();
 

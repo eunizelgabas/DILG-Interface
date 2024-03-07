@@ -47,6 +47,27 @@
                         <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                     </div>
+                    {{-- <div>
+                        <label for="role" class="text-gray-800 font-semibold block my-3 text-md">Role:</label>
+                        <select id="role" name="role" required class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none">
+                            @foreach($roles as $role)
+                                <option value="{{ $role->name }}" @if($user->hasRole($role->name)) selected @endif>{{ $role->name }}</option>
+                            @endforeach
+                        </select>
+                    </div> --}}
+                    <div class="col-span-6 sm:col-span-6">
+                        <label class="text-gray-800 font-semibold block my-3 text-md" for="role">Roles</label>
+                        <select name="role" id="role"  class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none ">
+                            <option disabled>Select a Role</option>
+                            @foreach($roles as $role)
+                            <option value="{{ $role->name }}" @if($user->hasRole($role->name)) selected @endif>{{ $role->name }}</option>
+                        @endforeach
+                        </select>
+                        @error('role')
+                            <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                        @enderror
+
+                    </div>
                     <div class="col-span-6 sm:col-span-6">
                         <label for="password" class="text-sm font-medium text-gray-900 block mb-2">Password <span class="text-red-400"> (
                             Please leave this space blank if there are no alterations required.)</span> </label>
