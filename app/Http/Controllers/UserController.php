@@ -263,6 +263,12 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
+            if ($user->status == 0) {
+                return response()->json([
+                    'message' => 'Account deactivated. Please contact admin.'
+                ], 403); // 403 status code indicates Forbidden
+            }
+
             $token = $user->createToken('Personal Access Token')->plainTextToken;
             return response()->json([
                 'user' => $user,

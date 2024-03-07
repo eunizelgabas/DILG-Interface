@@ -62,7 +62,7 @@ class JointController extends Controller
                         ->orWhere('reference_no', 'like', '%' . $search . '%')
                         ->orWhere('keyword', 'like', '%' . $search . '%');
                 });
-        })->with('issuance')->orderBy('created_at', 'desc');
+        })->with('issuance')->orderBy('id', 'desc');
 
         if ($request->expectsJson()) {
             $joints = $jointsQuery->get(); // Get all data for JSON API requests

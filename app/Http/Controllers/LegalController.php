@@ -32,7 +32,7 @@ class LegalController extends Controller
             $legalsQuery->where('category', $selectedCategory);
         }
 
-        $legals = $legalsQuery->with('issuance')->orderBy('created_at', 'desc');
+        $legals = $legalsQuery->with('issuance')->orderBy('id', 'desc');
 
         $categories = Legal::whereNotNull('category')->pluck('category')->unique();
 

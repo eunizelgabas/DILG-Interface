@@ -22,7 +22,7 @@ class MemoController extends Controller
                         ->orWhere('reference_no', 'like', '%' . $search . '%')
                         ->orWhere('keyword', 'like', '%' . $search . '%');
                 });
-        })->with('issuance')->orderBy('created_at', 'desc');
+        })->with('issuance')->orderBy('id', 'desc');
 
 
         if ($request->expectsJson()) {
@@ -149,4 +149,6 @@ class MemoController extends Controller
 
         return redirect('/memo_circulars')->with('success','Memo Circular deleted successfully.');
     }
+
+
 }
