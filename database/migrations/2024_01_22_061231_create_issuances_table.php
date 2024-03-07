@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('issuances', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 1000);
+            $table->string('title', 1500);
             $table->string('type');
             $table->string('reference_no')->nullable();
             $table->string('url_link')->nullable();

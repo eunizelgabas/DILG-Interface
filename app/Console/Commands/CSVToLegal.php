@@ -51,12 +51,19 @@ class CSVToLegal extends Command
             }
 
             // Ensure the row has enough columns
-            if (count($data) < 8) {
+            if (count($data) < 7) {
                 echo "Skipping row: " . implode(',', $data) . " - Insufficient data\n";
                 continue;
             }
             $date = $data[3];
-            $mysql_date = date('Y-m-d', strtotime(str_replace('/', '-', $date)));
+            $mysql_date = null;
+
+            if (!empty($date)) {
+                $timestamp = strtotime(str_replace('/', '-', $date));
+                if ($timestamp !== false) {
+                    $mysql_date = date('Y-m-d', $timestamp);
+                }
+            }
             $source = [
                 'title' => $data[1],
                 'reference_no' => $data[2],
@@ -65,7 +72,7 @@ class CSVToLegal extends Command
                 'date' => $data[3] == '0000-00-00' ? null : $mysql_date,
                 'type' => "Legal Opinions",
                 'responsible_office' => $data[7] == '' ? null : $data[7],
-                'category' => [6] == '' ? null : $data[6],
+                'category' => $data[6] === '' ? null : $data[6],
             ];
 
                 try {

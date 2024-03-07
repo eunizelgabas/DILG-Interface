@@ -26,7 +26,7 @@
                 }, 2000); // 2000 milliseconds = 2 seconds
             </script>
         @endif
-        <div class="flex">
+        <div class="flex mt-3">
             <div class="pr-4">
                 <div class="relative md:w-full">
                     <form action="{{ route('legal.index') }}" method="GET" class="mb-4" id="filterForm">
@@ -41,8 +41,8 @@
                     </form>
                 </div>
             </div>
-            <div class="flex-1 pr-4">
-                <div class="relative md:w-1/3">
+            {{-- <div class="flex-1 pr-4"> --}}
+                <div class=" w-1/2">
                     <form action="{{ route('legal.index') }}" method="GET" class="mb-4" id="searchForm">
                         <input type="text" name="search" value="{{ $search }}"
                                class="w-full pl-10 pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
@@ -63,7 +63,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            {{-- </div> --}}
         </div>
 
 
