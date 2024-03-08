@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         @vite('resources/css/app.css')
-        <title>DILG Issuance</title>
+        <title>Tangkaraw</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -20,15 +20,15 @@
             <div class="container flex flex-col md:flex-row items-center justify-between px-5 text-gray-700">
                 <div class="w-full lg:w-1/2 mx-3">
 
-                    <div class="text-4xl text-red-500 font-dark font-extrabold mb-5"> Department of the Interior and Local Government- BOHOL</div>
+                    <div class="text-4xl text-blue-500 font-dark font-extrabold mb-5"> Tangkaraw DILG- BOHOL</div>
                     <p class="text-xl  font-light leading-normal mb-8 justify-center">
                         The DILG is the executive department of the Philippine government responsible for promoting peace and order, ensuring public safety and strengthening local government capability aimed towards the effective delivery of basic services to the citizenry.
                     </p>
 
-                    <a href="/login" class="px-5 inline py-3 text-sm font-medium leading-5 shadow-2xl text-white transition-all duration-400 border border-transparent rounded-lg focus:outline-none bg-red-600 active:bg-red-700 hover:bg-red-800">Get Started</a>
+                    <a href="/login" class="px-5 inline py-3 text-sm font-medium leading-5 shadow-2xl text-white transition-all duration-400 border border-transparent rounded-lg focus:outline-none bg-blue-600 active:bg-blue-700 hover:bg-blue-800">Get Started</a>
                 </div>
                 <div class="w-full lg:flex lg:justify-end lg:w-1/2  my-12">
-                    <img src="images/dilg-main.png" class="w-[400px] object-fit" alt="Image">
+                    <img src="images/Tngkrw Icon.png" class="w-[400px] object-fit" alt="Image">
                 </div>
             </div>
 

@@ -51,16 +51,16 @@
             <div class="bg-white rounded-3xl shadow-xl w-full overflow-hidden" style="max-width:1000px">
                 <div class="md:flex w-full ">
                     <div class="hidden md:flex md:flex-col md:items-center md:justify-center w-1/2 ">
-                        <img src="/images/dilg-main.png" class="w-[200px] h-[200px] object-fit mx-auto mt-18" alt="">
-                        <h1 class="font-bold text-2xl mx-auto mt-4">Department of the Interior</h1>
-                        <h1 class="font-bold text-2xl mx-auto">and Local Government</h1>
-                        <h1 class="font-bold text-2xl mx-auto">Bohol Province</h1>
+                        <img src="/images/Tngkrw Icon.png" class="w-[200px] h-[200px] object-fit mx-auto mt-18" alt="">
+                        <h1 class="font-bold text-2xl mx-auto mt-4">TANGKARAW</h1>
+                        <h5 class="font-bold text-sm mx-auto">DILG - Bohol Province </h5>
+                        {{-- <h5 class="font-bold text-2xl mx-auto">Bohol Province</h5> --}}
                     </div>
 
                     <div class="w-full md:w-1/2 py-10 px-5 md:px-10  bg-blue-200">
                         <div class="text-center mb-10">
 
-                            <h1 class="font-bold text-3xl text-gray-900">Login to DILG Issuances</h1>
+                            <h1 class="font-bold text-3xl text-gray-900">Login to TANGKARAW</h1>
                             <p class="mt-5">Enter your information to log in</p>
                         </div>
                         <div>

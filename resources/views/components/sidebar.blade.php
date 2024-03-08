@@ -10,8 +10,8 @@
         <!-- Sidebar content -->
         <div id="branding" class="mt-2" >
             <div class="flex items-center justify-center h-14 mb-5 border-gray-800">
-                <img src="/images/dilg-main.png" alt="Logo" class="w-[70px] h-[70px] rounded-full object-cover">
-                <span class="text-xl font-extrabold text-white my-5 px-4">DILG Issuances</span>
+                <img src="/images/Tngkrw Icon.png" alt="Logo" class="w-[70px] h-[70px] rounded-full object-cover">
+                <span class="text-xl font-extrabold text-white my-5 px-4">TANGKARAW</span>
             </div>
             <hr class="border-gray-90">
             <x-main-nav/>
