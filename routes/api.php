@@ -8,6 +8,7 @@ use App\Http\Controllers\MemoController;
 use App\Http\Controllers\PresidentialController;
 use App\Http\Controllers\RepublicController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VisitorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,3 +59,5 @@ Route::get('/{filename}', [UserController::class, 'getAvatar'])
     ->middleware('auth');
 
 Route::middleware('auth:sanctum')->put('/users/{user}/change-password', [UserController::class, 'changePassword']);
+
+Route::post('/visitor/count', [VisitorController::class, 'increment']);

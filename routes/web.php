@@ -11,6 +11,7 @@ use App\Http\Controllers\PresidentialController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RepublicController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VisitorController;
 use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 
@@ -105,6 +106,9 @@ Route::middleware('auth')->group(function () {
 
     //Route for Logs - Eula
     Route::get('logs', [LogController::class, 'index'])->name('log.index');
+
+    //Daily visitor User count
+    Route::get('/visitors', [VisitorController::class, 'show']);
 
 });
 
