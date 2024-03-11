@@ -10,13 +10,13 @@ class VisitorController extends Controller
 {
     public function increment(Request $request)
     {
-        $today = Carbon::now()->toDateString();
+        $today = Carbon::now('Asia/Manila')->toDateString();
         $userIdentifier = $request->input('user_identifier');
 
         // Check if user identifier has already been counted for today
         $dailyUserCount = Visitor::where('date', $today)
-                                         ->where('user_identifier', $userIdentifier)
-                                         ->first();
+            ->where('user_identifier', $userIdentifier)
+            ->first();
 
         if ($dailyUserCount) {
             // User has already been counted for today
@@ -36,24 +36,25 @@ class VisitorController extends Controller
     public function show()
     {
 
-        $today = Carbon::today();
-        $yesterday = Carbon::yesterday();
+        $today = Carbon::today('Asia/Manila')->toDateString();
+        $yesterday = Carbon::yesterday('Asia/Manila')->toDateString();
 
         // Get the first day and last day of the current month
-        $firstDayOfMonth = Carbon::today()->startOfMonth();
-        $lastDayOfMonth = Carbon::today()->endOfMonth();
+        $firstDayOfMonth = Carbon::today('Asia/Manila')->startOfMonth();
+        $lastDayOfMonth = Carbon::today('Asia/Manila')->endOfMonth();
 
         // Retrieve user counts for today and yesterday of the current month
         $todayCount = Visitor::whereDate('date', $today)->count();
         $yesterdayCount = Visitor::whereDate('date', $yesterday)->count();
 
         // Retrieve daily counts for the last 30 days of the current month
+       // Retrieve daily counts for the last 30 days including today
         $dailyCounts = Visitor::selectRaw('DATE(date) as date, COUNT(*) as count')
-            ->whereBetween('date', [$firstDayOfMonth, $lastDayOfMonth])
-            ->groupBy('date')
-            ->orderBy('date', 'asc')
-            ->limit(30)
-            ->get();
+        ->whereBetween('date', [Carbon::today()->subDays(29), $lastDayOfMonth])
+        ->groupBy('date')
+        ->orderBy('date', 'asc')
+        ->get();
+
 
         $totalVisitorCount = Visitor::count();
         return view('visits.counter', [

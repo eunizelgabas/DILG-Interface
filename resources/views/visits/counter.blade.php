@@ -1,25 +1,9 @@
 <x-app-layout>
-    {{-- <h1>User Counts</h1>
-    <p>Today's Count for {{ $today->format('F Y') }}: {{ $todayCount }}</p>
-    <p>Yesterday's Count for {{ $yesterday->format('F Y') }}: {{ $yesterdayCount }}</p>
-
-    <h2>Daily Counts for the Last 30 Days</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Count</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($dailyCounts as $dailyCount)
-            <tr>
-                <td>{{ $dailyCount->date }}</td>
-                <td>{{ $dailyCount->count }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table> --}}
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Visitor Counter') }}
+        </h2>
+    </x-slot>
     <div class="flex">
         <div class="w-1/2">
             <section class="py-1 bg-blueGray-50">
