@@ -49,25 +49,22 @@ class VisitorController extends Controller
         $yesterdayCount = Visitor::whereDate('date', $yesterday)->count();
 
         // Retrieve daily counts for the last 30 days of the current month
-        $dailyCounts = Visitor::selectRaw('dates.date as date, COUNT(visitor.id) as count')
-        ->rightJoin(
-            DB::raw("(SELECT CURDATE() - INTERVAL (a.a + (10 * b.a) + (100 * c.a)) DAY as date
+        $dailyCounts = DB::table(DB::raw('(SELECT CURDATE() - INTERVAL (a.a + (10 * b.a) + (100 * c.a)) DAY as date
                 FROM (SELECT 0 as a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) as a
                 CROSS JOIN (SELECT 0 as a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) as b
                 CROSS JOIN (SELECT 0 as a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) as c
-                ORDER BY date ASC
-            ) as dates"),
-            function ($join) {
-                $join->on(DB::raw('DATE(visitor.date)'), '=', 'dates.date');
-            }
-        )
-        ->whereBetween('visitor.date', [$firstDayOfMonth, $lastDayOfMonth])
-        ->groupBy('dates.date')
-        ->orderBy('dates.date', 'asc')
-        ->get();
+                ORDER BY date ASC) AS dates'))
+            ->leftJoin('visitors', function ($join) {
+                $join->on(DB::raw('DATE(visitors.date)'), '=', 'dates.date');
+            })
+            ->selectRaw('dates.date as date, COUNT(visitors.id) as count')
+            ->whereBetween('dates.date', [Carbon::today()->subDays(29)->toDateString(), $lastDayOfMonth->toDateString()])
+            ->groupBy('dates.date')
+            ->orderBy('dates.date', 'asc')
+            ->get();
 
-    $totalVisitorCount = Visitor::count();
 
+        $totalVisitorCount = Visitor::count();
         return view('visits.counter', [
             'todayCount' => $todayCount,
             'yesterdayCount' => $yesterdayCount,
