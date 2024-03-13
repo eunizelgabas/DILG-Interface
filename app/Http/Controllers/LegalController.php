@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewIssuanceEvent;
 use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Legal;
@@ -104,6 +105,7 @@ class LegalController extends Controller
 
         $log_entry = Auth::user()->name . " created a Legal Opinion  " . $legal->title . " with the id# " . $legal->id;
         event(new UserLog($log_entry));
+
 
         return redirect('/legal_opinions')->with('success', 'Legal Opinion successfully created');
     }

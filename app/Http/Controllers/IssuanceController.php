@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewIssuanceEvent;
 use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Latest;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -217,6 +220,7 @@ class IssuanceController extends Controller
             'issuance_id' => $issuance->id,
         ]);
 
+
         // dd($request->all());
         $log_entry = Auth::user()->name . " created a Latest Issuances  " . $latest->title . " with the id# " . $latest->id;
         event(new UserLog($log_entry));
@@ -280,5 +284,66 @@ class IssuanceController extends Controller
         return redirect('/latest_issuances')->with('success','Latest Issuance deleted successfully.');
     }
 
-}
+    public function recent(Request $request)
+    {
+        // Get recent issuances for today, yesterday, and last 7 days
+        $today = Carbon::today();
+        $yesterday = Carbon::yesterday();
+        $last7Days = Carbon::today()->subDays(7);
 
+        $todayIssuances = Issuances::whereDate('created_at', '=', $today)
+            ->orderBy('created_at', 'desc')->take(10)
+            ->get();
+
+        $yesterdayIssuances = Issuances::whereDate('created_at', '=', $yesterday)
+            ->orderBy('created_at', 'desc')->take(10)
+            ->get();
+
+        $last7DaysIssuances = Issuances::whereDate('created_at', '>=', $last7Days)
+            ->whereDate('created_at', '<', $yesterday) // Exclude today and yesterday
+            ->orderBy('created_at', 'desc')->take(7)
+            ->get();
+
+        if ($request->expectsJson()) {
+            // Transform the data to include the foreign key relationship
+            $formattedLatests = [
+                'today' => $todayIssuances->map(function ($issuance) {
+                    return [
+                        'id' => $issuance->id,
+                        'date' => $issuance->date ?? 'N/A',
+                        'title' => $issuance->title,
+                        'reference_no' => $issuance->reference_no ?? 'N/A',
+                        'keyword' => $issuance->keyword,
+                        'url_link' => $issuance->url_link ?? 'N/A',
+                        'type' => $issuance->type
+                    ];
+                }),
+                'yesterday' => $yesterdayIssuances->map(function ($issuance) {
+                    return [
+                        'id' => $issuance->id,
+                        'date' => $issuance->date ?? 'N/A',
+                        'title' => $issuance->title,
+                        'reference_no' => $issuance->reference_no ?? 'N/A',
+                        'keyword' => $issuance->keyword,
+                        'url_link' => $issuance->url_link ?? 'N/A',
+                        'type' => $issuance->type
+                    ];
+                }),
+                'last7Days' => $last7DaysIssuances->map(function ($issuance) {
+                    return [
+                        'id' => $issuance->id,
+                        'date' => $issuance->date ?? 'N/A',
+                        'title' => $issuance->title,
+                        'reference_no' => $issuance->reference_no ?? 'N/A',
+                        'keyword' => $issuance->keyword,
+                        'url_link' => $issuance->url_link ?? 'N/A',
+                        'type' => $issuance->type
+                    ];
+                }),
+            ];
+
+            return response()->json(['recentIssuances' => $formattedLatests]);
+        }
+    }
+
+}

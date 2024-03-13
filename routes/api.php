@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\IssuanceController;
 use App\Http\Controllers\JointController;
@@ -34,12 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::post('/auth/login', [UserController::class, 'login']);
 
-// Route::get('/test', function() {
-//     return response([
-//         'message' => 'Api is working'
-//     ], 200);
-// });
-
 Route::get('/latest_issuances', [IssuanceController::class, 'index']);
 Route::get('/joint_circulars', [JointController::class, 'index']);
 Route::get('/legal_opinions', [LegalController::class, 'index']);
@@ -47,6 +42,7 @@ Route::get('/memo_circulars', [MemoController::class, 'index']);
 Route::get('/presidential_directives', [PresidentialController::class, 'index']);
 Route::get('/draft_issuances', [DraftController::class, 'index']);
 Route::get('/republic_acts', [RepublicController::class, 'index']);
+Route::get('/recent-issuances', [IssuanceController::class, 'recent']);
 
 // Route::get('/user',[UserController::class, 'apiIndex']);
 // Route::put('/user/update', [UserController::class, 'update'])->middleware('auth:sanctum');
@@ -61,3 +57,5 @@ Route::get('/{filename}', [UserController::class, 'getAvatar'])
 Route::middleware('auth:sanctum')->put('/users/{user}/change-password', [UserController::class, 'changePassword']);
 
 Route::post('/visitor/count', [VisitorController::class, 'increment']);
+
+

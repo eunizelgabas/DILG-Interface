@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\NewIssuanceEvent;
 use App\Events\UserLog;
 use App\Listeners\LogListener;
+use App\Listeners\NewIssuanceNotificationHandler;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -20,6 +22,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
         UserLog::class =>[
             LogListener::class,
         ]

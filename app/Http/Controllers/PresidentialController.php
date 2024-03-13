@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewIssuanceEvent;
 use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Presidential;

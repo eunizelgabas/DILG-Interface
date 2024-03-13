@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewIssuanceEvent;
 use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Republic;
@@ -90,6 +91,7 @@ class RepublicController extends Controller
         // dd($request->all());
         $log_entry = Auth::user()->name . " created a Republic Act  " . $republic->title . " with the id# " . $republic->id;
         event(new UserLog($log_entry));
+
 
         return redirect('/republic_acts')->with('success', 'Republic Act successfully created');
     }
