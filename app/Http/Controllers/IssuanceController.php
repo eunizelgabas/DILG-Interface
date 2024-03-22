@@ -292,7 +292,7 @@ class IssuanceController extends Controller
         $last7Days = Carbon::today()->subDays(7);
 
         $todayIssuances = Issuances::whereDate('created_at', '=', $today)
-            ->orderBy('created_at', 'desc')->take(10)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $yesterdayIssuances = Issuances::whereDate('created_at', '=', $yesterday)
@@ -346,4 +346,12 @@ class IssuanceController extends Controller
         }
     }
 
+    // public function getNewIssuancesCount(Request $request)
+    // {
+    //     // Get the count of newly added issuances since the specified time
+    //     $newIssuancesCount = Issuances::where('created_at', '>=', $request->input('since_time'))
+    //         ->count();
+
+    //     return response()->json(['count' => $newIssuancesCount]);
+    // }
 }

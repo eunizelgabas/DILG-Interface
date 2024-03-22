@@ -43,6 +43,7 @@ Route::get('/presidential_directives', [PresidentialController::class, 'index'])
 Route::get('/draft_issuances', [DraftController::class, 'index']);
 Route::get('/republic_acts', [RepublicController::class, 'index']);
 Route::get('/recent-issuances', [IssuanceController::class, 'recent']);
+// Route::get('/new-issuances-count', [IssuanceController::class, 'getNewIssuancesCount']);
 
 // Route::get('/user',[UserController::class, 'apiIndex']);
 // Route::put('/user/update', [UserController::class, 'update'])->middleware('auth:sanctum');
