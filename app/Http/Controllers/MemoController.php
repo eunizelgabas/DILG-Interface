@@ -29,7 +29,7 @@ class MemoController extends Controller
         if ($request->expectsJson()) {
             $memos = $memosQuery->get(); // Get all data for JSON API requests
         } else {
-            $memos = $memosQuery->paginate(5); // Paginate for web requests
+            $memos = $memosQuery->paginate(10); // Paginate for web requests
         }
 
         if ($request->expectsJson()) {

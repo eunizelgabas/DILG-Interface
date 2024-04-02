@@ -45,7 +45,6 @@
                 </div>
             </form>
 
-
         </div>
     </div>
     @if(count($republics) === 0 && !empty($search))
@@ -397,5 +396,13 @@
             form.action = `{{ url('/republic_acts') }}/${id}`;
             form.submit();
         }
+    }
+    let timeoutId;
+
+    function searchOnChange() {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function () {
+            document.getElementById('searchForm').submit();
+        }, 500); // Change 500 to the desired delay in milliseconds
     }
 </script>

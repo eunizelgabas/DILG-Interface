@@ -83,7 +83,7 @@ class IssuanceController extends Controller
         if ($request->expectsJson()) {
             $latests = $latestsQuery->get(); // Get all data for JSON API requests
         } else {
-            $latests = $latestsQuery->paginate(5); // Paginate for web requests
+            $latests = $latestsQuery->paginate(10); // Paginate for web requests
         }
 
         if ($request->expectsJson()) {

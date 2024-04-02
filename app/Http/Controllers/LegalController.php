@@ -41,7 +41,7 @@ class LegalController extends Controller
         if ($request->expectsJson()) {
             $legals = $legalsQuery->get(); // Get all data for JSON API requests
         } else {
-            $legals = $legalsQuery->paginate(5); // Paginate for web requests
+            $legals = $legalsQuery->paginate(10); // Paginate for web requests
         }
 
          if ($request->expectsJson()) {

@@ -4,15 +4,17 @@
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <!-- <a :href="route('dashboard')">
+                <div class="lg:hidden shrink-0 flex items-center">
+                    {{-- <a :href="route('dashboard')">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a> -->
+                    </a> --}}
+
                 </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center">
-                <!-- Settings Dropdown -->
+
+                 <!-- Settings Dropdown -->
                 <div class="ml-3 relative">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -53,6 +55,7 @@
                             </form>
                         </x-slot>
                     </x-dropdown>
+
                 </div>
             </div>
 
@@ -94,6 +97,36 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="/dashboard">
                 Dashboard
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/users">
+                Manage User
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/logs">
+                Logs
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/visitors">
+                Visitor Counter
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/latest_issuances">
+               Latest Issuances
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/joint_circulars">
+                Joint Circulars
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/memo_circulars">
+                Memo Circulars
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/presidential_directives">
+               Presidential Directives
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/draft_issuances">
+                Draft Issuances
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/republic_acts">
+               Republic Acts
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="/legal_opinions">
+                Legal Opinions
             </x-responsive-nav-link>
         </div>
 

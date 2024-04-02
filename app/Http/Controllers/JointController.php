@@ -68,7 +68,7 @@ class JointController extends Controller
         if ($request->expectsJson()) {
             $joints = $jointsQuery->get(); // Get all data for JSON API requests
         } else {
-            $joints = $jointsQuery->paginate(5); // Paginate for web requests
+            $joints = $jointsQuery->paginate(10); // Paginate for web requests
         }
 
         // Transform the data to include the foreign key relationship

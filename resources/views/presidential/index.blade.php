@@ -386,10 +386,10 @@
         }
     };
 
-    function searchOnChange() {
-        var form = document.getElementById('searchForm');
-        form.submit();
-    }
+    // function searchOnChange() {
+    //     var form = document.getElementById('searchForm');
+    //     form.submit();
+    // }
 
     function openDeleteModal(id) {
         if (confirm("Are you sure you want to delete this Presidential Directive?")) {
@@ -397,5 +397,13 @@
             form.action = `{{ url('/presidential_directives') }}/${id}`;
             form.submit();
         }
+    }
+    let timeoutId;
+
+    function searchOnChange() {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function () {
+            document.getElementById('searchForm').submit();
+        }, 500); // Change 500 to the desired delay in milliseconds
     }
 </script>

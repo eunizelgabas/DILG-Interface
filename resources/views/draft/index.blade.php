@@ -387,9 +387,13 @@
         }
     };
 
+    let timeoutId;
+
     function searchOnChange() {
-        var form = document.getElementById('searchForm');
-        form.submit();
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function () {
+            document.getElementById('searchForm').submit();
+        }, 500); // Change 500 to the desired delay in milliseconds
     }
 
     function openDeleteModal(id) {

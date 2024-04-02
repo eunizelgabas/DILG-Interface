@@ -27,7 +27,7 @@ class RepublicController extends Controller
         if ($request->expectsJson()) {
             $republics = $republicsQuery->get(); // Get all data for JSON API requests
         } else {
-            $republics = $republicsQuery->paginate(5); // Paginate for web requests
+            $republics = $republicsQuery->paginate(10); // Paginate for web requests
         }
 
         if ($request->expectsJson()) {

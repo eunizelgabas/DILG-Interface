@@ -415,15 +415,24 @@
         }
     };
 
-    function searchOnChange() {
+    var timeoutId;
+
+function searchOnChange() {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {
         var form = document.getElementById('searchForm');
         form.submit();
-    }
-    $(document).ready(function() {
-        $('#category').change(function() {
-            $('#filterForm').submit();
-        });
+    }, 500); // Change 500 to the desired delay in milliseconds
+}
+
+$(document).ready(function() {
+    $('#category').change(function() {
+        clearTimeout(timeoutId); // Clear the timeout for searchOnChange if any
+        var form = document.getElementById('filterForm');
+        form.submit();
     });
+});
+
 
     function openDeleteModal(id) {
         if (confirm("Are you sure you want to delete this Legal Opinion?")) {
@@ -432,6 +441,7 @@
             form.submit();
         }
     }
+
 </script>
 
 

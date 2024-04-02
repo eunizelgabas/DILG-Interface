@@ -28,7 +28,7 @@ class DraftController extends Controller
         if ($request->expectsJson()) {
             $drafts = $draftsQuery->get(); // Get all data for JSON API requests
         } else {
-            $drafts = $draftsQuery->paginate(5); // Paginate for web requests
+            $drafts = $draftsQuery->paginate(10); // Paginate for web requests
         }
 
         if ($request->expectsJson()) {

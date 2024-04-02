@@ -28,7 +28,7 @@ class PresidentialController extends Controller
         if ($request->expectsJson()) {
             $presidentials = $presidentialsQuery->get(); // Get all data for JSON API requests
         } else {
-            $presidentials = $presidentialsQuery->paginate(5); // Paginate for web requests
+            $presidentials = $presidentialsQuery->paginate(10); // Paginate for web requests
         }
 
         if ($request->expectsJson()) {
