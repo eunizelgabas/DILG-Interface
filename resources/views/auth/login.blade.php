@@ -93,28 +93,29 @@
 
                                 <div class="mt-4">
                                     <x-input-label for="password" value="Password" />
-                                    <x-text-input
-                                        id="password"
-                                        type="password"
-                                        name="password"
-                                        class="mt-1 block w-full"
-                                        required
-                                        autocomplete="current-password"
-                                    />
-                                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                                </div>
+                                    <div class="relative">
+                                        <x-text-input
+                                            id="password"
+                                            type="password"
+                                            name="password"
+                                            class="mt-1 block w-full pr-10"
+                                            required
+                                            autocomplete="current-password"
+                                        />
+                                        <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center px-3 focus:outline-none">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                                <!-- Closed eye icon -->
+                                                <path x-show="!showPassword" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                <!-- Open eye icon -->
+                                                <path x-show="showPassword" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                            </svg>
 
-                                <div class="block mt-4">
-                                    <label for="remember_me" class="inline-flex items-center">
-                                        <input id="remember_me" type="checkbox" class="rounded  border-gray-300  text-indigo-600 shadow-sm focus:ring-indigo-500 " name="remember">
-                                        <span class="ms-2 text-sm text-gray-600 ">{{ __('Remember me') }}</span>
-                                    </label>
-                                </div>
+
+                                        </button>
+                                    </div>
+                                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
 
                                 <div class="flex items-center mt-4">
-                                    <!-- <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Forgot your password?
-                                    </Link> -->
 
                                     <button class="w-full justify-center inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                         <span class="text-white">Login</span>
@@ -167,3 +168,34 @@
     }
 
 </style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('password');
+        const togglePasswordButton = document.getElementById('togglePassword');
+        let passwordVisible = false;
+
+        togglePasswordButton.addEventListener('click', function () {
+            passwordVisible = !passwordVisible;
+            const type = passwordVisible ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePasswordButton.querySelector('svg').classList.toggle('text-gray-400');
+            togglePasswordButton.querySelector('svg').classList.toggle('text-gray-600');
+        });
+
+        function checkVisibility() {
+            togglePasswordButton.style.visibility = passwordInput.value.length > 0 ? 'visible' : 'hidden';
+        }
+
+        // Check initial visibility
+        checkVisibility();
+
+        passwordInput.addEventListener('input', checkVisibility);
+
+        // Keep eye button visible even if user clicks elsewhere
+        document.addEventListener('click', function (event) {
+            if (!passwordInput.contains(event.target) && !togglePasswordButton.contains(event.target)) {
+                checkVisibility();
+            }
+        });
+    });
+</script>
