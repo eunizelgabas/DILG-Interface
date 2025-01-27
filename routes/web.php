@@ -12,8 +12,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RepublicController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisitorController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
+// use PDO;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +36,7 @@ Route::get('/', function () {
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
+Route::post('webhook/legal-opinion', [LegalController::class, 'receiveLegalOpinion']);
 
 Route::middleware('auth')->group(function () {
 
@@ -98,7 +102,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/republic_acts/{republic}', [RepublicController::class, 'destroy'])->name('republic.delete');
 
     //Route for Legal Opinion- Eunizel
-    Route::get('/legal_opinions', [LegalController::class, 'index'])->name('legal.index');
+    // Route::post('webhook/legal-opinion', [LegalController::class, 'receiveLegalOpinion']);
+
+
+    
+    Route::get('/legal_opinions', [LegalController::class, 'show'])->name('legal.index');
+    // Route::get('/legal_opinions', [LegalController::class, 'index'])->name('legal.index');
     Route::post('/legal_opinions', [LegalController::class, 'store'])->name('legal.store');
     Route::get('/legal_opinions/edit/{legal}', [LegalController::class, 'edit'])->name('legal.edit');
     Route::put('/legal_opinions/{legal}', [LegalController::class, 'update'])->name('legal.update');

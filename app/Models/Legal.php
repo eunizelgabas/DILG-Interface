@@ -8,8 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Legal extends Model
 {
     use HasFactory;
+    
+    // protected $connection = 'dilg_bohol'; 
+    protected $connection = 'mysql';
 
-    protected $fillable = ['category', 'issuance_id', 'responsible_office'];
+    protected $table = 'legal_opinions';
+
+    protected $fillable = ['title', 'link', 'category', 'reference', 'date'];
+    // protected $fillable = ['category', 'issuance_id', 'responsible_office'];
 
     public function issuance()
     {

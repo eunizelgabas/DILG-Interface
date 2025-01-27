@@ -10,6 +10,7 @@ use App\Http\Controllers\PresidentialController;
 use App\Http\Controllers\RepublicController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisitorController;
+use App\Http\Controllers\LegalOpinionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,9 +26,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-//     Route::post('/logout', UserController::class, 'logout');
-// });
+    //     return $request->user();
+    //     Route::post('/logout', UserController::class, 'logout');
+    // });
+    
+    
+//LEGAL OPINIONS FROM DILG BOHOL
+Route::post('/legal_opinions', [LegalOpinionController::class, 'sendToDilg']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [UserController::class, 'getUser']); // Endpoint to fetch user data
@@ -58,5 +64,4 @@ Route::get('/{filename}', [UserController::class, 'getAvatar'])
 Route::middleware('auth:sanctum')->put('/users/{user}/change-password', [UserController::class, 'changePassword']);
 
 Route::post('/visitor/count', [VisitorController::class, 'increment']);
-
 

@@ -7,10 +7,158 @@ use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Legal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LegalController extends Controller
 {
+    public function receiveLegalOpinion(Request $request)
+{
+    // Log incoming payload
+    Log::info('Incoming webhook data:', $request->all());
+
+    try {
+        $validatedData = $request->validate([
+            'legal_opinions' => 'required|array',
+            'legal_opinions.*.title' => 'nullable|string',
+            'legal_opinions.*.link' => 'nullable|string',
+            'legal_opinions.*.category' => 'nullable|string',
+            'legal_opinions.*.reference' => 'required|string',
+            'legal_opinions.*.date' => 'nullable|string',
+        ]);
+
+        Log::info('Validation successful:', $validatedData);
+
+        foreach ($validatedData['legal_opinions'] as $opinion) {
+            Log::info('Processing legal opinion:', $opinion);
+
+            Legal::updateOrCreate(
+                ['reference' => $opinion['reference']],
+                [
+                    'title' => $opinion['title'],
+                    'link' => $opinion['link'],
+                    'category' => $opinion['category'],
+                    'date' => $opinion['date'],
+                ]
+            );
+        }
+
+        return response()->json(['message' => 'Legal opinions stored successfully'], 200);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        Log::error('Validation failed:', $e->errors());
+
+        return response()->json(['errors' => $e->errors()], 422);
+    } catch (\Exception $e) {
+        Log::error('An error occurred:', ['message' => $e->getMessage()]);
+
+        return response()->json(['message' => 'An error occurred while processing'], 500);
+    }
+}
+
+    
+//     public function receiveLegalOpinion(Request $request)
+// {
+//     // Log the entire request payload to see what is being sent
+//     Log::info('Incoming webhook data:', $request->all());
+
+//     try {
+//         // Validate the incoming array of legal opinions
+//         $validatedData = $request->validate([
+//             'legal_opinions' => 'required|array',
+//             'legal_opinions.*.title' => 'required|string',
+//             'legal_opinions.*.link' => 'required|string',
+//             'legal_opinions.*.category' => 'nullable|string',
+//             'legal_opinions.*.reference' => 'nullable|string',
+//             'legal_opinions.*.date' => 'nullable|string',
+//         ]);
+
+//         Log::info('Validation successful:', $validatedData);
+
+//         foreach ($validatedData['legal_opinions'] as $opinion) {
+//             // Log each opinion being processed
+//             Log::info('Processing legal opinion:', $opinion);
+
+//             $legal = Legal::create([
+//                 'title' => $opinion['title'],
+//                 'link' => $opinion['link'],
+//                 'category' => $opinion['category'],
+//                 'reference' => $opinion['reference'],
+//                 'date' => $opinion['date'],
+//             ]);
+//         }
+
+//         return response()->json(['message' => 'Legal opinions stored successfully'], 200);
+//     } catch (\Illuminate\Validation\ValidationException $e) {
+//         // Log validation errors
+//         Log::error('Validation failed:', $e->errors());
+
+//         return response()->json(['errors' => $e->errors()], 422);
+//     } catch (\Exception $e) {
+//         // Log any other exceptions
+//         Log::error('An error occurred:', ['message' => $e->getMessage()]);
+
+//         return response()->json(['message' => 'An error occurred while processing'], 500);
+//     }
+// }
+
+    
+//     public function receiveLegalOpinion(Request $request)
+// {
+//     // Log the incoming request data
+//     Log::info('Incoming webhook data:', $request->all());
+
+//     try {
+//         // Validate the incoming array of legal opinions
+//         $validatedData = $request->validate([
+//             'legal_opinions' => 'required|array',
+//             'legal_opinions.*.title' => 'required|string',
+//             'legal_opinions.*.link' => 'required|string',
+//             'legal_opinions.*.category' => 'nullable|string',
+//             'legal_opinions.*.reference' => 'nullable|string',
+//             'legal_opinions.*.date' => 'nullable|string',
+//         ]);
+
+//         Log::info('Validation successful:', $validatedData);
+
+//         foreach ($validatedData['legal_opinions'] as $opinion) {
+//             // Log each opinion being processed
+//             Log::info('Processing legal opinion:', $opinion);
+
+//             $legal = Legal::create([
+//                 'title' => $opinion['title'],
+//                 'link' => $opinion['link'],
+//                 'category' => $opinion['category'],
+//                 'reference' => $opinion['reference'],
+//                 'date' => $opinion['date'],
+//             ]);
+//         }
+
+//         return response()->json(['message' => 'Legal opinions stored successfully'], 200);
+//     } catch (\Illuminate\Validation\ValidationException $e) {
+//         // Log validation errors
+//         Log::error('Validation failed:', $e->errors());
+
+//         return response()->json(['errors' => $e->errors()], 422);
+//     } catch (\Exception $e) {
+//         // Log any other exceptions
+//         Log::error('An error occurred:', ['message' => $e->getMessage()]);
+
+//         return response()->json(['message' => 'An error occurred while processing'], 500);
+//     }
+// }
+
+    
+    public function show()
+    {
+        // Get all legal opinions with the associated issuance data
+        // dd(config('database.connections.dilg_bohol'));  // This will dump the connection config array
+        $opinions = Legal::with('issuance')->get();
+
+
+        return view('legal.index', compact('opinions'));
+    }
+    
     public function index(Request $request){
 
         $search = $request->input('search');
@@ -21,8 +169,8 @@ class LegalController extends Controller
         if ($search) {
             $legalsQuery->where(function ($query) use ($search) {
                 $query->where('category', 'like', '%' . $search . '%')
-                    ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
-                        $issuanceQuery->where('title', 'like', '%' . $search . '%')
+                    ->orWhereHas('issuance', function ($legalQuery) use ($search) {
+                        $legalQuery->where('title', 'like', '%' . $search . '%')
                             ->orWhere('reference_no', 'like', '%' . $search . '%')
                             ->orWhere('keyword', 'like', '%' . $search . '%');
                     });
@@ -87,7 +235,7 @@ class LegalController extends Controller
         $keywordString = implode(', ', $keywords);
 
         // Create Issuances record
-        $issuance = Issuances::create([
+        $legal = Issuances::create([
             'title' => $data['title'],
             'reference_no' => $data['reference_no'],
             'date' => $data['date'],
@@ -100,7 +248,7 @@ class LegalController extends Controller
         $legal = Legal::create([
             'category' => $data['category'],
             'responsible_office' => $data['responsible_office'],
-            'issuance_id' => $issuance->id,
+            'issuance_id' => $legal->id,
         ]);
 
         $log_entry = Auth::user()->name . " created a Legal Opinion  " . $legal->title . " with the id# " . $legal->id;
@@ -132,8 +280,8 @@ class LegalController extends Controller
         $keywordString = implode(', ', $keywords);
 
         // Update Issuances record
-        $issuance = $legal->issuance; // Assuming Joint model has a relationship to Issuances
-        $issuance->update([
+        $legal = $legal->issuance; // Assuming Joint model has a relationship to Issuances
+        $legal->update([
             'title' => $data['title'],
             'reference_no' => $data['reference_no'],
             'date' => $data['date'],

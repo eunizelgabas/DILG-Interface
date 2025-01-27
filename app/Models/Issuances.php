@@ -9,6 +9,9 @@ class Issuances extends Model
 {
     use HasFactory;
 
+    protected $connection = 'dilg_bohol'; // Use the DILG Bohol database connection
+    protected $table = 'bohol_issuances';  
+    
     protected $fillable = ['title', 'reference_no', 'type', 'url_link', 'date', 'keyword'];
 
     public function latest()

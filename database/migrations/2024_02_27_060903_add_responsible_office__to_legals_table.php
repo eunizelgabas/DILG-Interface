@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('legals', function (Blueprint $table) {
-            $table->string('responsible_office',1000)->nullable();
-        });
+        // Schema::table('legals', function (Blueprint $table) {
+        //     $table->string('responsible_office',1000)->nullable();
+        // });
     }
 
     /**

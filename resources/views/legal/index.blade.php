@@ -83,7 +83,18 @@
                 @if(count($legals) > 0)
                 @foreach ($legals as $legal )
 
-                <div class='flex items-center mt-3'>
+                <div>
+                    @foreach ($opinions as $opinion)
+                    <div>
+                        <p>Category: {{ $opinion->category ?? 'No Category' }}</p>
+                        <p>Issuance ID: {{ $opinion->issuance->id }}</p>
+                        <p>Issuance Details: {{ $opinion->issuance->details }}</p>
+                        <!-- <p>Created At: {{ $opinion->created_at }}</p> -->
+                    </div>
+                    @endforeach
+                </div>
+                
+                <!-- <div class='flex items-center mt-3'>
                     <div class="rounded-xl p-5 shadow-md w-full bg-white border-l-4 border-blue-500">
                     <div class="flex w-full items-center justify-between border-b pb-3">
                       <div class="flex items-center space-x-3">
@@ -195,7 +206,7 @@
                     </div>
                   </div>
 
-                </div>
+                </div> -->
 
 
                 @endforeach
