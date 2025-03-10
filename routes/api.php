@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Route;
     
     
 //LEGAL OPINIONS FROM DILG BOHOL
-Route::post('/legal_opinions', [LegalOpinionController::class, 'sendToDilg']);
+// Route::post('/legal_opinions', [LegalOpinionController::class, 'sendToDilg']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -43,7 +43,7 @@ Route::post('/auth/login', [UserController::class, 'login']);
 
 Route::get('/latest_issuances', [IssuanceController::class, 'index']);
 Route::get('/joint_circulars', [JointController::class, 'index']);
-Route::get('/legal_opinions', [LegalController::class, 'index']);
+Route::get('/legal_opinions', [LegalController::class, 'getLegalOpinionsJson']);
 Route::get('/memo_circulars', [MemoController::class, 'index']);
 Route::get('/presidential_directives', [PresidentialController::class, 'index']);
 Route::get('/draft_issuances', [DraftController::class, 'index']);

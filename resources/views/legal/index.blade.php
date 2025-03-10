@@ -7,9 +7,9 @@
                 {{-- <small class="font-[500]">In the event that we do not have a full 30-days, we extrapolate based on data we have.</small> --}}
             </div>
 
-            <button onclick="document.getElementById('myModal').showModal()" id="btn" class="py-2 px-4 bg-blue-600 text-white rounded text shadow-xl mt-4 md:mt-0 ml-auto">
+            <!-- <button onclick="document.getElementById('myModal').showModal()" id="btn" class="py-2 px-4 bg-blue-600 text-white rounded text shadow-xl mt-4 md:mt-0 ml-auto">
                 <i class="fa-solid fa-plus" style="color: #ffffff; margin-right: 4px;"></i> Add
-            </button>
+            </button> -->
 
         </div>
         @if(session('success'))
@@ -42,188 +42,78 @@
                 </div>
             </div>
             {{-- <div class="flex-1 pr-4"> --}}
-                <div class=" w-1/2">
-                    <form action="{{ route('legal.index') }}" method="GET" class="mb-4" id="searchForm">
-                        <input type="text" name="search" value="{{ $search }}"
-                               class="w-full pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                               placeholder="Search..." oninput="searchOnChange()">
-                        <!-- Include the selected category in the form -->
-                        <input type="hidden" name="category" value="{{ $selectedCategory }}">
-                        {{-- <div class="absolute inline-flex items-center p-2">
-                            <!-- Icon SVG -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24"
-                                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                 stroke-linejoin="round">
-                                <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
-                                <circle cx="10" cy="10" r="7"/>
-                                <line x1="21" y1="21" x2="15" y2="15"/>
-                            </svg>
-                        </div> --}}
+            <div class=" w-1/2">
+                <form action="{{ route('legal.index') }}" method="GET" class="mb-4" id="searchForm">
+                    <input type="text" name="search" value="{{ $search }}"
+                            class="w-full pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                            placeholder="Search..." oninput="searchOnChange()">
+                    <!-- Include the selected category in the form -->
+                    <input type="hidden" name="category" value="{{ $selectedCategory }}">
+                    {{-- <div class="absolute inline-flex items-center p-2">
+                        <!-- Icon SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round">
+                            <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
+                            <circle cx="10" cy="10" r="7"/>
+                            <line x1="21" y1="21" x2="15" y2="15"/>
+                        </svg>
+                    </div> --}}
 
-                        <div class="absolute top-0 left-0 inline-flex items-center p-2">
-                            <div id="loadingIndicator" class="hidden loader"></div>
-                        </div>
-                    </form>
-                </div>
-            {{-- </div> --}}
+                    <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                        <div id="loadingIndicator" class="hidden loader"></div>
+                    </div>
+                </form>
+            </div>
         </div>
-
-
-
             <div class=" w-full z-10">
                 <div class="flex flex-col">
+                @if(count($legals) === 0 && !empty($search))
+                    <div class="text-gray-900 mt-4 justify-center">
+                        No data available for your search query "{{ $search }}".
+                    </div>
+                @endif
 
-
-                    @if(count($legals) === 0 && !empty($search))
-                        <div class="text-gray-900 mt-4 justify-center">
-                            No data available for your search query "{{ $search }}".
-                        </div>
-                    @endif
 
                 @if(count($legals) > 0)
-                @foreach ($legals as $legal )
-
-                <div>
-                    @foreach ($opinions as $opinion)
-                    <div>
-                        <p>Category: {{ $opinion->category ?? 'No Category' }}</p>
-                        <p>Issuance ID: {{ $opinion->issuance->id }}</p>
-                        <p>Issuance Details: {{ $opinion->issuance->details }}</p>
-                        <!-- <p>Created At: {{ $opinion->created_at }}</p> -->
+                    <div class="overflow-x-auto mt-6 bg-white shadow-md rounded-lg">
+                        <table class="table-auto w-full border-collapse border border-gray-300">
+                            <tbody>
+                                @foreach ($legals as $legal)
+                                    <tr>
+                                        <td class="border px-4 py-2 text-center">
+                                            {{ $loop->iteration + ($legals->currentPage() - 1) * $legals->perPage() }}
+                                        </td>
+                                        <td class="border px-4 py-2">
+                                            <a href="{{ route('legal.show', $legal->id) }}" class="text-blue-500 hover:underline">{{ $legal->title }}</a>
+                                            @if (!empty($legal->category))
+                                                <br>
+                                                <span class="text-sm text-gray-600">{{ ucfirst($legal->category) }}</span>
+                                            @endif
+                                            <br>
+                                            <strong>{{ $legal->reference ?? 'No Reference' }}</strong>
+                                        </td>
+                                        <td class="border px-4 py-2 text-sm text-center">
+                                            {{ \Carbon\Carbon::parse($legal->date)->format('F d, Y') }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                    @endforeach
-                </div>
-                
-                <!-- <div class='flex items-center mt-3'>
-                    <div class="rounded-xl p-5 shadow-md w-full bg-white border-l-4 border-blue-500">
-                    <div class="flex w-full items-center justify-between border-b pb-3">
-                      <div class="flex items-center space-x-3">
-                        {{-- <div class="h-8 w-8 rounded-full bg-slate-400 bg-[url('https://i.pravatar.cc/32')]"></div> --}}
-                        <div class="text-ml font-bold text-slate-700">Reference No: <span class="font-light">{{$legal->issuance->reference_no}}</span></div>
-                      </div>
-                      <div class="flex items-center space-x-8">
-                        <div class="text-xs text-neutral-500">{{ \Carbon\Carbon::parse($legal->issuance->date)->format('F j, Y') }}</div>
-                        <div x-data="{ dropdownOpen: false }" class="relative">
-                            <button @click="dropdownOpen = !dropdownOpen" class="relative z-10 flex items-center rounded-lg p-2 focus:outline-none bg-white ">
-
-                                {{-- <svg class="h-5 w-5 text-gray-800 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg> --}}
-                                <i class="fa-solid fa-ellipsis-vertical"></i>
-                            </button>
-
-
-                            <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 w-full h-full z-10"></div>
-
-                            <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                                <a  href="{{ url('/legal_opinions/edit', $legal->id) }}" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-500 hover:text-white">
-                                   Edit
-                                </a>
-
-                                <a onclick="openDeleteModal({{ $legal->id }})" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-red-500 hover:text-white">
-                                    Delete
-                                </a>
-                            </div>
-                            <div id="modelConfirm" class="fixed hidden z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
-                                <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
-
-                                    <div class="flex justify-end p-2">
-                                        <button onclick="closeModal('modelConfirm')" type="button"
-                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd"
-                                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-
-                                    <div class="p-6 pt-0 text-center">
-                                        <svg class="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Are you sure you want to delete this legal opinion?</h3>
-                                        <div class="flex  justify-center">
-                                            <form id="deleteForm" method="POST" action="{{ url('/legal_opinions'. $legal->id) }}">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <button type="submit" onclick="closeModal('modelConfirm')"
-                                                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                                                Yes, I'm sure
-                                            </button>
-                                            </form>
-                                            <a href="#" onclick="closeModal('modelConfirm')"
-                                                class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center"
-                                                data-modal-toggle="delete-user-modal">
-                                                No, cancel
-                                            </a>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                      </div>
+                    <div class="text-start" style="color:rgb(83, 82, 82); margin-top: 15px;">
+                        Showing {{ $legals->firstItem() }} to {{ $legals->lastItem() }} of {{ $legals->total() }} entries
                     </div>
 
-                    <div class="mt-4 mb-">
-                      <div class="mb-3 text-xl font-bold">{{$legal->issuance->title}}</div>
-                      <div class="text-sm text-neutral-600 font-bold">
-                        @if($legal->responsible_office)
-                            Responsible Office: <span class="font-light">{{ $legal->responsible_office }}</span>
-                        @endif
+                    <div class="d-flex justify-content-end mt-2">
+                        {{ $legals->onEachSide(1)->links() }}
                     </div>
-                      <div class="text-sm text-neutral-600 font-bold">
-                        @if($legal->category)
-                            Category: <span class="font-light">{{ $legal->category }}</span>
-                        @endif
-                    </div>
-                      <div class="flex-1 inline-flex items-center">
-                        <div class="text-sm text-neutral-600 font-bold">URL link: </div>
-                        <a href="{{ $legal->issuance->url_link }}" class="font-bold ml-1 hover:underline" target="_blank">
-                         <span class=" text-blue-500 font-light">{{ $legal->issuance->url_link }}</span>
-                        </a>
-                    </div>
-                    </div>
-
-                    <div>
-                      <div class="flex items-center justify-between text-slate-500">
-                        <div class="flex space-x-4 md:space-x-8">
-                          <div class="flex cursor-pointer items-center transition hover:text-slate-600">
-                            <div class="text-sm text-neutral-600 font-bold">Keyword/s: </div>
-                            <span class="ml-2"> {{$legal->issuance->keyword}}</span>
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div> -->
-
-
-                @endforeach
-                <div class="text-start" style="color:rgb(83, 82, 82); margin-top: 15px;">
-                    {{-- Showing {{ $joints->firstItem() }} to {{ $joints->lastItem() }} of {{ $joints->total() }} entries --}}
-                </div>
-
-                <div class="d-flex justify-content-end mt-2">
-                    {{ $legals->onEachSide(1)->links() }}
-                </div>
                 @else
-                <div class="flex justify-center items-center">
-                    <h1>No Legal opinion available</h1>
-                </div>
+                    <div class="flex justify-center items-center">
+                        <h1>No Legal opinion available</h1>
+                    </div>
                 @endif
-                </div>
-
+            </div>
         </div>
     </div>
 
@@ -269,10 +159,10 @@
                                     class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" /></textarea>
                             </div>
                             <div class="mb-5">
-                                <label for="reference_no" class="mb-3 block text-base font-medium text-[#07074D]">
+                                <label for="reference" class="mb-3 block text-base font-medium text-[#07074D]">
                                 Reference No
                                 </label>
-                                <input type="text" name="reference_no" id="reference_no" placeholder=""
+                                <input type="text" name="reference" id="reference" placeholder=""
                                     class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
                             </div>
                             <div class="mb-5">

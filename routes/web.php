@@ -104,10 +104,18 @@ Route::middleware('auth')->group(function () {
     //Route for Legal Opinion- Eunizel
     // Route::post('webhook/legal-opinion', [LegalController::class, 'receiveLegalOpinion']);
 
-
+    // Route::get('/pdfs', function() {
+    //     $pdfs = \App\Models\LegalOpinionPdf::all();
+    //     return response()-> json($pdfs); 
+    // });
+    Route::get('/check-pdfs', function () {
+        $pdfs = \App\Models\LegalOpinionPdf::all();
+        return response()->json($pdfs);
+    });
     
-    Route::get('/legal_opinions', [LegalController::class, 'show'])->name('legal.index');
-    // Route::get('/legal_opinions', [LegalController::class, 'index'])->name('legal.index');
+    // Route::get('/legal_opinions', [LegalController::class, 'show'])->name('legal.index');
+    Route::get('/legal_opinions', [LegalController::class, 'index'])->name('legal.index');
+    Route::get('/legal_opinion/{id}', [LegalController::class, 'show'])->name('legal.show');
     Route::post('/legal_opinions', [LegalController::class, 'store'])->name('legal.store');
     Route::get('/legal_opinions/edit/{legal}', [LegalController::class, 'edit'])->name('legal.edit');
     Route::put('/legal_opinions/{legal}', [LegalController::class, 'update'])->name('legal.update');
