@@ -146,36 +146,98 @@ class LegalController extends Controller
      * Handle API request for legal opinions
      */
 
+    // public function getLegalOpinionsJson(Request $request)
+    // {
+    //     $search = $request->input('search');
+    //     $selectedCategory = $request->input('category', 'All');
+    //     $perPage = $request->input('per_page', 100);
+    //     $page = $request->input('page', 1);
 
+    //     $legalsQuery = Legal::query();
+
+    //     // Apply search filter across all records
+    //     if ($search) {
+    //         $legalsQuery->where(function ($query) use ($search) {
+    //             $query->where('category', 'like', '%' . $search . '%')
+    //                 ->orWhere('title', 'like', '%' . $search . '%')
+    //                 ->orWhere('reference', 'like', '%' . $search . '%')
+    //                 ->orWhere('extracted_texts', 'like', '%' . $search . '%');
+    //         });
+
+    //         // If searching, return all matching records instead of paginated results
+    //         $legals = $legalsQuery->orderBy('id', 'asc')->get(); // Get all matches
+    //     } else {
+    //         // Apply category filter only for paginated results
+    //         if ($selectedCategory !== 'All') {
+    //             $legalsQuery->where('category', $selectedCategory);
+    //         }
+
+    //         $legals = $legalsQuery->orderBy('id', 'asc')->paginate($perPage, ['*'], 'page', $page);
+    //     }
+
+    //     $formattedLegals = $legals->map(function ($legal) {
+    //         return [
+    //             "id" => intval($legal->id),
+    //             "title" => $this->cleanString((string) ($legal->title ?? 'None')),
+    //             "link" => empty($legal->link) ? "N/A" : trim((string) $legal->link),
+    //             "category" => $this->cleanString((string) ($legal->category ?? 'None')),
+    //             "reference" => $this->cleanString((string) ($legal->reference ?? 'None')),
+    //             "date" => $legal->date && \Carbon\Carbon::hasFormat($legal->date, 'Y-m-d')
+    //                 ? \Carbon\Carbon::parse($legal->date)->format('F d, Y')
+    //                 : $this->cleanString((string) ($legal->date ?? 'N/A')),
+    //             "download_link" => empty($legal->download_link) ? "N/A" : $this->cleanString((string) $legal->download_link),
+    //             "extracted_texts" => empty($legal->extracted_texts) ? "N/A" : $this->cleanString((string) $legal->extracted_texts),
+    //         ];
+    //     });
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'legals' => $formattedLegals,
+    //         'pagination' => $search ? null : [
+    //             'current_page' => $legals->currentPage(),
+    //             'per_page' => $legals->perPage(),
+    //             'total' => $legals->total(),
+    //             'last_page' => $legals->lastPage(),
+    //         ],
+    //     ], 200);
+    // }
+
+
+
+    //THIS IS MY MAIN PAGINATION METHOD
     public function getLegalOpinionsJson(Request $request)
     {
         $search = $request->input('search');
         $selectedCategory = $request->input('category', 'All');
+        $perPage = $request->input('per_page', 100); // Keep pagination
+        $page = $request->input('page', 1);
 
         $legalsQuery = Legal::query();
 
+        // Apply search filter across the full database
         if ($search) {
             $legalsQuery->where(function ($query) use ($search) {
                 $query->where('category', 'like', '%' . $search . '%')
                     ->orWhere('title', 'like', '%' . $search . '%')
-                    ->orWhere('reference', 'like', '%' . $search . '%');
+                    ->orWhere('reference', 'like', '%' . $search . '%')
+                    ->orWhere('extracted_texts', 'like', '%' . $search . '%'); // Search in all records
             });
         }
 
+        // Apply category filter
         if ($selectedCategory !== 'All') {
             $legalsQuery->where('category', $selectedCategory);
         }
 
-        $legals = $legalsQuery->orderBy('id', 'asc')->get();
+        // Paginate only for displaying results
+        $legals = $legalsQuery->orderBy('id', 'asc')->paginate($perPage, ['*'], 'page', $page);
 
-        // ✅ Ensure all fields are properly formatted and cleaned
+        // Format the results
         $formattedLegals = $legals->map(function ($legal) {
             return [
                 "id" => intval($legal->id),
                 "title" => $this->cleanString((string) ($legal->title ?? 'None')),
                 "link" => empty($legal->link) ? "N/A" : trim((string) $legal->link),
-
-                // "link" => filter_var($this->cleanString((string) ($legal->link ?? 'None')), FILTER_SANITIZE_URL),
                 "category" => $this->cleanString((string) ($legal->category ?? 'None')),
                 "reference" => $this->cleanString((string) ($legal->reference ?? 'None')),
                 "date" => $legal->date && \Carbon\Carbon::hasFormat($legal->date, 'Y-m-d')
@@ -183,28 +245,86 @@ class LegalController extends Controller
                     : $this->cleanString((string) ($legal->date ?? 'N/A')),
                 "download_link" => empty($legal->download_link) ? "N/A" : $this->cleanString((string) $legal->download_link),
                 "extracted_texts" => empty($legal->extracted_texts) ? "N/A" : $this->cleanString((string) $legal->extracted_texts),
-
             ];
         });
 
-        $jsonResponse = [
+        // Return the response with pagination metadata
+        return response()->json([
             'status' => 'success',
-            'legals' => $formattedLegals
-        ];
-
-        Log::info('Legal Opinions JSON: ' . json_encode($jsonResponse));
-
-        $finalJson = json_encode($jsonResponse, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            Log::error('JSON Encoding Error: ' . json_last_error_msg());
-            return response()->json(['status' => 'error', 'message' => 'Invalid JSON format'], 500);
-        }
-
-        return response($finalJson, 200)->header('Content-Type', 'application/json');
-
-        // return response()->json($jsonResponse, 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+            'legals' => $formattedLegals,
+            'pagination' => [
+                'current_page' => $legals->currentPage(),
+                'per_page' => $legals->perPage(),
+                'total' => $legals->total(),
+                'last_page' => $legals->lastPage(),
+            ],
+        ], 200);
     }
+
+
+    //DAGHAN HUGAW, WITHOUT PAGINATION
+    // public function getLegalOpinionsJson(Request $request)
+    // {
+    //     $search = $request->input('search');
+    //     $selectedCategory = $request->input('category', 'All');
+
+    //     $legalsQuery = Legal::query();
+
+    //     if ($search) {
+    //         $legalsQuery->where(function ($query) use ($search) {
+    //             $query->where('category', 'like', '%' . $search . '%')
+    //                 ->orWhere('title', 'like', '%' . $search . '%')
+    //                 ->orWhere('reference', 'like', '%' . $search . '%');
+    //         });
+    //     }
+
+    //     if ($selectedCategory !== 'All') {
+    //         $legalsQuery->where('category', $selectedCategory);
+    //     }
+
+    //     $legals = $legalsQuery->orderBy('id', 'asc')->get();
+
+    //     // ✅ Ensure all fields are properly formatted and cleaned
+    //     $formattedLegals = $legals->map(function ($legal) {
+    //         return [
+    //             "id" => intval($legal->id),
+    //             "title" => $this->cleanString((string) ($legal->title ?? 'None')),
+    //             "link" => empty($legal->link) ? "N/A" : trim((string) $legal->link),
+
+    //             // "link" => filter_var($this->cleanString((string) ($legal->link ?? 'None')), FILTER_SANITIZE_URL),
+    //             "category" => $this->cleanString((string) ($legal->category ?? 'None')),
+    //             "reference" => $this->cleanString((string) ($legal->reference ?? 'None')),
+    //             "date" => $legal->date && \Carbon\Carbon::hasFormat($legal->date, 'Y-m-d')
+    //                 ? \Carbon\Carbon::parse($legal->date)->format('F d, Y')
+    //                 : $this->cleanString((string) ($legal->date ?? 'N/A')),
+    //             "download_link" => empty($legal->download_link) ? "N/A" : $this->cleanString((string) $legal->download_link),
+    //             "extracted_texts" => empty($legal->extracted_texts) ? "N/A" : $this->cleanString((string) $legal->extracted_texts),
+
+    //         ];
+    //     });
+
+    //     $jsonResponse = [
+    //         'status' => 'success',
+    //         'legals' => $formattedLegals
+    //     ];
+
+    //     Log::info('Legal Opinions JSON: ' . json_encode($jsonResponse));
+
+    //     $finalJson = json_encode($jsonResponse, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+
+    //     if (json_last_error() !== JSON_ERROR_NONE) {
+    //         Log::error('JSON Encoding Error: ' . json_last_error_msg());
+    //         return response()->json(['status' => 'error', 'message' => 'Invalid JSON format'], 500);
+    //     }
+
+    //     return response()->stream(function () use ($finalJson) {
+    //         echo $finalJson;
+    //     }, 200, ['Content-Type' => 'application/json']);
+
+    //     // return response($finalJson, 200)->header('Content-Type', 'application/json');
+
+    //     // return response()->json($jsonResponse, 200, [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    // }
 
     /**
      * Helper function to remove invalid UTF-8 characters and trim strings.
