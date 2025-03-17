@@ -16,16 +16,6 @@ class Legal extends Model
 
     protected $fillable = ['title', 'link', 'category', 'reference', 'date', 'download_link', 'extracted_texts'];
 
-    protected $casts = [
-        'title' => 'string', // Ensure it's returned as a properly formatted string
-        'link' => 'string', // Ensure it's returned as a properly formatted string
-        'category' => 'string', // Ensure it's returned as a properly formatted string
-        'reference' => 'string', // Ensure it's returned as a properly formatted string
-        'date' => 'string', // Ensure it's returned as a properly formatted string
-        'download_link' => 'string', // Ensure it's returned as a properly formatted string
-        'extracted_texts' => 'string', // Ensure it's returned as a properly formatted string
-    ];
-
     // protected $fillable = ['category', 'issuance_id', 'responsible_office'];
 
     public function issuance()
