@@ -11,53 +11,56 @@ use Illuminate\Support\Facades\Auth;
 
 class RepublicController extends Controller
 {
-    public function index(Request $request){
-
+    public function indexMobile(Request $request)
+    {
         $search = $request->input('search');
+        $selectedDate = $request->input('date', 'All');
+        $perPage = $request->input('per_page', 50);
+        $page = $request->input('page', 1);
 
-        $republicsQuery = Republic::when($search, function ($query) use ($search) {
-            $query->where('responsible_office', 'like', '%' . $search . '%')
-                ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
-                    $issuanceQuery->where('title', 'like', '%' . $search . '%')
-                        ->orWhere('reference_no', 'like', '%' . $search . '%')
-                        ->orWhere('keyword', 'like', '%' . $search . '%');
-                });
-        })->with('issuance')->orderBy('id', 'desc');
+        $republicsQuery = Republic::query();
 
-        if ($request->expectsJson()) {
-            $republics = $republicsQuery->get(); // Get all data for JSON API requests
-        } else {
-            $republics = $republicsQuery->paginate(10); // Paginate for web requests
-        }
-
-        if ($request->expectsJson()) {
-            // Transform the data to include the foreign key relationship
-            $formattedRepublics = $republics->map(function ($republic) {
-                return [
-                    'id' => $republic->id,
-                    'responsible_office' => $republic->responsible_office ?? 'N/A',
-                    'issuance' => [
-                        'id' => $republic->issuance->id,
-                        'date' => $republic->issuance->date ?? 'N/A',
-                        'title' => $republic->issuance->title,
-                        'reference_no' => $republic->issuance->reference_no ?? 'N/A',
-                        'keyword' => $republic->issuance->keyword,
-                        'url_link' => $republic->issuance->url_link ?? 'N/A',
-                        'type' => $republic->issuance->type
-                    ],
-                ];
+        if ($search) {
+            $republicsQuery->where(function ($query) use ($search) {
+                $query->where('date', 'like', '%' . $search . '%')
+                    ->orWhere('title', 'like', '%' . $search . '%')
+                    ->orWhere('reference', 'like', '%' . $search . '%');
             });
 
-            return response()->json(['republics' => $formattedRepublics]);
+            $republics = $republicsQuery->orderBy('id', 'asc')->get();
         } else {
-            // If the request is from the web view, return a Blade view
-            return view('republic.index', compact('republics', 'search'));
+            if ($selectedDate !== 'All') {
+                $republicsQuery->where('date', $selectedDate);
+            }
+
+            $republics = $republicsQuery->orderBy('id', 'asc')->paginate($perPage, ['*'], 'page', $page);
         }
 
-        // return view('republic.index', compact('republics', 'search'));
+        $formattedRepublics = $republics->map(function ($republic) {
+            return [
+                "id" => $republic->id,
+                "title" => $republic->title,
+                "link" => $republic->link,
+                "reference" => $republic->reference,
+                "date" => $republic->date,
+                "download_link" => $republic->download_link,
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'republics' => $formattedRepublics,
+            'pagination' => $search ? null : [
+                'current_page' => $republics->currentPage(),
+                'per_page' => $republics->perPage(),
+                'total' => $republics->total(),
+                'last_page' => $republics->lastPage(),
+            ],
+        ], 200);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $data = $request->validate([
             'title' => 'required|string',
             'reference_no' => 'nullable|string',
@@ -96,12 +99,14 @@ class RepublicController extends Controller
         return redirect('/republic_acts')->with('success', 'Republic Act successfully created');
     }
 
-    public function edit(Republic $republic){
-        $republic->load([ 'issuance'])->get();
+    public function edit(Republic $republic)
+    {
+        $republic->load(['issuance'])->get();
         return view('republic.edit', compact('republic'));
     }
 
-    public function update(Request $request, Republic $republic) {
+    public function update(Request $request, Republic $republic)
+    {
         $data = $request->validate([
             'title' => 'required|string',
             'reference_no' => 'nullable|string',
@@ -138,7 +143,8 @@ class RepublicController extends Controller
     }
 
 
-    public function destroy(Republic $republic){
+    public function destroy(Republic $republic)
+    {
 
         $republic->issuance()->delete(); // Make sure to use the correct relationship method
         $republic->delete();
@@ -146,7 +152,7 @@ class RepublicController extends Controller
         $log_entry = Auth::user()->name . " deleted a Republic Act  " . $republic->title . " with the id# " . $republic->id;
         event(new UserLog($log_entry));
 
-        return redirect('/republic_acts')->with('success','Republic Act deleted successfully.');
+        return redirect('/republic_acts')->with('success', 'Republic Act deleted successfully.');
     }
 
 }

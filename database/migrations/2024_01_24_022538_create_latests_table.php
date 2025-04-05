@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,8 +14,8 @@ return new class extends Migration
             $table->id();
             $table->string('category')->nullable();
             $table->string('outcome');
-            $table->bigInteger('bohol_issuance_id')->unsigned();
-            $table->foreign('bohol_issuance_id')->references('id')->on('bohol_issuances')->onDelete('cascade');
+            $table->bigInteger('issuance_id')->unsigned();
+            $table->foreign('issuance_id')->references('id')->on('issuances')->onDelete('cascade');
             $table->timestamps();
         });
     }

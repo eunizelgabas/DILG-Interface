@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewIssuanceEvent;
 use App\Events\UserLog;
 use App\Models\Issuances;
 use App\Models\Legal;
-use App\Models\LegalOpinionPdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Schema;
 
 
 class LegalController extends Controller
@@ -80,7 +76,8 @@ class LegalController extends Controller
      * Handle API request for legal opinions
      */
 
-    // ORIGINAL WORKING METHOD  
+
+    // MAIN PAGINATION METHOD
     public function getLegalOpinionsJson(Request $request)
     {
         $search = $request->input('search');
@@ -99,10 +96,8 @@ class LegalController extends Controller
                     ->orWhere('extracted_texts', 'like', '%' . $search . '%');
             });
 
-            // If searching, return all matching records instead of paginated results
-            $legals = $legalsQuery->orderBy('id', 'asc')->get(); // Get all matches
+            $legals = $legalsQuery->orderBy('id', 'asc')->get();
         } else {
-            // Apply category filter only for paginated results
             if ($selectedCategory !== 'All') {
                 $legalsQuery->where('category', $selectedCategory);
             }
@@ -120,16 +115,6 @@ class LegalController extends Controller
                 "date" => $legal->date,
                 "download_link" => $legal->download_link,
                 "extracted_texts" => $legal->extracted_texts,
-                // "id" => intval($legal->id),
-                // "title" => $this->cleanString((string) ($legal->title ?? 'None')),
-                // "link" => empty($legal->link) ? "N/A" : trim((string) $legal->link),
-                // "category" => $this->cleanString((string) ($legal->category ?? 'None')),
-                // "reference" => $this->cleanString((string) ($legal->reference ?? 'None')),
-                // "date" => $legal->date && \Carbon\Carbon::hasFormat($legal->date, 'Y-m-d')
-                //     ? \Carbon\Carbon::parse($legal->date)->format('F d, Y')
-                //     : $this->cleanString((string) ($legal->date ?? 'N/A')),
-                // "download_link" => empty($legal->download_link) ? "N/A" : $this->cleanString((string) $legal->download_link),
-                // "extracted_texts" => empty($legal->extracted_texts) ? "N/A" : $this->cleanString((string) $legal->extracted_texts),
             ];
         });
 
@@ -144,64 +129,6 @@ class LegalController extends Controller
             ],
         ], 200);
     }
-
-
-    //THIS IS MY MAIN PAGINATION METHOD
-    // public function getLegalOpinionsJson(Request $request)
-    // {
-    //     $search = $request->input('search');
-    //     $selectedCategory = $request->input('category', 'All');
-    //     $perPage = $request->input('per_page', 100); // Keep pagination
-    //     $page = $request->input('page', 1);
-
-    //     $legalsQuery = Legal::query();
-
-    //     // Apply search filter across the full database
-    //     if ($search) {
-    //         $legalsQuery->where(function ($query) use ($search) {
-    //             $query->where('category', 'like', '%' . $search . '%')
-    //                 ->orWhere('title', 'like', '%' . $search . '%')
-    //                 ->orWhere('reference', 'like', '%' . $search . '%')
-    //                 ->orWhere('extracted_texts', 'like', '%' . $search . '%'); // Search in all records
-    //         });
-    //     }
-
-    //     // Apply category filter
-    //     if ($selectedCategory !== 'All') {
-    //         $legalsQuery->where('category', $selectedCategory);
-    //     }
-
-    //     // Paginate only for displaying results
-    //     $legals = $legalsQuery->orderBy('id', 'asc')->paginate($perPage, ['*'], 'page', $page);
-
-    //     // Format the results
-    //     $formattedLegals = $legals->map(function ($legal) {
-    //         return [
-    //             "id" => intval($legal->id),
-    //             "title" => $this->cleanString((string) ($legal->title ?? 'None')),
-    //             "link" => empty($legal->link) ? "N/A" : trim((string) $legal->link),
-    //             "category" => $this->cleanString((string) ($legal->category ?? 'None')),
-    //             "reference" => $this->cleanString((string) ($legal->reference ?? 'None')),
-    //             "date" => $legal->date && \Carbon\Carbon::hasFormat($legal->date, 'Y-m-d')
-    //                 ? \Carbon\Carbon::parse($legal->date)->format('F d, Y')
-    //                 : $this->cleanString((string) ($legal->date ?? 'N/A')),
-    //             "download_link" => empty($legal->download_link) ? "N/A" : $this->cleanString((string) $legal->download_link),
-    //             "extracted_texts" => empty($legal->extracted_texts) ? "N/A" : $this->cleanString((string) $legal->extracted_texts),
-    //         ];
-    //     });
-
-    //     // Return the response with pagination metadata
-    //     return response()->json([
-    //         'status' => 'success',
-    //         'legals' => $formattedLegals,
-    //         'pagination' => [
-    //             'current_page' => $legals->currentPage(),
-    //             'per_page' => $legals->perPage(),
-    //             'total' => $legals->total(),
-    //             'last_page' => $legals->lastPage(),
-    //         ],
-    //     ], 200);
-    // }
 
     /**
      * Helper function to remove invalid UTF-8 characters and trim strings.

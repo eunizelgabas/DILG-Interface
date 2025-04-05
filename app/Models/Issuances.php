@@ -9,9 +9,6 @@ class Issuances extends Model
 {
     use HasFactory;
 
-    protected $connection = 'dilg_bohol'; // Use the DILG Bohol database connection
-    protected $table = 'bohol_issuances';  
-    
     protected $fillable = ['title', 'reference_no', 'type', 'url_link', 'date', 'keyword'];
 
     public function latest()
@@ -19,19 +16,23 @@ class Issuances extends Model
         return $this->hasOne(Latest::class, 'issuance_id');
     }
 
-    public function joint(){
+    public function joint()
+    {
         return $this->hasOne(Joint::class, 'issuance_id');
     }
 
-    public function memo(){
+    public function memo()
+    {
         return $this->hasOne(Memo::class, 'issuance_id');
     }
 
-    public function presidential(){
+    public function presidential()
+    {
         return $this->hasOne(Presidential::class, 'issuance_id');
     }
 
-    public function draft(){
+    public function draft()
+    {
         return $this->hasOne(Draft::class, 'issuance_id');
     }
 
@@ -40,7 +41,8 @@ class Issuances extends Model
         return $this->hasOne(Republic::class, 'issuance_id');
     }
 
-    public function legal(){
+    public function legal()
+    {
         return $this->hasOne(Legal::class, 'issuance_id');
     }
 

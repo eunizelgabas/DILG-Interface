@@ -10,11 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('drafts', function (Blueprint $table) {
+        Schema::create('issuances', function (Blueprint $table) {
             $table->id();
-            $table->string('responsible_office', 1000)->nullable();
-            $table->bigInteger('issuance_id')->unsigned();
-            $table->foreign('issuance_id')->references('id')->on('issuances')->onDelete('cascade');
+            $table->string('title', 1500);
+            $table->string('type')->nullable();
+            $table->string('reference_no')->nullable();
+            $table->string('url_link')->nullable();
+            $table->date('date')->nullable();
+            $table->string('keyword');
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('drafts');
+        Schema::dropIfExists('issuances');
     }
 };

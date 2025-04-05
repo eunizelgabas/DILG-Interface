@@ -1,409 +1,171 @@
 <x-app-layout>
     <div class="w-full max-w-[1190px] px-6 sm:px-8 md:px-16 py-2 md:py-10 rounded-xl min-h-[300px] m-2">
-    <div class="flex flex-col md:flex-row items-start md:items-center">
-        <div class="md:mr-4"> <!-- Adjust margin based on your design -->
-            <h1 class="font-semibold text-2xl mb-2 tracking-wider drop-shadow-[3px_3px_5px_rgba(91,91,91,0.58)]">Presidential Directives Archive</h1>
-            {{-- <small class="font-[500]">In the event that we do not have a full 30-days, we extrapolate based on data we have.</small> --}}
+        <div class="flex flex-col md:flex-row items-start md:items-center">
+            <div class="md:mr-4">
+                <h1 class="font-semibold text-2xl mb-2 tracking-wider drop-shadow-[3px_3px_5px_rgba(91,91,91,0.58)]">
+                    Presidential Directives Archive</h1>
+            </div>
         </div>
 
-        <button onclick="document.getElementById('myModal').showModal()" id="btn" class="py-2 px-4 bg-blue-600 text-white rounded text shadow-xl mt-4 md:mt-0 ml-auto">
-            <i class="fa-solid fa-plus" style="color: #ffffff; margin-right: 4px;"></i> Add
-        </button>
+        @if(session('success'))
+            <div id="flash-message"
+                class="bg-green-200 px-6 py-4 my-4 rounded-md text-lg flex items-center mx-auto max-w-lg absolute top-10 right-0">
+                <svg viewBox="0 0 24 24" class="text-green-600 w-5 h-5 sm:w-5 sm:h-5 mr-3">
+                    <path fill="currentColor"
+                        d="M11.983,0a12.206,12.206,0,0,0-8.51,3.653A11.8,11.8,0,0,0,0,12.207,11.779,11.779,0,0,0,11.8,24h.214A12.111,12.111,0,0,0,24,11.791h0A11.766,11.766,0,0,0,11.983,0ZM10.5,16.542a1.476,1.476,0,0,1,1.449-1.53h.027a1.527,1.527,0,0,1,1.523,1.47,1.475,1.475,0,0,1-1.449,1.53h-.027A1.529,1.529,0,0,1,10.5,16.542ZM11,12.5v-6a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Z">
+                    </path>
+                </svg>
+                <span class="text-green-800 text-sm">{{ session('success') }}</span>
+            </div>
 
-    </div>
-    @if(session('success'))
-        <div id="flash-message" class="bg-green-200 px-6 py-4 my-4 rounded-md text-lg flex items-center mx-auto max-w-lg absolute top-10 right-0">
-            <svg viewBox="0 0 24 24" class="text-green-600 w-5 h-5 sm:w-5 sm:h-5 mr-3">
-                <path fill="currentColor" d="M11.983,0a12.206,12.206,0,0,0-8.51,3.653A11.8,11.8,0,0,0,0,12.207,11.779,11.779,0,0,0,11.8,24h.214A12.111,12.111,0,0,0,24,11.791h0A11.766,11.766,0,0,0,11.983,0ZM10.5,16.542a1.476,1.476,0,0,1,1.449-1.53h.027a1.527,1.527,0,0,1,1.523,1.47,1.475,1.475,0,0,1-1.449,1.53h-.027A1.529,1.529,0,0,1,10.5,16.542ZM11,12.5v-6a1,1,0,0,1,2,0v6a1,1,0,1,1-2,0Z"></path>
-            </svg>
-            <span class="text-green-800 text-sm">{{ session('success') }}</span>
-        </div>
+            <script>
+                setTimeout(function () {
+                    document.getElementById('flash-message').style.display = 'none';
+                }, 2000);
+            </script>
+        @endif
 
-        <script>
-            setTimeout(function(){
-                document.getElementById('flash-message').style.display = 'none';
-            }, 2000); // 2000 milliseconds = 2 seconds
-        </script>
-    @endif
-    <div class="flex-1 pr-4">
-        <div class="relative md:w-1/3">
-            <form action="{{ route('presidential.index') }}" method="GET" class="mb-4" id="searchForm">
-                <input type="text" name="search" value="{{ $search }}"
-                       class="w-full pl-10 pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                       placeholder="Search..." oninput="searchOnChange()">
-                <div class="absolute top-0 left-0 inline-flex items-center p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24"
-                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                         stroke-linejoin="round">
-                        <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
-                        <circle cx="10" cy="10" r="7"/>
-                        <line x1="21" y1="21" x2="15" y2="15"/>
-                    </svg>
-                </div>
-                <div class="absolute top-0 left-0 inline-flex items-center p-2">
-                    <div id="loadingIndicator" class="hidden loader"></div>
-                </div>
-            </form>
-
-
-        </div>
-    </div>
-    @if(count($presidentials) === 0 && !empty($search))
-        <div class="text-gray-900 mt-4 justify-center">
-            No data available for your search query "{{ $search }}".
-        </div>
-    @endif
-
-    @if(count($presidentials) > 0)
-    @foreach ($presidentials as $presidential )
-
-    <div class='flex items-center mt-3'>
-        <div class="rounded-xl border-l-4 border-green-400  p-5 shadow-md w-full bg-white">
-        <div class="flex w-full items-center justify-between border-b pb-3">
-          <div class="flex items-center space-x-3">
-            {{-- <div class="h-8 w-8 rounded-full bg-slate-400 bg-[url('https://i.pravatar.cc/32')]"></div> --}}
-            <div class="text-ml font-bold text-slate-700">Reference No: <span class="font-light">{{$presidential->issuance->reference_no}}</span></div>
-          </div>
-          <div class="flex items-center space-x-8">
-            <div class="text-xs text-neutral-500">{{ \Carbon\Carbon::parse($presidential->issuance->date)->format('F j, Y') }}</div>
-            <div x-data="{ dropdownOpen: false }" class="relative">
-                <button @click="dropdownOpen = !dropdownOpen" class="relative z-10 flex items-center rounded-lg p-2 focus:outline-none bg-white ">
-
-                    {{-- <svg class="h-5 w-5 text-gray-800 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg> --}}
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                </button>
-
-
-                <div x-show="dropdownOpen" @click="dropdownOpen = false" class="fixed inset-0 w-full h-full z-10"></div>
-
-                <div x-show="dropdownOpen" class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                    <a  href="{{ url('/presidential_directives/edit', $presidential->id) }}" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-blue-500 hover:text-white">
-                       Edit
-                    </a>
-
-                    <a onclick="openDeleteModal({{ $presidential->id }})" class="block px-4 py-2 text-sm capitalize text-gray-700 hover:bg-red-500 hover:text-white">
-                        Delete
-                    </a>
-                </div>
-                <div id="modelConfirm" class="fixed hidden z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
-                    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
-
-                        <div class="flex justify-end p-2">
-                            <button onclick="closeModal('modelConfirm')" type="button"
-                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </button>
+        <div class="flex flex-col md:flex-row gap-2">
+            <div class="w-full md:w-1/2">
+                <form action="{{ route('presidential.index') }}" method="GET" class="mb-4" id="searchForm">
+                    <div class="relative">
+                        <input type="text" name="search" value="{{ $search }}"
+                            class="w-full pr-4 py-2 rounded-lg shadow focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+                            placeholder="Search..." oninput="searchOnChange()">
+                        <input type="hidden" name="date" value="{{ $selectedDate }}">
+                        <div class="absolute top-0 left-0 inline-flex items-center p-2">
+                            <div id="loadingIndicator" class="hidden loader"></div>
                         </div>
-
-                        <div class="p-6 pt-0 text-center">
-                            <svg class="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <h3 class="text-xl font-normal text-gray-500 mt-5 mb-6">Are you sure you want to delete this presidential issuance?</h3>
-                            <div class="flex  justify-center">
-                                <form id="deleteForm" method="POST" action="{{ url('/presidential_directives'. $presidential->id) }}">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit" onclick="closeModal('modelConfirm')"
-                                    class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                                    Yes, I'm sure
-                                </button>
-                                </form>
-                                <a href="#" onclick="closeModal('modelConfirm')"
-                                    class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center"
-                                    data-modal-toggle="delete-user-modal">
-                                    No, cancel
-                                </a>
-                            </div>
-
-                        </div>
-
                     </div>
-                </div>
-
-
+                </form>
             </div>
 
-          </div>
-        </div>
-
-        <div class="mt-4 mb-">
-          <div class="mb-3 text-xl font-bold">{{$presidential->issuance->title}}</div>
-          <div class="text-sm text-neutral-600 font-bold">
-                @if($presidential->responsible_office)
-                    Responsible Office: <span class="font-light">{{ $presidential->responsible_office }}</span>
-                @endif
-            </div>
-          <div class="flex-1 inline-flex items-center">
-            <div class="text-sm text-neutral-600 font-bold">URL link: </div>
-            <a href="{{ $presidential->issuance->url_link }}" class="font-bold ml-1 hover:underline" target="_blank">
-             <span class=" text-blue-500 font-light">{{ $presidential->issuance->url_link }}</span>
-            </a>
-        </div>
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between text-slate-500">
-            <div class="flex space-x-4 md:space-x-8">
-              <div class="flex cursor-pointer items-center transition hover:text-slate-600">
-                <div class="text-sm text-neutral-600 font-bold">Keyword/s: </div>
-                <span class="ml-2"> {{$presidential->issuance->keyword}}</span>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-
-    @endforeach
-
-    <div class="text-start" style="color:rgb(83, 82, 82); margin-top: 15px;">
-        {{-- Showing {{ $presidentials->firstItem() }} to {{ $presidentials->lastItem() }} of {{ $presidentials->total() }} entries --}}
-    </div>
-
-    <div class="d-flex justify-content-end mt-2">
-        {{ $presidentials->onEachSide(1)->links() }}
-    </div>
-    @else
-    <div class="flex justify-center items-center">
-        <h1>No Presidential Directives available</h1>
-    </div>
-    @endif
-
-
-</div>
-
-<dialog id="myModal" class="h-auto w-full md:w-1/2 p-5  bg-white rounded-md">
-    <div class="flex flex-col w-full h-auto">
-        <!-- Header -->
-            <div class="flex w-full h-auto justify-center items-center">
-                <div class="flex w-10/12 h-auto py-3 justify-center items-center text-2xl font-bold ">
-                    Create Presidential Directives
-                </div>
-                <div onclick="document.getElementById('myModal').close();" class="flex w-1/12 h-auto justify-center cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </div>
-            </div>
-        <!--Header End-->
-        <!-- Modal Content-->
-            <div class="flex items-center justify-center p-2">
-                <div class="w-full bg-white">
-                    <form method="POST" action="{{route('presidential.store')}}">
-                        @csrf
-                        <div class="mb-5">
-
-                        <div class="-mx-3 flex flex-wrap">
-                            <div class="w-full ">
-                                <div class="mb-5">
-                                    <label for="date" class="mb-3 block text-base font-medium text-[#07074D]">
-                                        Date
-                                    </label>
-                                    <input type="date" name="date" id="date"
-                                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="mb-5">
-                            <label for="title" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Title
-                            </label>
-                            <textarea type="text" name="title" id="title"
-                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" /></textarea>
-                        </div>
-                        <div class="mb-5">
-                            <label for="reference_no" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Reference No
-                            </label>
-                            <input type="text" name="reference_no" id="reference_no" placeholder=""
-                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                        </div>
-                        <div class="mb-5">
-                            <label for="responsible_office" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Responsible Office
-                            </label>
-                            <input type="text" name="responsible_office" id="responsible_office" placeholder=""
-                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                        </div>
-                        <div class="mb-5">
-                            <label for="url_link" class="mb-3 block text-base font-medium text-[#07074D]">
-                            Url Link
-                            </label>
-                            <input type="text" name="url_link" id="url_link" placeholder=""
-                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                        </div>
-
-                        <div id="keyword-container" class="mb-5">
-                            <label for="url_link" class="mb-3 block text-base font-medium text-[#07074D]">
-                                Keyword/s:
-                            </label>
-                            <div class="flex mb-2">
-                                <input type="text" name="keyword[]" placeholder=""
-                                       class="flex-1 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md keyword-input" />
-                                <button type="button" onclick="removeItem(this)"
-                                        class="ml-2 text-sm text-red-600 cursor-pointer keyword-remove" style="display: none;">Remove</button>
-                            </div>
-                        </div>
-                        <button type="button" onclick="addItem()" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Add keyword</button>
-                        {{-- <button type="button" onclick="addItem()" class="mt-2 text-sm text-blue-600 cursor-pointer">Add Item</button> --}}
-                        <input type="hidden" name="concatenated_keywords" id="concatenated_keywords">
-
-
-                            <button
-                                type="submit" class=" mt-3 hover:shadow-form w-full rounded-md bg-blue-400 hover:bg-blue-600 py-3 px-8 text-center text-base font-semibold text-white outline-none">
-                                Save
-                            </button>
-                        </div>
+            <div class="w-full md:w-1/2">
+                <form action="{{ route('presidential.index') }}" method="GET" class="mb-4" id="filterForm">
+                    <div class="relative">
+                        <select id="date" name="date" autocomplete="date"
+                            class="w-full rounded-lg border py-2 px-3 bg-white text-gray-700"
+                            onchange="this.form.submit()">
+                            <option value="All" @if(!isset($selectedDate) || $selectedDate === 'All') selected @endif>
+                                All Dates
+                            </option>
+                            @foreach ($dates as $date)
+                                <option value="{{ $date }}" @if(isset($selectedDate) && $selectedDate === $date) selected
+                                @endif>
+                                    {{ $date }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="search" value="{{ $search }}">
+                    </div>
                 </form>
             </div>
         </div>
-        <!-- End of Modal Content-->
+
+        <div class="w-full z-10">
+            <div class="flex flex-col">
+                @if(count($presidentials) === 0 && request()->has('search'))
+                    <div class="text-gray-900 justify-center">
+                        No Presidential Directives found for your search query "{{ request('search') }}".
+                    </div>
+                @endif
+
+                @if(count($presidentials) > 0)
+                    @foreach ($presidentials as $directive)
+                        <div class='flex items-center mt-3'>
+                            <div class="rounded-xl border-l-4 border-blue-700 p-5 shadow-md w-full bg-white">
+                                <div class="flex w-full items-center justify-between border-b pb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="text-ml font-bold text-slate-700">Reference:
+                                            <span class="font-light">{{ $directive->reference ?? 'No Reference' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-8">
+                                        <div class="text-xs text-neutral-500">
+                                            @if($directive->date)
+                                                {{ \Carbon\Carbon::parse($directive->date)->format('F j, Y') }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 mb-">
+                                    <div class="mb-3 text-xl font-bold">{{ $directive->title ?? 'No Title' }}</div>
+                                    @if(isset($directive->download_link))
+                                        <div class="flex items-center">
+                                            <a href="{{ asset($directive->download_link) }}" target="_blank"
+                                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 transition-all duration-200">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red"
+                                                    class="bi bi-file-earmark-pdf mr-2" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                                                    <path
+                                                        d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.7 11.7 0 0 0-1.997.406 11.3 11.3 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.026.044l.035-.012c.137-.056.355-.235.635-.572a8 8 0 0 0 .45-.606m1.64-1.33a13 13 0 0 1 1.01-.193 12 12 0 0 1-.51-.858 21 21 0 0 1-.5 1.05zm2.446.45q.226.245.435.41c.24.19.407.253.498.256a.1.1 0 0 0 .07-.015.3.3 0 0 0 .094-.125.44.44 0 0 0 .059-.2.1.1 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a4 4 0 0 0-.612-.053zM8.078 7.8a7 7 0 0 0 .2-.828q.046-.282.038-.465a.6.6 0 0 0-.032-.198.5.5 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822q.036.167.09.346z" />
+                                                </svg>
+                                                Download Attachment
+                                            </a>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    <div class="d-flex justify-content-end mt-2">
+                        {{ $presidentials->onEachSide(1)->links() }}
+                    </div>
+                @else
+                    <div class="flex justify-center items-center mt-10">
+                        <h1 class="text-gray-600">No Presidential Directives available</h1>
+                    </div>
+                @endif
+            </div>
+        </div>
     </div>
-</dialog>
-
-
-
-
 </x-app-layout>
+
 <style scoped>
-    dialog[open] {
-    animation: appear .15s cubic-bezier(0, 1.8, 1, 1.8);
-  }
+    @keyframes appear {
+        from {
+            opacity: 0;
+            transform: translateX(-3rem);
+        }
 
-    dialog::backdrop {
-      background: linear-gradient(45deg, rgba(0, 0, 0, 0.5), rgba(54, 54, 54, 0.5));
-      backdrop-filter: blur(3px);
-    }
-
-
-  @keyframes appear {
-    from {
-      opacity: 0;
-      transform: translateX(-3rem);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.loader {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-left: 4px solid #3498db;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 1s linear infinite;
-}
-
-  </style>
- <script>
-   document.addEventListener('DOMContentLoaded', function () {
-        addItem();
-    });
-
-    function addItem() {
-        var container = document.getElementById('keyword-container');
-        createInput(container);
-    }
-
-    function removeItem(button) {
-        var container = document.getElementById('keyword-container');
-        var divToRemove = button.parentNode;
-        container.removeChild(divToRemove);
-
-        // Display "Remove" button only when there is more than one input
-        var inputCount = container.getElementsByClassName('keyword-input').length;
-        if (inputCount === 1) {
-            container.getElementsByClassName('keyword-remove')[0].style.display = 'none';
+        to {
+            opacity: 1;
+            transform: translateX(0);
         }
     }
 
-    function createInput(container) {
-        var input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'keyword[]';
-        input.placeholder = '';
-        input.className = 'flex-1 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md keyword-input';
-
-        var removeButton = document.createElement('button');
-        removeButton.type = 'button';
-        removeButton.onclick = function () { removeItem(this); };
-        removeButton.className = 'ml-2 text-sm text-red-600 cursor-pointer keyword-remove';
-        removeButton.textContent = 'Remove';
-
-        var div = document.createElement('div');
-        div.className = 'flex mb-2 keyword-remove';
-        div.appendChild(input);
-
-        if (container.getElementsByClassName('keyword-input').length > 0) {
-            // Only add "Remove" button for additional inputs
-            div.appendChild(removeButton);
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
         }
 
-        container.appendChild(div);
-
-        // Hide "Remove" button for the initial input
-        document.getElementById('initial-input').style.display = 'none';
-    }
-    window.openModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'block'
-        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
-    }
-
-    window.closeModal = function(modalId) {
-        document.getElementById(modalId).style.display = 'none'
-        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-    }
-
-    // Close all modals when press ESC
-    document.onkeydown = function(event) {
-        event = event || window.event;
-        if (event.keyCode === 27) {
-            document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
-            let modals = document.getElementsByClassName('modal');
-            Array.prototype.slice.call(modals).forEach(i => {
-                i.style.display = 'none'
-            })
-        }
-    };
-
-    // function searchOnChange() {
-    //     var form = document.getElementById('searchForm');
-    //     form.submit();
-    // }
-
-    function openDeleteModal(id) {
-        if (confirm("Are you sure you want to delete this Presidential Directive?")) {
-            const form = document.getElementById('deleteForm');
-            form.action = `{{ url('/presidential_directives') }}/${id}`;
-            form.submit();
+        100% {
+            transform: rotate(360deg);
         }
     }
-    let timeoutId;
+
+    .loader {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #3498db;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+    }
+</style>
+
+<script>
+    var timeoutId;
 
     function searchOnChange() {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(function () {
             document.getElementById('searchForm').submit();
-        }, 500); // Change 500 to the desired delay in milliseconds
+        }, 500);
     }
 </script>

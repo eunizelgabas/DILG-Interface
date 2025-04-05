@@ -12,12 +12,12 @@ return new class extends Migration {
     {
         Schema::create('legal_opinions', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->string('link')->nullable();
+            $table->text('title')->nullable();
+            $table->text('link')->nullable();
             $table->string('category')->nullable();
             $table->string('reference')->unique();
             $table->string('date')->nullable();
-            $table->string('download_link')->nullable();
+            $table->text('download_link')->nullable();
             $table->longText('extracted_texts')->nullable();
             $table->timestamps();
         });
