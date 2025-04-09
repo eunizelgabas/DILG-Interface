@@ -50,10 +50,12 @@ class JointController extends Controller
         }
     }
 
-    public function index(Request $request)
+    public function indexMobile(Request $request)
     {
         $search = $request->input('search');
         $selectedDate = $request->input('date', 'All');
+        $perPage = $request->input('per_page', 50);
+        $page = $request->input('page', 1);
 
         $jointsQuery = Joint::query();
 
@@ -63,17 +65,63 @@ class JointController extends Controller
                     ->orWhere('title', 'like', '%' . $search . '%')
                     ->orWhere('reference', 'like', '%' . $search . '%');
             });
+
+            $joints = $jointsQuery->orderBy('id', 'asc')->get();
+        } else {
+            if ($selectedDate !== 'All') {
+                $jointsQuery->where('date', $selectedDate);
+            }
+
+            $joints = $jointsQuery->orderBy('id', 'asc')->paginate($perPage, ['*'], 'page', $page);
         }
 
-        if ($selectedDate !== 'All') {
-            $jointsQuery->where('date', $selectedDate);
-        }
+        $formattedJoints = $joints->map(function ($joint) {
+            return [
+                "id" => $joint->id,
+                "title" => $joint->title,
+                "link" => $joint->link,
+                "reference" => $joint->reference,
+                "date" => $joint->date,
+                "download_link" => $joint->download_link,
+            ];
+        });
 
-        $joints = $jointsQuery->orderBy('id', 'asc')->paginate(10);
-        $dates = Joint::whereNotNull('date')->pluck('date')->unique();
-
-        return view('joint.index', compact('joints', 'search', 'dates', 'selectedDate'));
+        return response()->json([
+            'status' => 'success',
+            'joints' => $formattedJoints,
+            'pagination' => $search ? null : [
+                'current_page' => $joints->currentPage(),
+                'per_page' => $joints->perPage(),
+                'total' => $joints->total(),
+                'last_page' => $joints->lastPage(),
+            ],
+        ], 200);
     }
+
+    // public function index(Request $request)
+    // {
+    //     $search = $request->input('search');
+    //     $selectedDate = $request->input('date', 'All');
+
+    //     $jointsQuery = Joint::query();
+
+    //     if ($search) {
+    //         $jointsQuery->where(function ($query) use ($search) {
+    //             $query->where('date', 'like', '%' . $search . '%')
+    //                 ->orWhere('title', 'like', '%' . $search . '%')
+    //                 ->orWhere('reference', 'like', '%' . $search . '%');
+    //         });
+    //     }
+
+    //     if ($selectedDate !== 'All') {
+    //         $jointsQuery->where('date', $selectedDate);
+    //     }
+
+    //     $joints = $jointsQuery->orderBy('id', 'asc')->paginate(10);
+    //     $dates = Joint::whereNotNull('date')->pluck('date')->unique();
+
+    //     return view('joint.index', compact('joints', 'search', 'dates', 'selectedDate'));
+    // }
 
     public function store(Request $request)
     {

@@ -42,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/auth/login', [UserController::class, 'login']);
 
 Route::get('/latest_issuances', [IssuanceController::class, 'index']);
-Route::get('/joint_circulars', [JointController::class, 'index']);
+Route::get('/joint_circulars', [JointController::class, 'indexMobile']);
 Route::get('/legal_opinions', [LegalController::class, 'getLegalOpinionsJson']);
 Route::get('/memo_circulars', [MemoController::class, 'index']);
 Route::get('/presidential_directives', [PresidentialController::class, 'indexMobile']);
