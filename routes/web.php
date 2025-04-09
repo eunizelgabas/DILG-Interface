@@ -39,6 +39,7 @@ Route::get('/', function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 Route::post('webhook/republic-act', [RepublicActController::class, 'receiveRepublicAct']);
 Route::post('webhook/presidential-directive', [PresidentialController::class, 'receivePresidentialDirectives']);
+Route::post('webhook/joint-circular', [JointController::class, 'receiveJointCirculars']);
 Route::post('webhook/legal-opinion', [LegalController::class, 'receiveLegalOpinion']);
 
 Route::middleware('auth')->group(function () {
@@ -71,10 +72,10 @@ Route::middleware('auth')->group(function () {
 
     //Route for Joint Circulars - Eunizel
     Route::get('/joint_circulars', [JointController::class, 'index'])->name('joint.index');
-    Route::post('/joint_circulars', [JointController::class, 'store'])->name('joint.store');
-    Route::get('/joint_circulars/edit/{joint}', [JointController::class, 'edit'])->name('joint.edit');
-    Route::put('/joint_circulars/{joint}', [JointController::class, 'update'])->name('joint.update');
-    Route::delete('/joint_circulars/{joint}', [JointController::class, 'destroy'])->name('joint.delete');
+    // Route::post('/joint_circulars', [JointController::class, 'store'])->name('joint.store');
+    // Route::get('/joint_circulars/edit/{joint}', [JointController::class, 'edit'])->name('joint.edit');
+    // Route::put('/joint_circulars/{joint}', [JointController::class, 'update'])->name('joint.update');
+    // Route::delete('/joint_circulars/{joint}', [JointController::class, 'destroy'])->name('joint.delete');
 
     //Route for Memo Circulars - Eunizel
     Route::get('/memo_circulars', [MemoController::class, 'index'])->name('memo.index');

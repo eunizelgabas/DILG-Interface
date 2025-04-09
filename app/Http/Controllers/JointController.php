@@ -8,98 +8,75 @@ use App\Models\Issuances;
 use App\Models\Joint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use PDO;
 
 class JointController extends Controller
 {
-    // public function index(Request $request){
+    public function receiveJointCirculars(Request $request)
+    {
+        set_time_limit(0);
+        Log::info('Incoming webhook data:', $request->all());
 
-    //     $search = $request->input('search');
+        try {
+            $validatedData = $request->validate([
+                'joint_circulars' => 'required|array',
+                'joint_circulars.*.title' => 'nullable|string',
+                'joint_circulars.*.link' => 'nullable|string',
+                'joint_circulars.*.reference' => 'nullable|string',
+                'joint_circulars.*.date' => 'nullable|string',
+                'joint_circulars.*.download_link' => 'nullable|string|url',
+            ]);
 
-    //     $joints = Joint::when($search, function ($query) use ($search) {
-    //         $query->where('responsible_office', 'like', '%' . $search . '%')
-    //             ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
-    //                 $issuanceQuery->where('title', 'like', '%' . $search . '%')
-    //                     ->orWhere('reference_no', 'like', '%' . $search . '%')
-    //                     ->orWhere('keyword', 'like', '%' . $search . '%');
-    //             });
-    //     })->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
+            foreach ($validatedData['joint_circulars'] as $circular) {
+                Log::info('Processing joint circulars:', $circular);
 
-    //     if ($request->expectsJson()) {
-    //         // Transform the data to include the foreign key relationship
-    //         $formattedJoints = $joints->map(function ($joint) {
-    //             return [
-    //                 'id' => $joint->id,
-    //                 'responsible_office' => $joint->responsible_office ?? 'N/A',
-    //                 'issuance' => [
-    //                     'id' => $joint->issuance->id,
-    //                     'date' => $joint->issuance->date,
-    //                     'title' => $joint->issuance->title,
-    //                     'reference_no' => $joint->issuance->reference_no,
-    //                     'keyword' => $joint->issuance->keyword,
-    //                     'url_link' => $joint->issuance->url_link,
-    //                     'type' => $joint->issuance->type
-    //                 ],
-    //             ];
-    //         });
+                $jointCircular = Joint::updateOrCreate(
+                    ['reference' => $circular['reference']],
+                    [
+                        'title' => $circular['title'],
+                        'link' => $circular['link'],
+                        'reference' => $circular['reference'],
+                        'date' => $circular['date'],
+                        'download_link' => $circular['download_link'],
+                    ]
+                );
+            }
 
-    //         return response()->json(['joints' => $formattedJoints]);
-    //     } else {
-    //         // If the request is from the web view, return a Blade view
-    //         return view('joint.index', compact('joints', 'search'));
-    //     }
-
-    //     // return view('joint.index', compact('joints', 'search'));
-    // }
-
-    public function index(Request $request){
-
-        $search = $request->input('search');
-
-        $jointsQuery = Joint::when($search, function ($query) use ($search) {
-            $query->where('responsible_office', 'like', '%' . $search . '%')
-                ->orWhereHas('issuance', function ($issuanceQuery) use ($search) {
-                    $issuanceQuery->where('title', 'like', '%' . $search . '%')
-                        ->orWhere('reference_no', 'like', '%' . $search . '%')
-                        ->orWhere('keyword', 'like', '%' . $search . '%');
-                });
-        })->with('issuance')->orderBy('id', 'desc');
-
-        if ($request->expectsJson()) {
-            $joints = $jointsQuery->get(); // Get all data for JSON API requests
-        } else {
-            $joints = $jointsQuery->paginate(10); // Paginate for web requests
+            return response()->json(['message' => 'Joint circulars stored successfully'], 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            Log::error('An error occurred:', ['message' => $e->getMessage()]);
+            return response()->json(['message' => 'An error occurred while processing'], 500);
         }
-
-        // Transform the data to include the foreign key relationship
-        $formattedJoints = $joints->map(function ($joint) {
-            return [
-                'id' => $joint->id,
-                'responsible_office' => $joint->responsible_office ?? 'N/A',
-                'issuance' => [
-                    'id' => $joint->issuance->id,
-                    'date' => $joint->issuance->date ?? 'N/A',
-                    'title' => $joint->issuance->title,
-                    'reference_no' => $joint->issuance->reference_no ?? 'N/A',
-                    'keyword' => $joint->issuance->keyword,
-                    'url_link' => $joint->issuance->url_link ?? 'N/A',
-                    'type' => $joint->issuance->type
-                ],
-            ];
-        });
-
-        if ($request->expectsJson()) {
-            return response()->json(['joints' => $formattedJoints]);
-        } else {
-            // If the request is from the web view, return a Blade view
-            return view('joint.index', compact('joints', 'search'));
-        }
-
-        // return view('joint.index', compact('joints', 'search'));
     }
 
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $selectedDate = $request->input('date', 'All');
 
-    public function store(Request $request){
+        $jointsQuery = Joint::query();
+
+        if ($search) {
+            $jointsQuery->where(function ($query) use ($search) {
+                $query->where('date', 'like', '%' . $search . '%')
+                    ->orWhere('title', 'like', '%' . $search . '%')
+                    ->orWhere('reference', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($selectedDate !== 'All') {
+            $jointsQuery->where('date', $selectedDate);
+        }
+
+        $joints = $jointsQuery->orderBy('id', 'asc')->paginate(10);
+        $dates = Joint::whereNotNull('date')->pluck('date')->unique();
+
+        return view('joint.index', compact('joints', 'search', 'dates', 'selectedDate'));
+    }
+
+    public function store(Request $request)
+    {
         $data = $request->validate([
             'title' => 'required|string',
             'reference_no' => 'nullable|string',
@@ -137,12 +114,14 @@ class JointController extends Controller
         return redirect('/joint_circulars')->with('success', 'Joint Circular successfully created');
     }
 
-    public function edit(Joint $joint){
-        $joint->load([ 'issuance'])->get();
+    public function edit(Joint $joint)
+    {
+        $joint->load(['issuance'])->get();
         return view('joint.edit', compact('joint'));
     }
 
-    public function update(Request $request, Joint $joint) {
+    public function update(Request $request, Joint $joint)
+    {
         $data = $request->validate([
             'title' => 'required|string',
             'reference_no' => 'nullable|string',
@@ -180,7 +159,8 @@ class JointController extends Controller
     }
 
 
-    public function destroy(Joint $joint){
+    public function destroy(Joint $joint)
+    {
         $joint->issuance->delete();
 
         // Now, delete the Joint
@@ -190,6 +170,6 @@ class JointController extends Controller
         $log_entry = Auth::user()->name . " deleted a Joint Circular  " . $joint->title . " with the id# " . $joint->id;
         event(new UserLog($log_entry));
 
-        return redirect('/joint_circulars')->with('success','Joint Circular deleted successfully.');
+        return redirect('/joint_circulars')->with('success', 'Joint Circular deleted successfully.');
     }
 }
