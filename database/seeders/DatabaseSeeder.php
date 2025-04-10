@@ -38,5 +38,7 @@ class DatabaseSeeder extends Seeder
             RolesandPermissionSeeder::class,
             // UserSeeder::class
         ]);
+
+        $this->call(LegalOpinionsSeeder::class);
     }
 }

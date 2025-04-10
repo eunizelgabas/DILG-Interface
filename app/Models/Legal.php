@@ -9,10 +9,10 @@ class Legal extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category', 'issuance_id', 'responsible_office'];
+    protected $connection = 'mysql';
 
-    public function issuance()
-    {
-        return $this->belongsTo(Issuances::class, 'issuance_id');
-    }
+    protected $table = 'legal_opinions';
+
+    protected $fillable = ['title', 'link', 'category', 'reference', 'date', 'download_link', 'extracted_texts'];
+
 }

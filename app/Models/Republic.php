@@ -9,10 +9,10 @@ class Republic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['responsible_office', 'issuance_id'];
+    protected $connection = 'mysql';
 
-    public function issuance()
-    {
-        return $this->belongsTo(Issuances::class, 'issuance_id');
-    }
+    protected $table = 'republic_acts';
+
+    protected $fillable = ['title', 'link', 'reference', 'date', 'download_link'];
+
 }

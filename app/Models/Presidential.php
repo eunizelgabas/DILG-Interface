@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Presidential extends Model
 {
     use HasFactory;
+    protected $connection = 'mysql';
+    protected $table = 'presidential_directives';
 
-    protected $fillable = ['responsible_office', 'issuance_id'];
-
-    public function issuance()
-    {
-        return $this->belongsTo(Issuances::class, 'issuance_id');
-    }
+    protected $fillable = [
+        'title',
+        'link',
+        'reference',
+        'date',
+        'download_link'
+    ];
 }

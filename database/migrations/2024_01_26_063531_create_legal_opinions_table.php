@@ -6,17 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     /**
-     * Run the migrations.
+     * Run the migrations.  
      */
     public function up(): void
     {
-        Schema::create('joints', function (Blueprint $table) {
+        Schema::create('legal_opinions', function (Blueprint $table) {
             $table->id();
             $table->text('title')->nullable();
             $table->text('link')->nullable();
-            $table->string('reference')->unique()->nullable();
+            $table->string('category')->nullable();
+            $table->string('reference')->unique();
             $table->string('date')->nullable();
             $table->text('download_link')->nullable();
+            $table->longText('extracted_texts')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('joints');
+        Schema::dropIfExists('legal_opinions');
     }
 };

@@ -9,7 +9,15 @@ class Joint extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['responsible_office', 'issuance_id'];
+
+    protected $fillable = [
+        'title',
+        'link',
+        'reference',
+        'date',
+        'download_link',
+    ];
+    // protected $fillable = ['responsible_office', 'issuance_id'];
 
     public function issuance()
     {

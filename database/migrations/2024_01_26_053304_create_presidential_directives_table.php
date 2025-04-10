@@ -4,18 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('presidentials', function (Blueprint $table) {
+        Schema::create('presidential_directives', function (Blueprint $table) {
             $table->id();
-            $table->string('responsible_office',1000)->nullable();
-            $table->bigInteger('issuance_id')->unsigned();
-            $table->foreign('issuance_id')->references('id')->on('issuances')->onDelete('cascade');
+            $table->text('title')->nullable();
+            $table->text('link')->nullable();
+            $table->text('reference')->unique();
+            $table->text('date')->nullable();
+            $table->text('download_link')->nullable();
             $table->timestamps();
         });
     }

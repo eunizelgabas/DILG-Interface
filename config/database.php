@@ -56,11 +56,37 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
-            'strict' => true,
+            'strict' => false,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+        ],
+
+        'dilg_bohol' => [  // This is the connection name used in your code
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_DILG_BOHOL_HOST', '127.0.0.1'),
+            'port' => env('DB_DILG_BOHOL_PORT', '3306'),
+            'database' => env('DB_DILG_BOHOL_DATABASE', default: 'DILG_IS_DATABASE'),
+            'username' => env('DB_DILG_BOHOL_USERNAME', 'root'),
+            'password' => env('DB_DILG_BOHOL_PASSWORD', ''),
+            'unix_socket' => env('DB_DILG_BOHOL_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+        ],
+
+        'connections' => [
+            'shared' => [
+                'driver' => 'mysql',
+                'host' => 'shared-database-host',
+                'database' => 'shared_db_name',
+                'username' => 'shared_db_user',
+                'password' => 'shared_db_pass',
+                'charset' => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+            ],
+
         ],
 
         'pgsql' => [
@@ -125,7 +151,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [
