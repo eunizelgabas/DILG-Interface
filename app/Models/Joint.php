@@ -15,6 +15,7 @@ class Joint extends Model
         'link',
         'reference',
         'date',
+        'type',
         'download_link',
     ];
     // protected $fillable = ['responsible_office', 'issuance_id'];

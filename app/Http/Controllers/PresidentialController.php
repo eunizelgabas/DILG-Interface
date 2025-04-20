@@ -37,6 +37,7 @@ class PresidentialController extends Controller
                         'link' => $directive['link'],
                         'reference' => $directive['reference'],
                         'date' => $directive['date'],
+                        'type' => 'Presidential Directives',
                         'download_link' => $directive['download_link'],
                     ]
                 );

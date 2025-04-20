@@ -38,6 +38,7 @@ class JointController extends Controller
                         'link' => $circular['link'],
                         'reference' => $circular['reference'],
                         'date' => $circular['date'],
+                        'type' => 'Joint Circulars',
                         'download_link' => $circular['download_link'],
                     ]
                 );
@@ -98,30 +99,30 @@ class JointController extends Controller
         ], 200);
     }
 
-    // public function index(Request $request)
-    // {
-    //     $search = $request->input('search');
-    //     $selectedDate = $request->input('date', 'All');
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $selectedDate = $request->input('date', 'All');
 
-    //     $jointsQuery = Joint::query();
+        $jointsQuery = Joint::query();
 
-    //     if ($search) {
-    //         $jointsQuery->where(function ($query) use ($search) {
-    //             $query->where('date', 'like', '%' . $search . '%')
-    //                 ->orWhere('title', 'like', '%' . $search . '%')
-    //                 ->orWhere('reference', 'like', '%' . $search . '%');
-    //         });
-    //     }
+        if ($search) {
+            $jointsQuery->where(function ($query) use ($search) {
+                $query->where('date', 'like', '%' . $search . '%')
+                    ->orWhere('title', 'like', '%' . $search . '%')
+                    ->orWhere('reference', 'like', '%' . $search . '%');
+            });
+        }
 
-    //     if ($selectedDate !== 'All') {
-    //         $jointsQuery->where('date', $selectedDate);
-    //     }
+        if ($selectedDate !== 'All') {
+            $jointsQuery->where('date', $selectedDate);
+        }
 
-    //     $joints = $jointsQuery->orderBy('id', 'asc')->paginate(10);
-    //     $dates = Joint::whereNotNull('date')->pluck('date')->unique();
+        $joints = $jointsQuery->orderBy('id', 'asc')->paginate(10);
+        $dates = Joint::whereNotNull('date')->pluck('date')->unique();
 
-    //     return view('joint.index', compact('joints', 'search', 'dates', 'selectedDate'));
-    // }
+        return view('joint.index', compact('joints', 'search', 'dates', 'selectedDate'));
+    }
 
     public function store(Request $request)
     {

@@ -308,28 +308,6 @@ class LegalOpinionsSeeder extends Seeder
             'LO-113S2007' => 'LO-113S2007.txt',
         ];
 
-        // foreach ($files as $reference => $filename) {
-        //     $path = storage_path("app/Extracted Texts/{$filename}");
-
-        //     if (File::exists($path)) {
-        //         // Read file content
-        //         $content = File::get($path);
-
-        //         // Convert to UTF-8
-        //         $utf8Content = mb_convert_encoding($content, 'UTF-8', 'auto');
-
-        //         // Remove soft hyphens and other non-printable characters
-        //         $utf8Content = preg_replace('/[\x00-\x1F\x7F\xAD]/u', '', $utf8Content);
-
-        //         // Trim whitespace
-        //         $utf8Content = Str::of($utf8Content)->trim();
-
-        //         // Update database
-        //         Legal::where('reference', $reference)
-        //             ->update(['extracted_texts' => $utf8Content]);
-        //     }
-        // }
-
         foreach ($files as $reference => $filename) {
             $path = storage_path("app/Extracted Texts/{$filename}");
 

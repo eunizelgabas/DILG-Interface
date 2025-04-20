@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('category')->nullable();
             $table->string('reference')->unique();
             $table->string('date')->nullable();
+            $table->string('type')->nullable();
             $table->text('download_link')->nullable();
             $table->longText('extracted_texts')->nullable();
             $table->timestamps();

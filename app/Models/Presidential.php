@@ -16,6 +16,7 @@ class Presidential extends Model
         'link',
         'reference',
         'date',
+        'type',
         'download_link'
     ];
 }
