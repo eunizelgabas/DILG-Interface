@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->text('link')->nullable();
             $table->text('reference')->unique();
             $table->text('date')->nullable();
+            $table->string('type')->nullable();
             $table->text('download_link')->nullable();
             $table->timestamps();
         });

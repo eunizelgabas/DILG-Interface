@@ -13,6 +13,15 @@ class Legal extends Model
 
     protected $table = 'legal_opinions';
 
-    protected $fillable = ['title', 'link', 'category', 'reference', 'date', 'download_link', 'extracted_texts'];
+    protected $fillable = [
+        'title',
+        'link',
+        'category',
+        'reference',
+        'date',
+        'type',
+        'download_link',
+        'extracted_texts'
+    ];
 
 }

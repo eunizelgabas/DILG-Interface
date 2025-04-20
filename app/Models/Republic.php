@@ -13,6 +13,13 @@ class Republic extends Model
 
     protected $table = 'republic_acts';
 
-    protected $fillable = ['title', 'link', 'reference', 'date', 'download_link'];
+    protected $fillable = [
+        'title',
+        'link',
+        'reference',
+        'date',
+        'type',
+        'download_link'
+    ];
 
 }

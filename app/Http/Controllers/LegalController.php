@@ -41,6 +41,7 @@ class LegalController extends Controller
                         'category' => $opinion['category'],
                         'reference' => $opinion['reference'],
                         'date' => $opinion['date'],
+                        'type' => 'Legal Opinions',
                         'download_link' => $opinion['download_link'],
                         'extracted_texts' => $opinion['extracted_texts'],
                     ]

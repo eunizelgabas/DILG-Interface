@@ -122,14 +122,14 @@ class IssuanceController extends Controller
         }
     }
 
-//     public function index(Request $request)
+    //     public function index(Request $request)
 // {
 //     $search = $request->input('search');
 //     $selectedOutcome = $request->input('outcome');
 
-//     $latestsQuery = Latest::query();
+    //     $latestsQuery = Latest::query();
 
-//     if ($search) {
+    //     if ($search) {
 //         $latestsQuery->where(function ($query) use ($search) {
 //             $query->where('category', 'like', '%' . $search . '%')
 //                 ->orWhere('outcome', 'like', '%' . $search . '%')
@@ -141,15 +141,15 @@ class IssuanceController extends Controller
 //         });
 //     }
 
-//     if ($selectedOutcome && $selectedOutcome !== 'All') {
+    //     if ($selectedOutcome && $selectedOutcome !== 'All') {
 //         $latestsQuery->where('outcome', $selectedOutcome);
 //     }
 
-//     // Apply pagination if it's a web request
+    //     // Apply pagination if it's a web request
 //     if (!$request->expectsJson()) {
 //         $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc')->paginate(5);
 
-//         // Return a Blade view
+    //         // Return a Blade view
 //         $outcomeOptions = [
 //             "ACCOUNTABLE, TRANSPARENT, PARTICIPATIVE, AND EFFECTIVE LOCAL GOVERNANCE",
 //             "PEACEFUL, ORDERLY AND SAFE LGUS STRATEGIC PRIORITIES",
@@ -159,13 +159,13 @@ class IssuanceController extends Controller
 //             "STRENGTHENING OF INTERNAL GOVERNANCE",
 //         ];
 
-//         return view('latest.index', compact('latests', 'search', 'outcomeOptions', 'selectedOutcome'));
+    //         return view('latest.index', compact('latests', 'search', 'outcomeOptions', 'selectedOutcome'));
 //     }
 
-//     // For JSON API requests
+    //     // For JSON API requests
 //     $latests = $latestsQuery->with('issuance')->orderBy('created_at', 'desc')->get();
 
-//     // Transform the data
+    //     // Transform the data
 //     $formattedLatests = $latests->map(function ($latest) {
 //         return [
 //             'id' => $latest->id,
@@ -183,11 +183,12 @@ class IssuanceController extends Controller
 //         ];
 //     });
 
-//     return response()->json(['latests' => $formattedLatests]);
+    //     return response()->json(['latests' => $formattedLatests]);
 // }
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $data = $request->validate([
             'title' => 'required|string',
             'reference_no' => 'nullable|string',
@@ -228,12 +229,14 @@ class IssuanceController extends Controller
         return redirect('/latest_issuances')->with('success', 'Latest Issuance successfully created');
     }
 
-    public function edit(Latest $latest){
-        $latest->load([ 'issuance'])->get();
+    public function edit(Latest $latest)
+    {
+        $latest->load(['issuance'])->get();
         return view('latest.edit', compact('latest'));
     }
 
-    public function update(Request $request, Latest $latest){
+    public function update(Request $request, Latest $latest)
+    {
         $data = $request->validate([
             'title' => 'required|string',
             'reference_no' => 'nullable|string',
@@ -272,7 +275,8 @@ class IssuanceController extends Controller
         return redirect('/latest_issuances')->with('success', 'Latest Issuance successfully updated');
     }
 
-    public function destroy(Latest $latest){
+    public function destroy(Latest $latest)
+    {
         $latest->issuance->delete();
 
         // Now, delete the latest
@@ -281,7 +285,7 @@ class IssuanceController extends Controller
         // $log_entry = Auth::user()->name . " deleted a Latest Issuances  " . $latest->title . " with the id# " . $latest->id;
         // event(new UserLog($log_entry));
 
-        return redirect('/latest_issuances')->with('success','Latest Issuance deleted successfully.');
+        return redirect('/latest_issuances')->with('success', 'Latest Issuance deleted successfully.');
     }
 
     public function recent(Request $request)

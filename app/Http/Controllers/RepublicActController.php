@@ -33,6 +33,7 @@ class RepublicActController extends Controller
                         'link' => $act['link'],
                         'reference' => $act['reference'],
                         'date' => $act['date'],
+                        'type' => 'Republic Acts',
                         'download_link' => $act['download_link'],
                     ]
                 );
